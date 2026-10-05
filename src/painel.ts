@@ -38,6 +38,9 @@ header{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-
 h1{font-size:20px;margin:0}h2{font-size:15px;margin:0 0 12px;color:var(--gold);text-transform:uppercase;letter-spacing:1px}
 nav a{color:var(--mut);text-decoration:none;padding:6px 12px;border:1px solid var(--line);border-radius:999px;margin-left:6px;font-size:13px}
 nav a.on{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:600}
+nav{display:flex;flex-wrap:wrap;align-items:center;gap:6px 0}nav form{margin:0 0 0 14px}
+nav button{background:transparent;color:var(--gold);border:1px solid var(--gold);border-radius:999px;padding:6px 14px;font:600 13px system-ui,sans-serif;cursor:pointer}
+nav button:hover{background:var(--gold);color:var(--bg)}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:28px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
 .lbl{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.5px}.val{font-size:28px;font-weight:700;margin:4px 0}.hint{color:var(--mut);font-size:12px}
@@ -49,7 +52,8 @@ th{color:var(--mut);font-weight:500;font-size:12px}td:first-child{white-space:no
 .bar i{display:block;height:100%;background:var(--gold);border-radius:3px}
 .vazio{color:var(--mut);text-align:center}.nota{color:var(--mut);font-size:13px;margin-top:24px}
 </style></head><body><main>
-<header><h1>Página de vendas · Liderança Inteligente</h1><nav>${periodos}</nav></header>
+<header><h1>Página de vendas · Liderança Inteligente</h1><nav>${periodos}
+<form method="post" action="/painel/sair"><button>Sair</button></form></nav></header>
 <div class="cards">
 ${card('Visitas', num(r.visitas), 'carregamentos da página')}
 ${card('Visitantes únicos', num(r.visitantes), 'pessoas diferentes')}

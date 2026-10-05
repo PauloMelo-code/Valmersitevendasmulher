@@ -5,7 +5,9 @@ import path from 'node:path';
 import zlib from 'node:zlib';
 import { estatisticas, migrar, salvarEvento } from './db.ts';
 import { lerEvento } from './evento.ts';
+import { renderLogin } from './login.ts';
 import { renderPainel } from './painel.ts';
+import { bloqueado, chaveDe, COOKIE, credenciaisOk, criarSessao, lerCookie, registrarFalha, sessaoValida } from './sessao.ts';
 
 const PORT = Number(process.env.PORT ?? 3000);
 const SITE_URL = (process.env.SITE_URL ?? `http://localhost:${PORT}`).replace(/\/+$/, '');
@@ -71,14 +73,35 @@ function fim(res: http.ServerResponse, status: number, corpo = '', extra: Record
   res.end(corpo);
 }
 
-const sha = (s: string) => crypto.createHash('sha256').update(s).digest();
-function autorizado(req: http.IncomingMessage): boolean {
-  const h = req.headers.authorization ?? '';
-  if (SENHA.length < 12 || !h.startsWith('Basic ')) return false;
-  const [u, ...resto] = Buffer.from(h.slice(6), 'base64').toString().split(':');
-  const okU = crypto.timingSafeEqual(sha(u ?? ''), sha(USUARIO));
-  const okS = crypto.timingSafeEqual(sha(resto.join(':')), sha(SENHA));
-  return okU && okS;
+const CHAVE = chaveDe(USUARIO, SENHA);
+const SECURE = SITE_URL.startsWith('https://') ? '; Secure' : '';
+const logado = (req: http.IncomingMessage) => SENHA.length >= 12 && sessaoValida(lerCookie(req.headers.cookie, COOKIE), CHAVE);
+// CSRF: POST do painel só aceita Origin do próprio host (navegadores sempre mandam Origin em POST de formulário).
+function mesmaOrigem(req: http.IncomingMessage): boolean {
+  if (!req.headers.origin) return true;
+  try { return new URL(req.headers.origin).host === req.headers.host; } catch { return false; }
+}
+const PRIVADO = { 'Cache-Control': 'no-store', 'X-Frame-Options': 'DENY', 'X-Robots-Tag': 'noindex' };
+const html = (res: http.ServerResponse, status: number, corpo: string) =>
+  fim(res, status, corpo, { 'Content-Type': 'text/html; charset=utf-8', ...PRIVADO });
+const ir = (res: http.ServerResponse, para: string, extra: Record<string, string> = {}) => fim(res, 303, '', { Location: para, ...PRIVADO, ...extra });
+
+async function entrar(req: http.IncomingMessage, res: http.ServerResponse) {
+  if (!mesmaOrigem(req)) return fim(res, 403, 'Origem inválida');
+  if (SENHA.length < 12) return html(res, 503, renderLogin({ desligado: true }));
+  const form = new URLSearchParams((await lerCorpo(req, 2048)) ?? '');
+  const usuario = (form.get('usuario') ?? '').trim().slice(0, 100);
+  if (bloqueado()) {
+    console.warn('painel: login bloqueado por excesso de tentativas');
+    return html(res, 429, renderLogin({ usuario, erro: 'Muitas tentativas. Aguarde 15 minutos e tente de novo.' }));
+  }
+  if (!credenciaisOk(usuario, form.get('senha') ?? '', USUARIO, SENHA)) {
+    registrarFalha();
+    console.warn('painel: login recusado');
+    return html(res, 401, renderLogin({ usuario, erro: 'Usuário ou senha incorretos.' }));
+  }
+  console.log('painel: login ok');
+  ir(res, '/painel', { 'Set-Cookie': `${COOKIE}=${criarSessao(CHAVE)}; Path=/painel; HttpOnly; SameSite=Lax; Max-Age=604800${SECURE}` });
 }
 
 function lerCorpo(req: http.IncomingMessage, limite: number): Promise<string | null> {
@@ -99,15 +122,21 @@ const server = http.createServer(async (req, res) => {
       if (ev) await salvarEvento(ev).catch((e) => console.error('evento:', e.message));
       return fim(res, 204);
     }
+    if (url.pathname === '/painel/entrar' && req.method === 'POST') return await entrar(req, res);
+    if (url.pathname === '/painel/sair' && req.method === 'POST') {
+      if (!mesmaOrigem(req)) return fim(res, 403, 'Origem inválida');
+      return ir(res, '/painel/entrar', { 'Set-Cookie': `${COOKIE}=; Path=/painel; HttpOnly; SameSite=Lax; Max-Age=0${SECURE}` });
+    }
     if (req.method !== 'GET' && req.method !== 'HEAD') return fim(res, 405, 'Método não permitido');
     if (url.pathname === '/saude') return fim(res, 200, 'ok');
-    if (url.pathname === '/painel') {
-      if (!autorizado(req)) return fim(res, 401, 'Acesso restrito', { 'WWW-Authenticate': 'Basic realm="Painel", charset="UTF-8"' });
+    if (url.pathname === '/painel/entrar') {
+      if (logado(req)) return ir(res, '/painel');
+      return html(res, SENHA.length < 12 ? 503 : 200, renderLogin({ desligado: SENHA.length < 12 }));
+    }
+    if (url.pathname === '/painel' || url.pathname === '/painel/') {
+      if (!logado(req)) return ir(res, '/painel/entrar');
       const dias = [1, 7, 30, 90].includes(Number(url.searchParams.get('dias'))) ? Number(url.searchParams.get('dias')) : 7;
-      const html = renderPainel(await estatisticas(dias), dias);
-      return fim(res, 200, html, {
-        'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Frame-Options': 'DENY', 'X-Robots-Tag': 'noindex',
-      });
+      return html(res, 200, renderPainel(await estatisticas(dias), dias));
     }
     const a = arquivos.get(url.pathname === '/' ? '/index.html' : url.pathname);
     if (!a) return fim(res, 404, 'Página não encontrada');
