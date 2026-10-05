@@ -7,6 +7,7 @@ import { carregarPainel, exportarCsv } from './consultas.ts';
 import { migrar, salvarEvento } from './db.ts';
 import { lerEvento } from './evento.ts';
 import { lerFiltro } from './filtros.ts';
+import { COOKIE_TEMA, lerTema } from './tema.ts';
 import { renderLogin } from './login.ts';
 import { renderPainel } from './painel.ts';
 import { bloqueado, chaveDe, COOKIE, credenciaisOk, criarSessao, lerCookie, registrarFalha, sessaoValida } from './sessao.ts';
@@ -84,8 +85,12 @@ function mesmaOrigem(req: http.IncomingMessage): boolean {
   try { return new URL(req.headers.origin).host === req.headers.host; } catch { return false; }
 }
 const PRIVADO = { 'Cache-Control': 'no-store', 'X-Frame-Options': 'DENY', 'X-Robots-Tag': 'noindex' };
-const html = (res: http.ServerResponse, status: number, corpo: string) =>
-  fim(res, status, corpo, { 'Content-Type': 'text/html; charset=utf-8', ...PRIVADO });
+// HTML do painel tem SVG inline (≈125 KB): comprime quando o navegador aceita.
+function html(res: http.ServerResponse, status: number, corpo: string, req?: http.IncomingMessage) {
+  const gz = req && /\bgzip\b/.test(String(req.headers['accept-encoding']));
+  res.writeHead(status, { ...SEGURANCA, 'Content-Type': 'text/html; charset=utf-8', ...PRIVADO, Vary: 'Accept-Encoding', ...(gz ? { 'Content-Encoding': 'gzip' } : {}) });
+  res.end(gz ? zlib.gzipSync(corpo) : corpo);
+}
 const ir = (res: http.ServerResponse, para: string, extra: Record<string, string> = {}) => fim(res, 303, '', { Location: para, ...PRIVADO, ...extra });
 
 async function entrar(req: http.IncomingMessage, res: http.ServerResponse) {
@@ -138,7 +143,7 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/painel' || url.pathname === '/painel/') {
       if (!logado(req)) return ir(res, '/painel/entrar');
       const f = lerFiltro(url.searchParams);
-      return html(res, 200, renderPainel(await carregarPainel(f), f));
+      return html(res, 200, renderPainel(await carregarPainel(f), f, { usuario: USUARIO, tema: lerTema(lerCookie(req.headers.cookie, COOKIE_TEMA)) }), req);
     }
     if (url.pathname === '/painel/exportar.csv') {
       if (!logado(req)) return ir(res, '/painel/entrar');

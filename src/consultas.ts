@@ -23,7 +23,7 @@ export type Dia = { dia: string; dow: number; visitas: number; visitantes: numbe
 export type Grupo = { nome: string; visitas: number; visitantes: number; clicaram: number; tempo_medio: number; leram75: number };
 export type Celula = { dow: number; hora: number; visitas: number };
 export type Painel = {
-  resumo: Resumo; anterior: Resumo; dias: Dia[]; horas: Celula[]; botoes: { nome: string; cliques: number }[];
+  resumo: Resumo; anterior: Resumo; dias: Dia[]; diasAnteriores: Dia[]; horas: Celula[]; botoes: { nome: string; cliques: number }[];
   grupos: Record<Dimensao, Grupo[]>; opcoes: Record<Dimensao, string[]>; aoVivo: number;
 };
 
@@ -111,12 +111,12 @@ async function aoVivo(): Promise<number> {
 }
 
 export async function carregarPainel(f: Filtro): Promise<Painel> {
-  const [r, ant, dias, horas, bts, ops, vivo, ...gs] = await Promise.all([
-    resumo(f), resumo(periodoAnterior(f)), porDia(f), porHora(f), botoes(f), opcoes(f), aoVivo(),
+  const [r, ant, dias, diasAnt, horas, bts, ops, vivo, ...gs] = await Promise.all([
+    resumo(f), resumo(periodoAnterior(f)), porDia(f), porDia(periodoAnterior(f)), porHora(f), botoes(f), opcoes(f), aoVivo(),
     ...DIMENSOES.map((d) => agrupar(f, d)),
   ]);
   const grupos = Object.fromEntries(DIMENSOES.map((d, i) => [d, gs[i]])) as Record<Dimensao, Grupo[]>;
-  return { resumo: r, anterior: ant, dias, horas, botoes: bts, opcoes: ops, aoVivo: vivo, grupos };
+  return { resumo: r, anterior: ant, dias, diasAnteriores: diasAnt, horas, botoes: bts, opcoes: ops, aoVivo: vivo, grupos };
 }
 
 const COLUNAS_CSV = ['data_hora', 'tipo', 'valor', 'detalhe', 'origem', 'midia', 'campanha', 'conteudo', 'dispositivo', 'sistema', 'visitante'];
