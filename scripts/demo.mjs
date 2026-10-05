@@ -26,16 +26,21 @@ for (let i = 0; ; i++) {
   catch { if (i > 30) throw new Error('O banco não respondeu. O Docker Desktop está aberto?'); await esperar(1000); }
 }
 
-console.log('2/3 Ligando o site (aplica as migrações)...');
-const site = spawn(process.execPath, ['src/server.ts'], {
-  cwd: RAIZ, stdio: 'inherit',
-  env: { ...process.env, PORT: String(PORTA), SITE_URL: `http://localhost:${PORTA}`, DATABASE_URL: BANCO, ...acesso },
-});
-process.on('SIGINT', () => { site.kill(); process.exit(0); });
-for (let i = 0; ; i++) {
-  try { if ((await fetch(`http://localhost:${PORTA}/saude`)).ok) break; } catch { /* ainda subindo */ }
-  if (i > 30) { site.kill(); throw new Error('O site não subiu. Veja o erro acima.'); }
-  await esperar(500);
+const noAr = () => fetch(`http://localhost:${PORTA}/saude`).then((r) => r.ok, () => false);
+if (await noAr()) {
+  console.log(`2/3 O site da demo já estava rodando na porta ${PORTA}: reaproveitando.`);
+} else {
+  console.log('2/3 Ligando o site (aplica as migrações)...');
+  const site = spawn(process.execPath, ['src/server.ts'], {
+    cwd: RAIZ, stdio: 'inherit',
+    env: { ...process.env, PORT: String(PORTA), SITE_URL: `http://localhost:${PORTA}`, DATABASE_URL: BANCO, ...acesso },
+  });
+  site.on('exit', (codigo) => { console.error(`O site parou (código ${codigo}).`); process.exit(codigo || 1); });
+  process.on('SIGINT', () => { site.kill(); process.exit(0); });
+  for (let i = 0; !(await noAr()); i++) {
+    if (i > 30) { site.kill(); throw new Error('O site não subiu. Veja o erro acima.'); }
+    await esperar(500);
+  }
 }
 
 console.log('3/3 Gerando 60 dias de visitas de exemplo...');
