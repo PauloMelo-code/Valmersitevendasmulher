@@ -13,12 +13,17 @@ export const paginaVendasEventos = pgTable(
     origem: text('origem').notNull(), // utm_source, domínio de quem indicou ou "direto"
     campanha: text('campanha'),
     midia: text('midia'),
+    conteudo: text('conteudo'), // utm_content: qual anúncio/criativo trouxe a visita
     dispositivo: text('dispositivo').notNull(),
+    sistema: text('sistema').notNull().default('Outro'), // iOS | Android | Windows | macOS | Linux | Outro
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
     deletedAt: timestamp('deleted_at', { withTimezone: true }),
     isDeleted: boolean('is_deleted').notNull().default(false),
     modifiedBy: text('modified_by').notNull().default('visitante'),
   },
-  (t) => [index('pagina_vendas_eventos_created_at_idx').on(t.createdAt)],
+  (t) => [
+    index('pagina_vendas_eventos_created_at_idx').on(t.createdAt),
+    index('pagina_vendas_eventos_visitante_idx').on(t.visitante, t.createdAt),
+  ],
 );

@@ -3,8 +3,10 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import zlib from 'node:zlib';
-import { estatisticas, migrar, salvarEvento } from './db.ts';
+import { carregarPainel, exportarCsv } from './consultas.ts';
+import { migrar, salvarEvento } from './db.ts';
 import { lerEvento } from './evento.ts';
+import { lerFiltro } from './filtros.ts';
 import { renderLogin } from './login.ts';
 import { renderPainel } from './painel.ts';
 import { bloqueado, chaveDe, COOKIE, credenciaisOk, criarSessao, lerCookie, registrarFalha, sessaoValida } from './sessao.ts';
@@ -135,8 +137,16 @@ const server = http.createServer(async (req, res) => {
     }
     if (url.pathname === '/painel' || url.pathname === '/painel/') {
       if (!logado(req)) return ir(res, '/painel/entrar');
-      const dias = [1, 7, 30, 90].includes(Number(url.searchParams.get('dias'))) ? Number(url.searchParams.get('dias')) : 7;
-      return html(res, 200, renderPainel(await estatisticas(dias), dias));
+      const f = lerFiltro(url.searchParams);
+      return html(res, 200, renderPainel(await carregarPainel(f), f));
+    }
+    if (url.pathname === '/painel/exportar.csv') {
+      if (!logado(req)) return ir(res, '/painel/entrar');
+      const f = lerFiltro(url.searchParams);
+      return fim(res, 200, await exportarCsv(f), {
+        'Content-Type': 'text/csv; charset=utf-8', ...PRIVADO,
+        'Content-Disposition': `attachment; filename="eventos_${f.de}_a_${f.ate}.csv"`,
+      });
     }
     const a = arquivos.get(url.pathname === '/' ? '/index.html' : url.pathname);
     if (!a) return fim(res, 404, 'Página não encontrada');

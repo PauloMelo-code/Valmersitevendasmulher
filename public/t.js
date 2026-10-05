@@ -7,7 +7,7 @@
   } catch (e) { id = (Math.random().toString(36).slice(2) + Date.now().toString(36)).slice(0, 24); }
 
   var q = new URLSearchParams(location.search);
-  var base = { v: id, o: q.get('utm_source'), c: q.get('utm_campaign'), m: q.get('utm_medium'), r: document.referrer };
+  var base = { v: id, o: q.get('utm_source'), c: q.get('utm_campaign'), m: q.get('utm_medium'), a: q.get('utm_content'), r: document.referrer };
   function enviar(t, extra) {
     var d = { t: t }, k;
     for (k in base) if (base[k]) d[k] = base[k];

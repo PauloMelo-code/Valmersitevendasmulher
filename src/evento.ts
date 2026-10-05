@@ -11,7 +11,9 @@ export type Evento = {
   origem: string;
   campanha: string | null;
   midia: string | null;
+  conteudo: string | null;
   dispositivo: 'celular' | 'tablet' | 'computador';
+  sistema: string;
 };
 
 const BOT = /bot|crawl|spider|slurp|facebookexternalhit|whatsapp|preview|headless|lighthouse|pingdom|uptime/i;
@@ -32,6 +34,15 @@ export function dispositivoDe(ua: string): Evento['dispositivo'] {
   if (/iPad|Tablet/i.test(ua)) return 'tablet';
   if (/Mobi|Android|iPhone/i.test(ua)) return 'celular';
   return 'computador';
+}
+
+export function sistemaDe(ua: string): string {
+  if (/iPhone|iPad|iPod/i.test(ua)) return 'iOS';
+  if (/Android/i.test(ua)) return 'Android';
+  if (/Windows/i.test(ua)) return 'Windows';
+  if (/Macintosh|Mac OS X/i.test(ua)) return 'macOS';
+  if (/Linux|CrOS/i.test(ua)) return 'Linux';
+  return 'Outro';
 }
 
 export function lerEvento(corpo: string, ua: string, hostProprio: string): Evento | null {
@@ -65,6 +76,8 @@ export function lerEvento(corpo: string, ua: string, hostProprio: string): Event
     origem,
     campanha: texto(d.c),
     midia: texto(d.m, 60),
+    conteudo: texto(d.a),
     dispositivo: dispositivoDe(ua),
+    sistema: sistemaDe(ua),
   };
 }

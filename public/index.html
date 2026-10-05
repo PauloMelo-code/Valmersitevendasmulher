@@ -212,6 +212,8 @@ section .s-img img{border-radius:18px!important}
   *,*::before,*::after{animation:none!important;transition:none!important}
   html.js .rv,html.js .h-body > *,html.js .h-img img,.h1 .w > i{opacity:1!important;transform:none!important}
 }
+.v6-prova{flex-basis:100%;font-size:14px;color:#B8C4D6;letter-spacing:.2px}.v6-prova b{color:#D4A855;font-weight:600}.v6-prova i{font-style:normal;opacity:.5;margin:0 4px}
+@media (max-width:820px){.v6-prova{text-align:center}}
 </style>
 </head>
 <body>
@@ -238,6 +240,7 @@ section .s-img img{border-radius:18px!important}
 <div style="text-align: left"><div style="font-size: 20px; color: #8D9AB0">De <span style="text-decoration: line-through">R$ 197</span> por</div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 92px; line-height: 0.95; color: #FFFFFF">R$ 97 <span style="font-size: 34px; color: #D4A855; white-space: nowrap">À VISTA</span></div></div>
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: flex-start">
 <a class="cta js-checkout" href="#oferta" style="display: inline-block; background: #FFFFFF; color: #08132B; text-decoration: none; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 17px; letter-spacing: 0.5px; padding: 20px 32px; border-radius: 6px; text-align: center">QUERO COMEÇAR MINHA JORNADA COMO LÍDER</a>
+<div class="v6-prova"><b>+30 mil</b> profissionais formados <i>·</i> <b>22 anos</b> formando líderes <i>·</i> <b>6 obras</b> publicadas</div>
 
 </div>
 </div>
@@ -386,11 +389,14 @@ section .s-img img{border-radius:18px!important}
 
 <section class="sec" style="padding: 112px 0">
 <div style="max-width: 1180px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; gap: 48px">
+<!-- DEPOIMENTOS: trocar "hidden" por style="display: contents" quando os videos reais estiverem no lugar dos VIDEO_DEPOIMENTO -->
+<div id="depoimentos" hidden>
 <h2 class="h2" style="margin: 0; text-align: center; font-family: 'Montserrat', sans-serif; font-weight: 800; font-size: 40px; line-height: 1.15">QUEM JÁ VIVEU A LIDERANÇA NA PRÁTICA, FALA.</h2>
 <div class="g3">
 <div style="display: flex; flex-direction: column; gap: 10px"><div style="width: 100%; aspect-ratio: 9 / 16; box-sizing: border-box; background: #0E1F42; border: 1px dashed #D4A855; border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; padding: 20px; text-align: center"><div style="font-family: 'Montserrat', sans-serif; font-weight: 800; letter-spacing: 1.5px; font-size: 13px; color: #FFFFFF; word-break: break-word">VIDEO_DEPOIMENTO_01</div><div style="color: #8D9AB0; font-size: 13px">Vídeo vertical de um depoimento real</div></div><div style="color: #8D9AB0; font-size: 14px; text-align: center">Nome, cargo e empresa</div></div>
 <div style="display: flex; flex-direction: column; gap: 10px"><div style="width: 100%; aspect-ratio: 9 / 16; box-sizing: border-box; background: #0E1F42; border: 1px dashed #D4A855; border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; padding: 20px; text-align: center"><div style="font-family: 'Montserrat', sans-serif; font-weight: 800; letter-spacing: 1.5px; font-size: 13px; color: #FFFFFF; word-break: break-word">VIDEO_DEPOIMENTO_02</div><div style="color: #8D9AB0; font-size: 13px">Vídeo vertical de um depoimento real</div></div><div style="color: #8D9AB0; font-size: 14px; text-align: center">Nome, cargo e empresa</div></div>
 <div style="display: flex; flex-direction: column; gap: 10px"><div style="width: 100%; aspect-ratio: 9 / 16; box-sizing: border-box; background: #0E1F42; border: 1px dashed #D4A855; border-radius: 4px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 8px; padding: 20px; text-align: center"><div style="font-family: 'Montserrat', sans-serif; font-weight: 800; letter-spacing: 1.5px; font-size: 13px; color: #FFFFFF; word-break: break-word">VIDEO_DEPOIMENTO_03</div><div style="color: #8D9AB0; font-size: 13px">Vídeo vertical de um depoimento real</div></div><div style="color: #8D9AB0; font-size: 14px; text-align: center">Nome, cargo e empresa</div></div>
+</div>
 </div>
 <div class="g3" style="border-top: 1px solid #23365A; border-bottom: 1px solid #23365A; padding: 36px 0; text-align: center">
 <div><div style="font-family: 'Bebas Neue', sans-serif; font-size: 56px; line-height: 1; color: #D4A855">+30 MIL</div><div style="color: #B8C4D6">profissionais formados</div></div>
@@ -561,7 +567,7 @@ var CHECKOUT_URL = "{{CHECKOUT_URL}}";
     });
   });
   var barra = document.getElementById('barra');
-  function onScroll() { barra.classList.toggle('on', window.scrollY > 1100); }
+  function onScroll() { barra.classList.toggle('on', window.scrollY > 700); }
   window.addEventListener('scroll', onScroll, { passive: true }); onScroll();
 })();
 </script>
