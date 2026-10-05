@@ -3,3 +3,5 @@ node_modules
 .git
 tests
 pagina-mulheres-v5.html
+.env.demo
+scripts
