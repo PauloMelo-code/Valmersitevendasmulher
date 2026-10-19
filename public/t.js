@@ -19,7 +19,7 @@
   function fb() { if (window.fbq) window.fbq.apply(null, arguments); }
 
   enviar('view');
-  fb('track', 'ViewContent', { content_name: 'Liderança Inteligente', value: 97, currency: 'BRL' });
+  /* PageView/ViewContent do Pixel saem do consentimento.js, só depois do "Aceitar" (LGPD). */
 
   /* repassa as UTMs da página para o checkout (a plataforma atribui a venda à campanha) */
   if (location.search) document.querySelectorAll('.js-checkout').forEach(function (a) {

@@ -25,23 +25,40 @@ if (CHECKOUT && !/^https:\/\/\S+$/.test(CHECKOUT)) throw new Error('CHECKOUT_URL
 if (SENHA.length < 12) console.warn('PAINEL_SENHA ausente ou com menos de 12 caracteres: /painel desligado.');
 const HOST = new URL(SITE_URL).host;
 
-const pixel = PIXEL ? `<script>!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');fbq('init','${PIXEL}');fbq('track','PageView');</script>
-<noscript><img height="1" width="1" style="display:none" alt="" src="https://www.facebook.com/tr?id=${PIXEL}&ev=PageView&noscript=1"></noscript>` : '';
+// LGPD: o Pixel não carrega aqui. O consentimento.js só o liga depois do "Aceitar" (e sem <noscript>,
+// que dispararia sem escolha). Sem PIXEL, não há banner.
+const pixel = PIXEL ? `<script>window.LV_PIXEL='${PIXEL}'</script>` : '';
+
+// Dados do controlador (rodapé e /privacidade), vindos do ambiente; escapados porque viram HTML.
+const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+const EMPRESA = {
+  RAZAO: process.env.EMPRESA_RAZAO ?? '', CNPJ: process.env.EMPRESA_CNPJ ?? '',
+  ENDERECO: process.env.EMPRESA_ENDERECO ?? '', CONTATO: process.env.CONTATO_EMAIL ?? '',
+};
+if (EMPRESA.CNPJ && !/^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/.test(EMPRESA.CNPJ)) throw new Error('EMPRESA_CNPJ inválido (ex.: 12.345.678/0001-90)');
+if (EMPRESA.CONTATO && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(EMPRESA.CONTATO)) throw new Error('CONTATO_EMAIL inválido');
+const faltando = Object.entries(EMPRESA).filter(([, v]) => !v).map(([k]) => k);
+if (faltando.length) console.warn(`Dados da empresa ausentes (${faltando.join(', ')}): rodapé e /privacidade ficam incompletos.`);
 
 const preencher = (t: string) => t
   .replaceAll('{{SITE_URL}}', SITE_URL)
   .replaceAll('{{CHECKOUT_URL}}', JSON.stringify(CHECKOUT).slice(1, -1).replaceAll('<', '\\u003c'))
+  .replaceAll('{{EMPRESA_RAZAO}}', esc(EMPRESA.RAZAO || 'Grupo Impacto Educacional'))
+  .replaceAll('{{EMPRESA_CNPJ}}', esc(EMPRESA.CNPJ || 'a informar'))
+  .replaceAll('{{EMPRESA_ENDERECO}}', esc(EMPRESA.ENDERECO || 'a informar'))
+  .replaceAll('{{CONTATO_EMAIL}}', esc(EMPRESA.CONTATO || 'a informar'))
   .replace('<!--PIXEL-->', pixel);
 
 // Tudo de public/ fica em memória (≈1 MB): sem leitura de disco por request e sem path traversal.
 type Arquivo = { corpo: Buffer; gz?: Buffer; tipo: string; cache: string };
 const TIPOS: Record<string, string> = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.txt': 'text/plain; charset=utf-8',
-  '.xml': 'application/xml; charset=utf-8', '.jpg': 'image/jpeg',
+  '.xml': 'application/xml; charset=utf-8', '.jpg': 'image/jpeg', '.png': 'image/png',
 };
+const BINARIOS = new Set(['.jpg', '.png']);
 const arquivos = new Map<string, Arquivo>();
 function registrar(rota: string, corpo: Buffer, ext: string, cache = 'public, max-age=300') {
-  const texto = !ext.startsWith('.jpg');
+  const texto = !BINARIOS.has(ext);
   arquivos.set(rota, { corpo, gz: texto ? zlib.gzipSync(corpo) : undefined, tipo: TIPOS[ext], cache });
 }
 const PUB = path.join(import.meta.dirname, '..', 'public');
@@ -49,14 +66,17 @@ for (const rel of fs.readdirSync(PUB, { recursive: true }) as string[]) {
   const abs = path.join(PUB, rel), ext = path.extname(rel);
   if (!TIPOS[ext] || fs.statSync(abs).isDirectory()) continue;
   const rota = '/' + rel.split(path.sep).join('/');
-  if (ext === '.jpg') registrar(rota, fs.readFileSync(abs), ext, 'public, max-age=604800');
+  if (BINARIOS.has(ext)) registrar(rota, fs.readFileSync(abs), ext, 'public, max-age=604800');
   else registrar(rota, Buffer.from(preencher(fs.readFileSync(abs, 'utf8'))), ext);
 }
+// Endereço sem ".html" para a política (é o que vai no rodapé, no banner e no cadastro da Meta).
+arquivos.set('/privacidade', arquivos.get('/privacidade.html')!);
 const hoje = new Date().toISOString().slice(0, 10);
 registrar('/robots.txt', Buffer.from(`User-agent: *\nAllow: /\nDisallow: /painel\nDisallow: /api/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`), '.txt');
 registrar('/sitemap.xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE_URL}/</loc><lastmod>${hoje}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>${SITE_URL}/privacidade</loc><lastmod>${hoje}</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>\n`), '.xml');
 
 const SEGURANCA = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin' };

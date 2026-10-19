@@ -28,4 +28,5 @@ Valor total declarado: R$ 815. Preço da oferta: R$ 97 à vista (cupom INTELIGEN
 ## Links
 
 - [Página de vendas]({{SITE_URL}}/): oferta completa, perguntas frequentes e botão de compra
+- [Política de privacidade]({{SITE_URL}}/privacidade): dados coletados, cookies e direitos (LGPD)
 - [Sitemap]({{SITE_URL}}/sitemap.xml)
