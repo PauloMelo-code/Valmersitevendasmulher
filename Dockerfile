@@ -5,6 +5,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
 COPY src ./src
 COPY public ./public
+COPY paginas ./paginas
 COPY drizzle ./drizzle
 USER node
 EXPOSE 3000

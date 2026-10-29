@@ -3,6 +3,7 @@ import { DIMENSOES, NOMES_PRESET, ROTULOS, hojeSP, periodoAnterior, urlCom, type
 import { SEMANA, ddmm, esc, fmtPct, funil, graficoBarras, graficoLinha, mapaCalor, miniBarras, num, pct, rotuloValor, tempo } from './graficos.ts';
 import { icone, type NomeIcone } from './icones.ts';
 import { ESTILO } from './painel-estilo.ts';
+import { PAGINA } from './pagina.ts';
 import type { Tema } from './tema.ts';
 
 type Tom = 'azul' | 'violeta' | 'ambar' | 'verde' | 'rosa' | 'ceu' | 'neutro';
@@ -161,7 +162,7 @@ ${DIMENSOES.map((d) => `.abas:has(#aba-${d}:checked) .aba-${d}{display:block}.ab
   </div></div></header>
 <main class="cont">
   <div class="cabecalho"><div class="cab-esq">${chip('painel', 'azul', 'lg')}<div>
-    <h1>Desempenho da página de vendas <span class="etiqueta t-neutro">${f.preset === 'custom' ? `${f.dias} dia${f.dias > 1 ? 's' : ''}` : NOMES_PRESET[f.preset]}</span></h1>
+    <h1>Desempenho da página de vendas <span class="etiqueta t-neutro">${PAGINA.nome}</span> <span class="etiqueta t-neutro">${f.preset === 'custom' ? `${f.dias} dia${f.dias > 1 ? 's' : ''}` : NOMES_PRESET[f.preset]}</span></h1>
     <p>${intervalo(f.de, f.ate)} · comparado com ${intervalo(ant.de, ant.ate)} · atualizado às ${agora}</p></div></div>
     <div class="acoes"><a class="bt bt-contorno" href="/painel/exportar.csv${esc(urlCom(f))}">${icone('baixar')}Exportar CSV</a>
       <a class="bt bt-neutro" href="/" target="_blank" rel="noopener">${icone('abrir')}Ver página</a></div></div>

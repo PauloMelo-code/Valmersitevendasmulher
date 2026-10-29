@@ -1,0 +1,35 @@
+# Liderança Inteligente + Líder na Prática
+
+> Página de vendas do livro "Liderança Inteligente", de Valmer Albuquerque, para profissionais que já lideram ou estão se preparando para liderar. A oferta reúne o livro físico, o treinamento online "Líder na Prática" e 3 materiais práticos, de R$ 197 por R$ 97 à vista, com frete grátis para todo o Brasil e garantia de 7 dias.
+
+## O que a pessoa recebe
+
+- Livro "Liderança Inteligente" (livro físico, entregue em casa com frete grátis): o que todo líder precisa aprender para liderar pessoas e gerar resultados.
+- Bônus 01 · Treinamento online "Líder na Prática": 2 módulos, 10 aulas em vídeo, 100% online, acesso imediato.
+  - Módulo 1 · Antes de liderar pessoas, aprenda a liderar a si mesmo: Fundamentos da liderança; Eu sou um bom líder?; Posicionamento; O direito e o peso da liderança; Identidade, capacidade e merecimento.
+  - Módulo 2 · Conduzir pessoas: Perfis comportamentais; Comunicação inteligente na liderança; As técnicas de comunicação; Feedback que constrói; Delegação sem perder o controle: os 5 níveis de autonomia.
+- Bônus 02 · "Feedback que Transforma": estruturar conversas de feedback e corrigir comportamentos sem atacar pessoas.
+- Bônus 03 · "Perfis Comportamentais na Liderança": reconhecer padrões de comportamento e adaptar a comunicação.
+- Bônus 04 · "Processos Claros": organizar responsabilidades e padrões para uma equipe mais autônoma.
+
+Preço da oferta: R$ 97 à vista (de R$ 197).
+
+## Para quem é
+
+Empresários e empreendedores que lideram equipes, gestores, coordenadores e supervisores, profissionais promovidos recentemente, líderes que centralizam decisões demais e pessoas que estão se preparando para assumir uma posição de liderança.
+
+## Entrega e garantia
+
+- Acesso imediato ao treinamento e aos materiais após a confirmação do pagamento. Não há versão digital do livro.
+- Livro físico enviado para o endereço informado na compra, com frete grátis para todo o Brasil.
+- Garantia de 7 dias.
+
+## Autor
+
+- Valmer Albuquerque: há mais de duas décadas desenvolve líderes como mentor e palestrante; autor de seis obras. CEO do Grupo Impacto Educacional e fundador e diretor editorial da Editora Signature.
+
+## Links
+
+- [Página de vendas]({{SITE_URL}}/): oferta completa, perguntas frequentes e botão de compra
+- [Política de privacidade]({{SITE_URL}}/privacidade): dados coletados, cookies e direitos (LGPD)
+- [Sitemap]({{SITE_URL}}/sitemap.xml)

@@ -7,6 +7,7 @@ import { carregarPainel, exportarCsv } from './consultas.ts';
 import { migrar, salvarEvento } from './db.ts';
 import { lerEvento } from './evento.ts';
 import { lerFiltro } from './filtros.ts';
+import { PAGINA } from './pagina.ts';
 import { COOKIE_TEMA, lerTema } from './tema.ts';
 import { renderLogin } from './login.ts';
 import { renderPainel } from './painel.ts';
@@ -53,22 +54,28 @@ const preencher = (t: string) => t
 type Arquivo = { corpo: Buffer; gz?: Buffer; tipo: string; cache: string };
 const TIPOS: Record<string, string> = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.txt': 'text/plain; charset=utf-8',
-  '.xml': 'application/xml; charset=utf-8', '.jpg': 'image/jpeg', '.png': 'image/png',
+  '.xml': 'application/xml; charset=utf-8', '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp',
 };
-const BINARIOS = new Set(['.jpg', '.png']);
+const BINARIOS = new Set(['.jpg', '.png', '.webp']);
 const arquivos = new Map<string, Arquivo>();
 function registrar(rota: string, corpo: Buffer, ext: string, cache = 'public, max-age=300') {
   const texto = !BINARIOS.has(ext);
   arquivos.set(rota, { corpo, gz: texto ? zlib.gzipSync(corpo) : undefined, tipo: TIPOS[ext], cache });
 }
-const PUB = path.join(import.meta.dirname, '..', 'public');
-for (const rel of fs.readdirSync(PUB, { recursive: true }) as string[]) {
-  const abs = path.join(PUB, rel), ext = path.extname(rel);
-  if (!TIPOS[ext] || fs.statSync(abs).isDirectory()) continue;
-  const rota = '/' + rel.split(path.sep).join('/');
-  if (BINARIOS.has(ext)) registrar(rota, fs.readFileSync(abs), ext, 'public, max-age=604800');
-  else registrar(rota, Buffer.from(preencher(fs.readFileSync(abs, 'utf8'))), ext);
+function carregarPasta(pasta: string) {
+  const base = path.join(import.meta.dirname, '..', pasta);
+  for (const rel of fs.readdirSync(base, { recursive: true }) as string[]) {
+    const abs = path.join(base, rel), ext = path.extname(rel);
+    if (!TIPOS[ext] || fs.statSync(abs).isDirectory()) continue;
+    const rota = '/' + rel.split(path.sep).join('/');
+    if (BINARIOS.has(ext)) registrar(rota, fs.readFileSync(abs), ext, 'public, max-age=604800');
+    else registrar(rota, Buffer.from(preencher(fs.readFileSync(abs, 'utf8'))), ext);
+  }
 }
+// public/ tem o que é comum (privacidade, consentimento, rastreio) e a página das mulheres;
+// a pasta da página escolhida em PAGINA sobrepõe index.html, llms.txt e imagens.
+carregarPasta('public');
+if (PAGINA.pasta) carregarPasta(PAGINA.pasta);
 // Endereço sem ".html" para a política (é o que vai no rodapé, no banner e no cadastro da Meta).
 arquivos.set('/privacidade', arquivos.get('/privacidade.html')!);
 const hoje = new Date().toISOString().slice(0, 10);
@@ -183,4 +190,4 @@ const server = http.createServer(async (req, res) => {
 });
 
 await migrar();
-server.listen(PORT, () => console.log(`Página no ar em ${SITE_URL} (porta ${PORT})`));
+server.listen(PORT, () => console.log(`Página no ar em ${SITE_URL} (porta ${PORT}) · ${PAGINA.nome}`));

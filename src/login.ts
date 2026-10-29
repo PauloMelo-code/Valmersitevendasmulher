@@ -1,3 +1,5 @@
+import { PAGINA } from './pagina.ts';
+
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 
 const ICONE = {
@@ -19,7 +21,7 @@ export function renderLogin(opcoes: { erro?: string; usuario?: string; desligado
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#08132B"><title>Entrar · Painel Liderança Inteligente</title>
 <link rel="icon" href="/img/livro-lideranca-inteligente.jpg">
-<link rel="preload" as="image" href="/img/cinco-mulheres-profissionais-em-um-ambiente-corpor.jpg">
+<link rel="preload" as="image" href="${PAGINA.foto}">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
 <style>
@@ -117,11 +119,11 @@ input:-webkit-autofill{-webkit-text-fill-color:var(--txt);-webkit-box-shadow:0 0
 </style></head><body>
 <div class="tela">
 <aside class="arte">
-  <img src="/img/cinco-mulheres-profissionais-em-um-ambiente-corpor.jpg" alt="" fetchpriority="high">
+  <img src="${PAGINA.foto}" alt="" fetchpriority="high">
   <div class="marca"><i></i>LIDERANÇA <b>INTELIGENTE</b></div>
   <div class="titulo">
     <div class="selo">PAINEL DA CAMPANHA</div>
-    <h2>Chegou a vez das mulheres <em>liderarem.</em></h2>
+    <h2>${PAGINA.slogan}</h2>
     <div class="numeros"><div><b>+30 mil</b>profissionais formados</div><div><b>22 anos</b>formando líderes</div><div><b>6 obras</b>publicadas</div></div>
   </div>
 </aside>
