@@ -15,6 +15,13 @@
       "when": 1791237524344,
       "tag": "0001_painel_completo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793297537698,
+      "tag": "0002_pagina_do_evento",
+      "breakpoints": true
     }
   ]
 }

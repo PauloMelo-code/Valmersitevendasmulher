@@ -29,4 +29,5 @@ test('período anterior e montagem de URL', () => {
   const dia = Object.fromEntries(new URLSearchParams(urlCom(f, { p: 'custom', de: '2026-10-01', ate: '2026-10-01' })));
   assert.deepEqual(dia, { p: 'custom', de: '2026-10-01', ate: '2026-10-01', origem: 'facebook', campanha: 'x' });
   assert.equal(ler('origem=' + 'a'.repeat(300)).dims.origem?.length, 120);
+  assert.equal(ler('pagina=geral').dims.pagina, 'geral', 'painel único filtra por página');
 });

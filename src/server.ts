@@ -7,7 +7,7 @@ import { carregarPainel, exportarCsv } from './consultas.ts';
 import { migrar, salvarEvento } from './db.ts';
 import { lerEvento } from './evento.ts';
 import { lerFiltro } from './filtros.ts';
-import { PAGINA } from './pagina.ts';
+import { NOME_PAGINA, PAGINA } from './pagina.ts';
 import { COOKIE_TEMA, lerTema } from './tema.ts';
 import { renderLogin } from './login.ts';
 import { renderPainel } from './painel.ts';
@@ -153,7 +153,7 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/api/evento' && req.method === 'POST') {
       const corpo = await lerCorpo(req, 4096);
       const ev = corpo && lerEvento(corpo, String(req.headers['user-agent'] ?? ''), HOST);
-      if (ev) await salvarEvento(ev).catch((e) => console.error('evento:', e.message));
+      if (ev) await salvarEvento({ ...ev, pagina: NOME_PAGINA }).catch((e) => console.error('evento:', e.message));
       return fim(res, 204);
     }
     if (url.pathname === '/painel/entrar' && req.method === 'POST') return await entrar(req, res);

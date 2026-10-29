@@ -19,3 +19,5 @@ export function lerPagina(valor = 'mulheres'): (typeof PAGINAS)[NomePagina] {
 }
 
 export const PAGINA = lerPagina(process.env.PAGINA);
+// Marca gravada em cada visita: é assim que o painel único separa as duas páginas.
+export const NOME_PAGINA = (process.env.PAGINA ?? 'mulheres') as NomePagina;

@@ -12,6 +12,6 @@ export const db = drizzle(pool);
 
 export const migrar = () => migrate(db, { migrationsFolder: path.join(import.meta.dirname, '..', 'drizzle') });
 
-export async function salvarEvento(e: Evento): Promise<void> {
+export async function salvarEvento(e: Evento & { pagina: string }): Promise<void> {
   await db.insert(paginaVendasEventos).values(e);
 }

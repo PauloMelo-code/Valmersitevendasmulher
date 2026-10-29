@@ -1,9 +1,9 @@
 // Filtros do painel vindos da URL (?p=7d&origem=facebook...). Tudo validado: vem do navegador.
 
-export const DIMENSOES = ['origem', 'midia', 'campanha', 'conteudo', 'dispositivo', 'sistema'] as const;
+export const DIMENSOES = ['pagina', 'origem', 'midia', 'campanha', 'conteudo', 'dispositivo', 'sistema'] as const;
 export type Dimensao = (typeof DIMENSOES)[number];
 export const ROTULOS: Record<Dimensao, string> = {
-  origem: 'Origem', midia: 'Mídia', campanha: 'Campanha', conteudo: 'Anúncio', dispositivo: 'Dispositivo', sistema: 'Sistema',
+  pagina: 'Página', origem: 'Origem', midia: 'Mídia', campanha: 'Campanha', conteudo: 'Anúncio', dispositivo: 'Dispositivo', sistema: 'Sistema',
 };
 
 // preset -> [dias atrás do início, dias atrás do fim]

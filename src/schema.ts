@@ -14,6 +14,7 @@ export const paginaVendasEventos = pgTable(
     campanha: text('campanha'),
     midia: text('midia'),
     conteudo: text('conteudo'), // utm_content: qual anúncio/criativo trouxe a visita
+    pagina: text('pagina').notNull().default('mulheres'), // página de vendas do deploy (PAGINA), gravada pelo servidor
     dispositivo: text('dispositivo').notNull(),
     sistema: text('sistema').notNull().default('Outro'), // iOS | Android | Windows | macOS | Linux | Outro
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),

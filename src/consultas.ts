@@ -119,13 +119,13 @@ export async function carregarPainel(f: Filtro): Promise<Painel> {
   return { resumo: r, anterior: ant, dias, diasAnteriores: diasAnt, horas, botoes: bts, opcoes: ops, aoVivo: vivo, grupos };
 }
 
-const COLUNAS_CSV = ['data_hora', 'tipo', 'valor', 'detalhe', 'origem', 'midia', 'campanha', 'conteudo', 'dispositivo', 'sistema', 'visitante'];
+const COLUNAS_CSV = ['data_hora', 'tipo', 'valor', 'detalhe', 'pagina', 'origem', 'midia', 'campanha', 'conteudo', 'dispositivo', 'sistema', 'visitante'];
 
 // CSV para Excel pt-BR (";" + BOM). Prefixa ' em células que começam com = + - @ (injeção de fórmula).
 export async function exportarCsv(f: Filtro): Promise<string> {
   const r = await db.execute(sql`
     select to_char(created_at at time zone ${TZ}, 'YYYY-MM-DD HH24:MI:SS') as data_hora, tipo, valor, detalhe,
-      origem, midia, campanha, conteudo, dispositivo, sistema, visitante
+      pagina, origem, midia, campanha, conteudo, dispositivo, sistema, visitante
     from pagina_vendas_eventos where ${onde(f)} order by created_at limit 50000`);
   const cel = (v: unknown) => {
     let s = v == null ? '' : String(v);

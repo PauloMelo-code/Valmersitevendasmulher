@@ -1,0 +1,1 @@
+ALTER TABLE "pagina_vendas_eventos" ADD COLUMN "pagina" text DEFAULT 'mulheres' NOT NULL;

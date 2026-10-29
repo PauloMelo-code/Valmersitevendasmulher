@@ -3,7 +3,7 @@ import { DIMENSOES, NOMES_PRESET, ROTULOS, hojeSP, periodoAnterior, urlCom, type
 import { SEMANA, ddmm, esc, fmtPct, funil, graficoBarras, graficoLinha, mapaCalor, miniBarras, num, pct, rotuloValor, tempo } from './graficos.ts';
 import { icone, type NomeIcone } from './icones.ts';
 import { ESTILO } from './painel-estilo.ts';
-import { PAGINA } from './pagina.ts';
+import { PAGINAS, type NomePagina } from './pagina.ts';
 import type { Tema } from './tema.ts';
 
 type Tom = 'azul' | 'violeta' | 'ambar' | 'verde' | 'rosa' | 'ceu' | 'neutro';
@@ -12,8 +12,11 @@ const dataBr = (iso: string) => `${ddmm(iso)}/${iso.slice(0, 4)}`;
 const intervalo = (de: string, ate: string) => (de === ate ? dataBr(de) : `${ddmm(de)} a ${dataBr(ate)}`);
 const barrinha = (v: number, max: number) => `<span class="barrinha"><i style="width:${max ? (v / max) * 100 : 0}%"></i></span>`;
 
+// Nome legível do valor: a dimensão página guarda a chave (mulheres/geral) e mostra o nome.
+const rot = (d: Dimensao, v: string) => (d === 'pagina' && v in PAGINAS ? PAGINAS[v as NomePagina].nome : rotuloValor(v));
+
 const ICONE_DIM: Record<Dimensao, NomeIcone> = {
-  origem: 'origem', midia: 'midia', campanha: 'campanha', conteudo: 'anuncio', dispositivo: 'celular', sistema: 'sistema',
+  pagina: 'livro', origem: 'origem', midia: 'midia', campanha: 'campanha', conteudo: 'anuncio', dispositivo: 'celular', sistema: 'sistema',
 };
 
 // Tendência contra o período anterior, sempre com ícone e texto (nunca só cor).
@@ -37,10 +40,10 @@ function filtros(f: Filtro, p: Painel): string {
   const selects = DIMENSOES.map((d) => {
     const ops = !f.dims[d] || p.opcoes[d].includes(f.dims[d]!) ? p.opcoes[d] : [f.dims[d]!, ...p.opcoes[d]];
     return `<label><span>${icone(ICONE_DIM[d])}${ROTULOS[d]}</span><select name="${d}"><option value="">Todos</option>${ops
-      .map((v) => `<option value="${esc(v)}"${v === f.dims[d] ? ' selected' : ''}>${esc(rotuloValor(v))}</option>`).join('')}</select></label>`;
+      .map((v) => `<option value="${esc(v)}"${v === f.dims[d] ? ' selected' : ''}>${esc(rot(d, v))}</option>`).join('')}</select></label>`;
   }).join('');
   const ativos = DIMENSOES.filter((d) => f.dims[d])
-    .map((d) => `<a class="ativo" href="${esc(urlCom(f, { [d]: null }))}" aria-label="Remover filtro ${ROTULOS[d]}">${ROTULOS[d]}: <b>${esc(rotuloValor(f.dims[d]!))}</b>${icone('fechar')}</a>`).join('');
+    .map((d) => `<a class="ativo" href="${esc(urlCom(f, { [d]: null }))}" aria-label="Remover filtro ${ROTULOS[d]}">${ROTULOS[d]}: <b>${esc(rot(d, f.dims[d]!))}</b>${icone('fechar')}</a>`).join('');
   const limpar = `/painel${esc(urlCom({ ...f, dims: {} }))}`;
   return `<form class="filtros" id="filtros" method="get" action="/painel">
   <nav class="segmentos" aria-label="Período">${presets}</nav>
@@ -58,7 +61,7 @@ function tabelaGrupo(f: Filtro, d: Dimensao, linhas: Grupo[], total: number): st
   if (!linhas.length) return '<div class="vazio-mini">Sem dados no período.</div>';
   const max = Math.max(1, ...linhas.map((l) => l.visitantes));
   return `<div class="rolar"><table class="tabela"><thead><tr><th>${ROTULOS[d]}</th><th>Visitantes</th><th>Clicaram em comprar</th><th>Taxa de clique</th><th>Tempo médio</th><th>Leram 75%</th></tr></thead><tbody>
-  ${linhas.map((l) => `<tr><td class="nome"><a href="${esc(urlCom(f, { [d]: l.nome }))}" title="Filtrar o painel por ${esc(rotuloValor(l.nome))}">${esc(rotuloValor(l.nome))}</a><small>${fmtPct(pct(l.visitantes, total))} dos visitantes</small></td>
+  ${linhas.map((l) => `<tr><td class="nome"><a href="${esc(urlCom(f, { [d]: l.nome }))}" title="Filtrar o painel por ${esc(rot(d, l.nome))}">${esc(rot(d, l.nome))}</a><small>${fmtPct(pct(l.visitantes, total))} dos visitantes</small></td>
     <td>${num(l.visitantes)}${barrinha(l.visitantes, max)}</td><td>${num(l.clicaram)}</td><td><b>${fmtPct(pct(l.clicaram, l.visitantes))}</b></td>
     <td>${tempo(l.tempo_medio)}</td><td>${fmtPct(pct(l.leram75, l.visitantes))}</td></tr>`).join('')}</tbody></table></div>`;
 }
@@ -162,7 +165,7 @@ ${DIMENSOES.map((d) => `.abas:has(#aba-${d}:checked) .aba-${d}{display:block}.ab
   </div></div></header>
 <main class="cont">
   <div class="cabecalho"><div class="cab-esq">${chip('painel', 'azul', 'lg')}<div>
-    <h1>Desempenho da página de vendas <span class="etiqueta t-neutro">${PAGINA.nome}</span> <span class="etiqueta t-neutro">${f.preset === 'custom' ? `${f.dias} dia${f.dias > 1 ? 's' : ''}` : NOMES_PRESET[f.preset]}</span></h1>
+    <h1>Desempenho das páginas de vendas <span class="etiqueta t-neutro">${f.preset === 'custom' ? `${f.dias} dia${f.dias > 1 ? 's' : ''}` : NOMES_PRESET[f.preset]}</span></h1>
     <p>${intervalo(f.de, f.ate)} · comparado com ${intervalo(ant.de, ant.ate)} · atualizado às ${agora}</p></div></div>
     <div class="acoes"><a class="bt bt-contorno" href="/painel/exportar.csv${esc(urlCom(f))}">${icone('baixar')}Exportar CSV</a>
       <a class="bt bt-neutro" href="/" target="_blank" rel="noopener">${icone('abrir')}Ver página</a></div></div>
