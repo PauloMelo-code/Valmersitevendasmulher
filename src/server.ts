@@ -40,12 +40,18 @@ const HOST = new URL(SITE_URL).host;
 // que dispararia sem escolha). Sem PIXEL, não há banner.
 const pixel = PIXEL ? `<script>window.LV_PIXEL='${PIXEL}'</script>` : '';
 
-// Dados do controlador (rodapé e /privacidade), vindos do ambiente; escapados porque viram HTML.
+// Dados do controlador (rodapé e /privacidade); escapados porque viram HTML.
+// Padrão = cadastro da Receita Federal (consultado em 29/10/2026, situação ATIVA); o ambiente sobrepõe se mudar.
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+const EMPRESA_PADRAO = {
+  RAZAO: 'Liderança Total Serviços em Tecnologia da Informação Ltda',
+  CNPJ: '67.949.459/0001-07',
+  ENDERECO: 'Rua Néo Alves Martins, 2789, Sala 103, 1º andar, Zona 01, Maringá/PR, CEP 87013-914',
+};
 const EMPRESA = {
-  RAZAO: opcional('EMPRESA_RAZAO', /^[^<>]+$/, 'deve ser o nome da empresa (sem o texto de exemplo entre < >)'),
-  CNPJ: opcional('EMPRESA_CNPJ', /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/, 'deve ser um CNPJ (ex.: 12.345.678/0001-90)'),
-  ENDERECO: opcional('EMPRESA_ENDERECO', /^[^<>]+$/, 'deve ser o endereço (sem o texto de exemplo entre < >)'),
+  RAZAO: opcional('EMPRESA_RAZAO', /^[^<>]+$/, 'deve ser o nome da empresa (sem o texto de exemplo entre < >)') || EMPRESA_PADRAO.RAZAO,
+  CNPJ: opcional('EMPRESA_CNPJ', /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/, 'deve ser um CNPJ (ex.: 12.345.678/0001-90)') || EMPRESA_PADRAO.CNPJ,
+  ENDERECO: opcional('EMPRESA_ENDERECO', /^[^<>]+$/, 'deve ser o endereço (sem o texto de exemplo entre < >)') || EMPRESA_PADRAO.ENDERECO,
   CONTATO: opcional('CONTATO_EMAIL', /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/, 'deve ser um e-mail'),
 };
 const faltando = Object.entries(EMPRESA).filter(([, v]) => !v).map(([k]) => k);
@@ -54,9 +60,9 @@ if (faltando.length) console.warn(`Dados da empresa ausentes (${faltando.join(',
 const preencher = (t: string) => t
   .replaceAll('{{SITE_URL}}', SITE_URL)
   .replaceAll('{{CHECKOUT_URL}}', JSON.stringify(CHECKOUT).slice(1, -1).replaceAll('<', '\\u003c'))
-  .replaceAll('{{EMPRESA_RAZAO}}', esc(EMPRESA.RAZAO || 'Grupo Impacto Educacional'))
-  .replaceAll('{{EMPRESA_CNPJ}}', esc(EMPRESA.CNPJ || 'a informar'))
-  .replaceAll('{{EMPRESA_ENDERECO}}', esc(EMPRESA.ENDERECO || 'a informar'))
+  .replaceAll('{{EMPRESA_RAZAO}}', esc(EMPRESA.RAZAO))
+  .replaceAll('{{EMPRESA_CNPJ}}', esc(EMPRESA.CNPJ))
+  .replaceAll('{{EMPRESA_ENDERECO}}', esc(EMPRESA.ENDERECO))
   .replaceAll('{{CONTATO_EMAIL}}', esc(EMPRESA.CONTATO || 'a informar'))
   .replace('<!--PIXEL-->', pixel);
 
