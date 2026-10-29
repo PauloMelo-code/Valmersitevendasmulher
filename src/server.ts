@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import zlib from 'node:zlib';
+import { env } from './ambiente.ts';
 import { carregarPainel, exportarCsv } from './consultas.ts';
 import { migrar, salvarEvento } from './db.ts';
 import { lerEvento } from './evento.ts';
@@ -13,16 +14,25 @@ import { renderLogin } from './login.ts';
 import { renderPainel } from './painel.ts';
 import { bloqueado, chaveDe, COOKIE, credenciaisOk, criarSessao, lerCookie, registrarFalha, sessaoValida } from './sessao.ts';
 
-const PORT = Number(process.env.PORT ?? 3000);
-const SITE_URL = (process.env.SITE_URL ?? `http://localhost:${PORT}`).replace(/\/+$/, '');
-const PIXEL = process.env.META_PIXEL_ID ?? '';
-const CHECKOUT = process.env.CHECKOUT_URL ?? '';
-const USUARIO = process.env.PAINEL_USUARIO ?? 'admin';
-const SENHA = process.env.PAINEL_SENHA ?? '';
+const PORT = Number(env('PORT', '3000'));
+const SITE_BRUTO = env('SITE_URL', `http://localhost:${PORT}`);
+const SITE_URL = (/^https?:\/\//i.test(SITE_BRUTO) ? SITE_BRUTO : `https://${SITE_BRUTO}`).replace(/\/+$/, '');
+// Opcionais: valor inválido não derruba o site; avisa no log (com o que chegou) e desliga só aquele item.
+function opcional(nome: string, formato: RegExp, comoDeveSer: string): string {
+  const v = env(nome);
+  if (!v || formato.test(v)) return v;
+  console.warn(`${nome} ignorada: recebi ${JSON.stringify(v)}, mas ${comoDeveSer}. O site sobe sem ela.`);
+  return '';
+}
 
-if (!/^https?:\/\/[^/\s]+$/.test(SITE_URL)) throw new Error('SITE_URL inválida (ex.: https://lideranca.seudominio.com.br)');
-if (PIXEL && !/^\d{5,20}$/.test(PIXEL)) throw new Error('META_PIXEL_ID deve ter só números');
-if (CHECKOUT && !/^https:\/\/\S+$/.test(CHECKOUT)) throw new Error('CHECKOUT_URL deve começar com https://');
+const PIXEL = opcional('META_PIXEL_ID', /^\d{5,20}$/, 'deve ter só os números do pixel (ex.: 1234567890123456)');
+const CHECKOUT = opcional('CHECKOUT_URL', /^https:\/\/\S+$/, 'deve ser um link começando com https://');
+const USUARIO = env('PAINEL_USUARIO', 'admin');
+const SENHA = env('PAINEL_SENHA');
+
+if (!/^https?:\/\/[^/\s]+$/.test(SITE_URL)) {
+  throw new Error(`SITE_URL inválida: recebi ${JSON.stringify(SITE_BRUTO)}. Use só o endereço, ex.: https://lider.lideresdeimpacto.com.br`);
+}
 if (SENHA.length < 12) console.warn('PAINEL_SENHA ausente ou com menos de 12 caracteres: /painel desligado.');
 const HOST = new URL(SITE_URL).host;
 
@@ -33,11 +43,11 @@ const pixel = PIXEL ? `<script>window.LV_PIXEL='${PIXEL}'</script>` : '';
 // Dados do controlador (rodapé e /privacidade), vindos do ambiente; escapados porque viram HTML.
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 const EMPRESA = {
-  RAZAO: process.env.EMPRESA_RAZAO ?? '', CNPJ: process.env.EMPRESA_CNPJ ?? '',
-  ENDERECO: process.env.EMPRESA_ENDERECO ?? '', CONTATO: process.env.CONTATO_EMAIL ?? '',
+  RAZAO: opcional('EMPRESA_RAZAO', /^[^<>]+$/, 'deve ser o nome da empresa (sem o texto de exemplo entre < >)'),
+  CNPJ: opcional('EMPRESA_CNPJ', /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/, 'deve ser um CNPJ (ex.: 12.345.678/0001-90)'),
+  ENDERECO: opcional('EMPRESA_ENDERECO', /^[^<>]+$/, 'deve ser o endereço (sem o texto de exemplo entre < >)'),
+  CONTATO: opcional('CONTATO_EMAIL', /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/, 'deve ser um e-mail'),
 };
-if (EMPRESA.CNPJ && !/^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/.test(EMPRESA.CNPJ)) throw new Error('EMPRESA_CNPJ inválido (ex.: 12.345.678/0001-90)');
-if (EMPRESA.CONTATO && !/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(EMPRESA.CONTATO)) throw new Error('CONTATO_EMAIL inválido');
 const faltando = Object.entries(EMPRESA).filter(([, v]) => !v).map(([k]) => k);
 if (faltando.length) console.warn(`Dados da empresa ausentes (${faltando.join(', ')}): rodapé e /privacidade ficam incompletos.`);
 
