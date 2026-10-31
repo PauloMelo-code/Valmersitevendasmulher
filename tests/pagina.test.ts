@@ -18,5 +18,6 @@ test('cada página tem os arquivos que o servidor e o login usam', () => {
     for (const marca of ['{{CHECKOUT_URL}}', '<!--PIXEL-->', '/t.js', '/consentimento.js', '{{EMPRESA_CNPJ}}', '/privacidade'])
       assert.ok(html.includes(marca), `${pasta}/index.html sem ${marca}`);
     assert.ok(!/livro digital|f[ií]sico \+ digital|aut[óo]graf/i.test(html), `${pasta}/index.html ainda promete digital ou autógrafo`);
+    assert.ok(html.includes('BLACK FRIDAY') && !html.includes('R$ 197'), `${pasta}/index.html sem a tarja ou com o valor antigo`);
   }
 });
