@@ -1,70 +1,42 @@
-import crypto from 'node:crypto';
 import fs from 'node:fs';
 import http from 'node:http';
 import path from 'node:path';
 import zlib from 'node:zlib';
-import { env } from './ambiente.ts';
+import { EMPRESA, env, opcional, PIXEL_TAG, PORT, SITE_URL } from './ambiente.ts';
+import { rotaCheckout } from './checkout.ts';
 import { carregarPainel, exportarCsv } from './consultas.ts';
-import { migrar, salvarEvento } from './db.ts';
+import { erroSemDados, migrar, salvarEvento } from './db.ts';
 import { lerEvento } from './evento.ts';
 import { lerFiltro } from './filtros.ts';
+import { fim, html, ir, lerCorpo, mesmaOrigem, PRIVADO, SEGURANCA } from './http.ts';
+import { INFINITEPAY } from './infinitepay.ts';
 import { NOME_PAGINA, PAGINA } from './pagina.ts';
 import { COOKIE_TEMA, lerTema } from './tema.ts';
 import { renderLogin } from './login.ts';
 import { renderPainel } from './painel.ts';
+import { rotaPedidos } from './painel-pedidos.ts';
+import { rotaBling } from './painel-bling.ts';
+import { iniciarRotina } from './rotina.ts';
 import { bloqueado, chaveDe, COOKIE, credenciaisOk, criarSessao, lerCookie, registrarFalha, sessaoValida } from './sessao.ts';
 
-const PORT = Number(env('PORT', '3000'));
-const SITE_BRUTO = env('SITE_URL', `http://localhost:${PORT}`);
-const SITE_URL = (/^https?:\/\//i.test(SITE_BRUTO) ? SITE_BRUTO : `https://${SITE_BRUTO}`).replace(/\/+$/, '');
-// Opcionais: valor inválido não derruba o site; avisa no log (com o que chegou) e desliga só aquele item.
-function opcional(nome: string, formato: RegExp, comoDeveSer: string): string {
-  const v = env(nome);
-  if (!v || formato.test(v)) return v;
-  console.warn(`${nome} ignorada: recebi ${JSON.stringify(v)}, mas ${comoDeveSer}. O site sobe sem ela.`);
-  return '';
-}
-
-const PIXEL = opcional('META_PIXEL_ID', /^\d{5,20}$/, 'deve ter só os números do pixel (ex.: 1234567890123456)');
-const CHECKOUT = opcional('CHECKOUT_URL', /^https:\/\/\S+$/, 'deve ser um link começando com https://');
+// Checkout próprio ligado (INFINITEPAY_HANDLE) tem precedência: os botões .js-checkout vão para /comprar.
+const CHECKOUT = INFINITEPAY.handle ? `${SITE_URL}/comprar` : opcional('CHECKOUT_URL', /^https:\/\/\S+$/, 'deve ser um link começando com https://');
 const USUARIO = env('PAINEL_USUARIO', 'admin');
 const SENHA = env('PAINEL_SENHA');
 
-if (!/^https?:\/\/[^/\s]+$/.test(SITE_URL)) {
-  throw new Error(`SITE_URL inválida: recebi ${JSON.stringify(SITE_BRUTO)}. Use só o endereço, ex.: https://lider.lideresdeimpacto.com.br`);
-}
 if (SENHA.length < 12) console.warn('PAINEL_SENHA ausente ou com menos de 12 caracteres: /painel desligado.');
 const HOST = new URL(SITE_URL).host;
 
-// LGPD: o Pixel não carrega aqui. O consentimento.js só o liga depois do "Aceitar" (e sem <noscript>,
-// que dispararia sem escolha). Sem PIXEL, não há banner.
-const pixel = PIXEL ? `<script>window.LV_PIXEL='${PIXEL}'</script>` : '';
-
-// Dados do controlador (rodapé e /privacidade); escapados porque viram HTML.
-// Padrão = cadastro da Receita Federal (consultado em 29/10/2026, situação ATIVA); o ambiente sobrepõe se mudar.
+// Dados do vendedor no rodapé e em /privacidade; escapados porque viram HTML.
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
-const EMPRESA_PADRAO = {
-  RAZAO: 'Liderança Total Serviços em Tecnologia da Informação Ltda',
-  CNPJ: '67.949.459/0001-07',
-  ENDERECO: 'Rua Néo Alves Martins, 2789, Sala 103, 1º andar, Zona 01, Maringá/PR, CEP 87013-914',
-};
-const EMPRESA = {
-  RAZAO: opcional('EMPRESA_RAZAO', /^[^<>]+$/, 'deve ser o nome da empresa (sem o texto de exemplo entre < >)') || EMPRESA_PADRAO.RAZAO,
-  CNPJ: opcional('EMPRESA_CNPJ', /^\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}$/, 'deve ser um CNPJ (ex.: 12.345.678/0001-90)') || EMPRESA_PADRAO.CNPJ,
-  ENDERECO: opcional('EMPRESA_ENDERECO', /^[^<>]+$/, 'deve ser o endereço (sem o texto de exemplo entre < >)') || EMPRESA_PADRAO.ENDERECO,
-  CONTATO: opcional('CONTATO_EMAIL', /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/, 'deve ser um e-mail'),
-};
-const faltando = Object.entries(EMPRESA).filter(([, v]) => !v).map(([k]) => k);
-if (faltando.length) console.warn(`Dados da empresa ausentes (${faltando.join(', ')}): rodapé e /privacidade ficam incompletos.`);
-
 const preencher = (t: string) => t
   .replaceAll('{{SITE_URL}}', SITE_URL)
   .replaceAll('{{CHECKOUT_URL}}', JSON.stringify(CHECKOUT).slice(1, -1).replaceAll('<', '\\u003c'))
   .replaceAll('{{EMPRESA_RAZAO}}', esc(EMPRESA.RAZAO))
   .replaceAll('{{EMPRESA_CNPJ}}', esc(EMPRESA.CNPJ))
   .replaceAll('{{EMPRESA_ENDERECO}}', esc(EMPRESA.ENDERECO))
-  .replaceAll('{{CONTATO_EMAIL}}', esc(EMPRESA.CONTATO || 'a informar'))
-  .replace('<!--PIXEL-->', pixel);
+  .replaceAll('{{CONTATO_EMAIL}}', esc(EMPRESA.CONTATO))
+  .replace('<!--PIXEL-->', PIXEL_TAG);
 
 // Tudo de public/ fica em memória (≈1 MB): sem leitura de disco por request e sem path traversal.
 type Arquivo = { corpo: Buffer; gz?: Buffer; tipo: string; cache: string };
@@ -95,14 +67,12 @@ if (PAGINA.pasta) carregarPasta(PAGINA.pasta);
 // Endereço sem ".html" para a política (é o que vai no rodapé, no banner e no cadastro da Meta).
 arquivos.set('/privacidade', arquivos.get('/privacidade.html')!);
 const hoje = new Date().toISOString().slice(0, 10);
-registrar('/robots.txt', Buffer.from(`User-agent: *\nAllow: /\nDisallow: /painel\nDisallow: /api/\n\nSitemap: ${SITE_URL}/sitemap.xml\n`), '.txt');
+registrar('/robots.txt', Buffer.from(`User-agent: *\nAllow: /\nDisallow: /painel\nDisallow: /api/\nDisallow: /comprar\nDisallow: /obrigado\n\nSitemap: ${SITE_URL}/sitemap.xml\n`), '.txt');
 registrar('/sitemap.xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${SITE_URL}/</loc><lastmod>${hoje}</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
   <url><loc>${SITE_URL}/privacidade</loc><lastmod>${hoje}</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
 </urlset>\n`), '.xml');
-
-const SEGURANCA = { 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'strict-origin-when-cross-origin' };
 
 function enviar(req: http.IncomingMessage, res: http.ServerResponse, a: Arquivo) {
   const gzip = a.gz && /\bgzip\b/.test(String(req.headers['accept-encoding']));
@@ -114,27 +84,10 @@ function enviar(req: http.IncomingMessage, res: http.ServerResponse, a: Arquivo)
   res.end(req.method === 'HEAD' ? undefined : corpo);
 }
 
-function fim(res: http.ServerResponse, status: number, corpo = '', extra: Record<string, string> = {}) {
-  res.writeHead(status, { ...SEGURANCA, 'Content-Type': 'text/plain; charset=utf-8', ...extra });
-  res.end(corpo);
-}
-
 const CHAVE = chaveDe(USUARIO, SENHA);
 const SECURE = SITE_URL.startsWith('https://') ? '; Secure' : '';
 const logado = (req: http.IncomingMessage) => SENHA.length >= 12 && sessaoValida(lerCookie(req.headers.cookie, COOKIE), CHAVE);
-// CSRF: POST do painel só aceita Origin do próprio host (navegadores sempre mandam Origin em POST de formulário).
-function mesmaOrigem(req: http.IncomingMessage): boolean {
-  if (!req.headers.origin) return true;
-  try { return new URL(req.headers.origin).host === req.headers.host; } catch { return false; }
-}
-const PRIVADO = { 'Cache-Control': 'no-store', 'X-Frame-Options': 'DENY', 'X-Robots-Tag': 'noindex' };
-// HTML do painel tem SVG inline (≈125 KB): comprime quando o navegador aceita.
-function html(res: http.ServerResponse, status: number, corpo: string, req?: http.IncomingMessage) {
-  const gz = req && /\bgzip\b/.test(String(req.headers['accept-encoding']));
-  res.writeHead(status, { ...SEGURANCA, 'Content-Type': 'text/html; charset=utf-8', ...PRIVADO, Vary: 'Accept-Encoding', ...(gz ? { 'Content-Encoding': 'gzip' } : {}) });
-  res.end(gz ? zlib.gzipSync(corpo) : corpo);
-}
-const ir = (res: http.ServerResponse, para: string, extra: Record<string, string> = {}) => fim(res, 303, '', { Location: para, ...PRIVADO, ...extra });
+const tema = (req: http.IncomingMessage) => lerTema(lerCookie(req.headers.cookie, COOKIE_TEMA));
 
 async function entrar(req: http.IncomingMessage, res: http.ServerResponse) {
   if (!mesmaOrigem(req)) return fim(res, 403, 'Origem inválida');
@@ -154,23 +107,23 @@ async function entrar(req: http.IncomingMessage, res: http.ServerResponse) {
   ir(res, '/painel', { 'Set-Cookie': `${COOKIE}=${criarSessao(CHAVE)}; Path=/painel; HttpOnly; SameSite=Lax; Max-Age=604800${SECURE}` });
 }
 
-function lerCorpo(req: http.IncomingMessage, limite: number): Promise<string | null> {
-  return new Promise((ok) => {
-    let tam = 0; const partes: Buffer[] = [];
-    req.on('data', (c: Buffer) => { tam += c.length; if (tam > limite) { ok(null); req.destroy(); } else partes.push(c); });
-    req.on('end', () => ok(Buffer.concat(partes).toString('utf8')));
-    req.on('error', () => ok(null));
-  });
-}
-
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url ?? '/', 'http://local');
     if (url.pathname === '/api/evento' && req.method === 'POST') {
       const corpo = await lerCorpo(req, 4096);
       const ev = corpo && lerEvento(corpo, String(req.headers['user-agent'] ?? ''), HOST);
-      if (ev) await salvarEvento({ ...ev, pagina: NOME_PAGINA }).catch((e) => console.error('evento:', e.message));
+      if (ev) await salvarEvento({ ...ev, pagina: NOME_PAGINA }).catch((e) => console.error('evento:', erroSemDados(e)));
       return fim(res, 204);
+    }
+    if (await rotaCheckout(req, res, url)) return;
+    if (url.pathname === '/painel/pedidos' || url.pathname.startsWith('/painel/pedidos/')) {
+      if (!logado(req)) return req.method === 'GET' ? ir(res, '/painel/entrar') : fim(res, 403, 'Sessão expirada', PRIVADO);
+      return await rotaPedidos(req, res, url, { usuario: USUARIO, tema: tema(req) });
+    }
+    if (url.pathname === '/painel/bling' || url.pathname.startsWith('/painel/bling/')) {
+      if (!logado(req)) return req.method === 'GET' ? ir(res, '/painel/entrar') : fim(res, 403, 'Sessão expirada', PRIVADO);
+      return await rotaBling(req, res, url, { usuario: USUARIO, tema: tema(req), sessao: lerCookie(req.headers.cookie, COOKIE) ?? '' });
     }
     if (url.pathname === '/painel/entrar' && req.method === 'POST') return await entrar(req, res);
     if (url.pathname === '/painel/sair' && req.method === 'POST') {
@@ -186,7 +139,7 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === '/painel' || url.pathname === '/painel/') {
       if (!logado(req)) return ir(res, '/painel/entrar');
       const f = lerFiltro(url.searchParams);
-      return html(res, 200, renderPainel(await carregarPainel(f), f, { usuario: USUARIO, tema: lerTema(lerCookie(req.headers.cookie, COOKIE_TEMA)) }), req);
+      return html(res, 200, renderPainel(await carregarPainel(f), f, { usuario: USUARIO, tema: tema(req) }), req);
     }
     if (url.pathname === '/painel/exportar.csv') {
       if (!logado(req)) return ir(res, '/painel/entrar');
@@ -200,10 +153,11 @@ const server = http.createServer(async (req, res) => {
     if (!a) return fim(res, 404, 'Página não encontrada');
     enviar(req, res, a);
   } catch (e) {
-    console.error(e);
+    console.error(`erro interno em ${req.method} ${(req.url ?? '').split('?')[0]}:`, erroSemDados(e));
     if (!res.headersSent) fim(res, 500, 'Erro interno');
   }
 });
 
 await migrar();
-server.listen(PORT, () => console.log(`Página no ar em ${SITE_URL} (porta ${PORT}) · ${PAGINA.nome}`));
+iniciarRotina();
+server.listen(PORT, () => console.log(`Página no ar em ${SITE_URL} (porta ${PORT}) · ${PAGINA.nome}${INFINITEPAY.handle ? ' · checkout próprio ligado' : ''}`));

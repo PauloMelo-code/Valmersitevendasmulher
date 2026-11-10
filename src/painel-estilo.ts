@@ -50,6 +50,7 @@ svg{width:1em;height:1em;flex:none}
   background:linear-gradient(140deg,var(--superficie-3),var(--superficie-2));box-shadow:inset 0 0 0 1px var(--borda-forte)}
 .conta-nome{line-height:1.2;font-size:13px}.conta-nome small{display:block;color:var(--apagado);font-size:11.5px}
 .conta form{margin:0}
+.nav-p{display:flex;gap:4px;margin-right:auto}
 
 /* botões */
 .bt{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:36px;padding:0 14px;border-radius:10px;font-family:inherit;font-size:13px;font-weight:500;line-height:1;
@@ -197,7 +198,9 @@ details.mais summary{list-style:none}details.mais summary::-webkit-details-marke
   .faixa{grid-template-columns:repeat(2,minmax(0,1fr))}.faixa>div:nth-child(3){border-left:0}.faixa>div:nth-child(n+3){border-top:1px solid var(--borda)}}
 @media (max-width:767px){
   .cont{padding:0 16px}body{background-attachment:scroll}
-  .conta-nome,.vivo span,.logo small{display:none}.vivo{padding:0 10px}
+  .conta-nome,.vivo span,.logo small,.logo-txt{display:none}.vivo{padding:0 8px;gap:6px}.nav-p .bt{padding:0 7px}
+  .barra-in{gap:10px}.dir{gap:6px}.conta{padding-left:6px}.conta .avatar{display:none}
+  .nav-p{min-width:0;overflow-x:auto;scrollbar-width:none} /* 3 abas + tema + sair cabem em 390 px; se faltar espaço, as abas rolam */
   .cabecalho{padding:20px 0 16px}.cab-esq .chip{display:none}.cab-esq p{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .acoes{width:100%}.acoes .bt{flex:1}
   .segmentos{width:100%;overflow-x:auto}.segmentos a{flex:1;text-align:center}

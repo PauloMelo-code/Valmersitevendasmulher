@@ -66,6 +66,23 @@ function tabelaGrupo(f: Filtro, d: Dimensao, linhas: Grupo[], total: number): st
     <td>${tempo(l.tempo_medio)}</td><td>${fmtPct(pct(l.leram75, l.visitantes))}</td></tr>`).join('')}</tbody></table></div>`;
 }
 
+// Barra do topo comum aos painéis (visitas e pedidos), com o seletor de tema.
+export function barraPainel(usuario: string, aba: 'visitas' | 'pedidos' | 'bling', extra = ''): string {
+  const link = (a: typeof aba, href: string, txt: string) => `<a class="bt ${aba === a ? 'bt-contorno' : 'bt-neutro'}" href="${href}"${aba === a ? ' aria-current="page"' : ''}>${txt}</a>`;
+  return `<header class="barra"><div class="cont barra-in">
+  <a class="logo" href="/painel"><span class="logo-marca">${icone('painel', 'fill')}</span><span class="logo-txt">Liderança Inteligente</span><small>Painel</small></a>
+  <nav class="nav-p" aria-label="Painéis">${link('visitas', '/painel', 'Visitas')}${link('pedidos', '/painel/pedidos', 'Pedidos')}${link('bling', '/painel/bling', 'Bling')}</nav>
+  <div class="dir">${extra}
+    <button type="button" class="bt-icone" id="tema" aria-label="Alternar tema claro/escuro" title="Alternar tema">${icone('lua', 'regular', 'tema-lua')}${icone('sol', 'regular', 'tema-sol')}</button>
+    <div class="conta"><span class="avatar">${esc(usuario.slice(0, 1).toUpperCase())}</span><span class="conta-nome">${esc(usuario)}<small>Administrador</small></span>
+      <form method="post" action="/painel/sair"><button class="bt-icone" aria-label="Sair" title="Sair">${icone('saiu')}</button></form></div>
+  </div></div></header>`;
+}
+export const SCRIPT_TEMA = `document.getElementById('tema').addEventListener('click',function(){
+    var h=document.documentElement,t=h.dataset.theme,escuro=t==='escuro'||(t==='sistema'&&matchMedia('(prefers-color-scheme: dark)').matches),n=escuro?'claro':'escuro';
+    h.dataset.theme=n;document.cookie='tema='+n+'; path=/painel; max-age=31536000; samesite=lax'+(location.protocol==='https:'?'; secure':'');
+  });`;
+
 export function renderPainel(p: Painel, f: Filtro, ctx: { usuario: string; tema: Tema }): string {
   const r = p.resumo, a = p.anterior, ant = periodoAnterior(f);
   const taxa = pct(r.clicaram, r.visitantes), taxaAnt = pct(a.clicaram, a.visitantes);
@@ -155,14 +172,7 @@ ${series.map(([id]) => `.cartao:has(#g-${id}:checked) .graf-${id}{display:block}
 ${DIMENSOES.map((d) => `.abas:has(#aba-${d}:checked) .aba-${d}{display:block}.abas-nav:has(#aba-${d}:checked) label[for=aba-${d}]{background:var(--superficie-2);color:var(--texto);font-weight:600;box-shadow:inset 0 -2px 0 var(--destaque)}`).join('')}
 .seg-graf:has(:focus-visible),.abas-nav:has(:focus-visible){outline:2px solid var(--destaque);outline-offset:2px}
 </style></head><body>
-<header class="barra"><div class="cont barra-in">
-  <a class="logo" href="/painel"><span class="logo-marca">${icone('painel', 'fill')}</span>Liderança Inteligente<small>Painel</small></a>
-  <div class="dir">
-    <span class="vivo num" title="Pessoas com a página aberta nos últimos 5 minutos"><i></i>${num(p.aoVivo)}<span> agora no site</span></span>
-    <button type="button" class="bt-icone" id="tema" aria-label="Alternar tema claro/escuro" title="Alternar tema">${icone('lua', 'regular', 'tema-lua')}${icone('sol', 'regular', 'tema-sol')}</button>
-    <div class="conta"><span class="avatar">${esc(ctx.usuario.slice(0, 1).toUpperCase())}</span><span class="conta-nome">${esc(ctx.usuario)}<small>Administrador</small></span>
-      <form method="post" action="/painel/sair"><button class="bt-icone" aria-label="Sair" title="Sair">${icone('saiu')}</button></form></div>
-  </div></div></header>
+${barraPainel(ctx.usuario, 'visitas', `<span class="vivo num" title="Pessoas com a página aberta nos últimos 5 minutos"><i></i>${num(p.aoVivo)}<span> agora no site</span></span>`)}
 <main class="cont">
   <div class="cabecalho"><div class="cab-esq">${chip('painel', 'azul', 'lg')}<div>
     <h1>Desempenho das páginas de vendas <span class="etiqueta t-neutro">${f.preset === 'custom' ? `${f.dias} dia${f.dias > 1 ? 's' : ''}` : NOMES_PRESET[f.preset]}</span></h1>
@@ -180,10 +190,7 @@ ${DIMENSOES.map((d) => `.abas:has(#aba-${d}:checked) .aba-${d}{display:block}.ab
   fm.addEventListener('submit',function(){fm.querySelectorAll('select,input[type=date]').forEach(function(el){if(!el.value||(el.type==='date'&&p.value!=='custom'))el.disabled=true})});
   document.addEventListener('click',function(e){var d=document.querySelector('details.mais[open]');if(d&&!d.contains(e.target))d.removeAttribute('open')});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'){var d=document.querySelector('details.mais[open]');if(d){d.removeAttribute('open');d.querySelector('summary').focus()}}});
-  document.getElementById('tema').addEventListener('click',function(){
-    var h=document.documentElement,t=h.dataset.theme,escuro=t==='escuro'||(t==='sistema'&&matchMedia('(prefers-color-scheme: dark)').matches),n=escuro?'claro':'escuro';
-    h.dataset.theme=n;document.cookie='tema='+n+'; path=/painel; max-age=31536000; samesite=lax'+(location.protocol==='https:'?'; secure':'');
-  });
+  ${SCRIPT_TEMA}
   document.querySelectorAll('[data-copiar]').forEach(function(b){b.addEventListener('click',function(){
     if(!navigator.clipboard)return;navigator.clipboard.writeText(b.dataset.copiar).then(function(){var o=b.innerHTML;b.innerHTML=${JSON.stringify(icone('ok'))};b.title='Copiado';setTimeout(function(){b.innerHTML=o;b.title='Copiar'},1600)});
   })});

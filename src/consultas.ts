@@ -122,16 +122,17 @@ export async function carregarPainel(f: Filtro): Promise<Painel> {
 const COLUNAS_CSV = ['data_hora', 'tipo', 'valor', 'detalhe', 'pagina', 'origem', 'midia', 'campanha', 'conteudo', 'dispositivo', 'sistema', 'visitante'];
 
 // CSV para Excel pt-BR (";" + BOM). Prefixa ' em células que começam com = + - @ (injeção de fórmula).
+export function celulaCsv(v: unknown): string {
+  let s = v == null ? '' : String(v);
+  if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+  return /[;"\n\r]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s;
+}
+
 export async function exportarCsv(f: Filtro): Promise<string> {
   const r = await db.execute(sql`
     select to_char(created_at at time zone ${TZ}, 'YYYY-MM-DD HH24:MI:SS') as data_hora, tipo, valor, detalhe,
       pagina, origem, midia, campanha, conteudo, dispositivo, sistema, visitante
     from pagina_vendas_eventos where ${onde(f)} order by created_at limit 50000`);
-  const cel = (v: unknown) => {
-    let s = v == null ? '' : String(v);
-    if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
-    return /[;"\n\r]/.test(s) ? `"${s.replaceAll('"', '""')}"` : s;
-  };
-  const linhas = (r.rows as Record<string, unknown>[]).map((l) => COLUNAS_CSV.map((c) => cel(l[c])).join(';'));
+  const linhas = (r.rows as Record<string, unknown>[]).map((l) => COLUNAS_CSV.map((c) => celulaCsv(l[c])).join(';'));
   return '﻿' + [COLUNAS_CSV.join(';'), ...linhas].join('\r\n') + '\r\n';
 }

@@ -1,0 +1,2 @@
+CREATE UNIQUE INDEX "pagina_vendas_pedidos_transaction_nsu_uq" ON "pagina_vendas_pedidos" USING btree ("transaction_nsu") WHERE "pagina_vendas_pedidos"."transaction_nsu" is not null and "pagina_vendas_pedidos"."status" <> 'AGUARDANDO_PAGAMENTO';--> statement-breakpoint
+CREATE UNIQUE INDEX "pagina_vendas_pedidos_invoice_slug_uq" ON "pagina_vendas_pedidos" USING btree ("invoice_slug") WHERE "pagina_vendas_pedidos"."invoice_slug" is not null and "pagina_vendas_pedidos"."status" <> 'AGUARDANDO_PAGAMENTO';

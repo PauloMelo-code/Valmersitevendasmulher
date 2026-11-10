@@ -9,6 +9,9 @@ const NOMES = {
   igual: 'minus', origem: 'globe-hemisphere-west', campanha: 'megaphone', anuncio: 'film-strip', celular: 'device-mobile',
   sistema: 'app-window', midia: 'share-network', clique: 'cursor-click', tabela: 'table', info: 'info', fechar: 'x',
   barras: 'chart-bar', copiar: 'copy', ok: 'check', vivo: 'broadcast', horario: 'clock-countdown',
+  pacote: 'package', caminhao: 'truck', recibo: 'receipt', alerta: 'warning', cancelar: 'prohibit', entregue: 'seal-check',
+  dinheiro: 'money', ampulheta: 'hourglass', repetir: 'arrow-clockwise', enviar: 'paper-plane-tilt', local: 'map-pin', cartao: 'credit-card',
+  nota: 'file-text', conexao: 'plugs-connected',
 } as const;
 export type NomeIcone = keyof typeof NOMES;
 type Peso = 'regular' | 'duotone' | 'fill';
