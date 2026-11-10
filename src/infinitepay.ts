@@ -1,10 +1,18 @@
-import { opcional, SITE_URL, URL_API } from './ambiente.ts';
+import { env, opcional, SITE_URL, URL_API } from './ambiente.ts';
 
 // Checkout Integrado da InfinitePay (https://www.infinitepay.io/checkout-documentacao). Sem API key:
 // o handle identifica a conta, e só o payment_check confirma pagamento (o webhook não tem assinatura).
 
+// Aceita a InfiniteTag como aparece no app ("$EditoraSignature"): tira o $ e os espaços e põe em minúsculas.
+export function lerHandle(bruto: string): string {
+  const h = bruto.replace(/\s+/g, '').replace(/^\$/, '').toLowerCase();
+  if (!h || /^[a-z0-9_.-]{2,40}$/.test(h)) return h;
+  console.warn(`INFINITEPAY_HANDLE ignorada: recebi ${JSON.stringify(bruto)}, mas deve ser a InfiniteTag da conta (ex.: editorasignature). O site sobe sem ela.`);
+  return '';
+}
+
 export const INFINITEPAY = {
-  handle: opcional('INFINITEPAY_HANDLE', /^[a-z0-9_.-]{2,40}$/, 'deve ser o handle da conta sem o $ (ex.: editorasignature)'),
+  handle: lerHandle(env('INFINITEPAY_HANDLE')),
   base: (opcional('INFINITEPAY_API_URL', URL_API, 'deve ser https:// (ou http://127.0.0.1 em teste local)') || 'https://api.checkout.infinitepay.io').replace(/\/+$/, ''),
   precoCentavos: Number(opcional('PRECO_CENTAVOS', /^[1-9]\d{2,6}$/, 'deve ser o preço em centavos, mínimo 100 (ex.: 9700)') || 9700),
   descricao: opcional('PRODUTO_DESCRICAO', /^[^<>]{3,200}$/, 'deve ter de 3 a 200 caracteres, sem < >')

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { corpoLink, INFINITEPAY, reciboOk, regraConfirmacao, urlDoLink } from '../src/infinitepay.ts';
+import { corpoLink, INFINITEPAY, lerHandle, reciboOk, regraConfirmacao, urlDoLink } from '../src/infinitepay.ts';
 
 const cfg = { ...INFINITEPAY, handle: 'editorasignature', site: 'https://lider.exemplo.com.br', descricao: 'Liderança Inteligente' };
 const pedido = {
@@ -45,4 +45,11 @@ test('comprovante só de domínio da InfinitePay', () => {
   assert.ok(!reciboOk('https://infinitepay.io.evil.com/x'));
   assert.ok(!reciboOk('http://recibo.infinitepay.io/abc'), 'só https');
   assert.ok(!reciboOk('nao é url') && !reciboOk(null));
+});
+
+test('INFINITEPAY_HANDLE aceita a InfiniteTag com $, espaço e maiúsculas', () => {
+  assert.equal(lerHandle('$editorasignature'), 'editorasignature');
+  assert.equal(lerHandle(' $EditoraSignature \n'), 'editorasignature');
+  assert.equal(lerHandle(''), '');
+  assert.equal(lerHandle('https://loja.infinitepay.io/editorasignature'), '');
 });
