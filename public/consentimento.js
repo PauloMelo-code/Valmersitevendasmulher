@@ -5,17 +5,24 @@
   var CHAVE = 'lv_consentimento';
   var pixel = window.LV_PIXEL;
 
-  function ler() { try { return localStorage.getItem(CHAVE); } catch (e) { return null; } }
-  function gravar(v) { try { localStorage.setItem(CHAVE, v); } catch (e) { /* aba anônima: vale só nesta visita */ } }
+  function ler(k) { try { return localStorage.getItem(k || CHAVE); } catch (e) { return null; } }
+  function gravarEm(k, v) { try { localStorage.setItem(k, v); } catch (e) { /* aba anônima: vale só nesta visita */ } }
+  function gravar(v) { gravarEm(CHAVE, v); }
 
   function carregarPixel() {
     if (!pixel || window.fbq) return;
     !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
     // No /comprar a correspondência avançada automática leria e-mail, celular e CEP do formulário: desligada.
-    if (location.pathname === '/comprar') window.fbq('set', 'autoConfig', false, pixel);
+    if (location.pathname === '/comprar' || location.pathname === '/obrigado') window.fbq('set', 'autoConfig', false, pixel);
     window.fbq('init', pixel);
     window.fbq('track', 'PageView');
-    window.fbq('track', 'ViewContent', { content_name: 'Liderança Inteligente', value: 97, currency: 'BRL' });
+    var compra = window.LV_COMPRA;
+    if (!compra) return window.fbq('track', 'ViewContent', { content_name: 'Liderança Inteligente', value: 97, currency: 'BRL' });
+    // Uma vez por pedido: recarregar o /obrigado não conta a venda de novo (eventID também deduplica na Meta).
+    var chave = 'lv_compra_' + compra.id;
+    if (ler(chave) === '1') return;
+    window.fbq('track', 'Purchase', { content_name: 'Liderança Inteligente', value: compra.valor, currency: 'BRL' }, { eventID: 'compra-' + compra.id });
+    gravarEm(chave, '1');
   }
 
   var barra;

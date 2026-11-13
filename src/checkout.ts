@@ -171,7 +171,10 @@ function paginaObrigado(p: Pedido | undefined, q: URLSearchParams, t: number): s
   if (p.status === 'CANCELADO') return mensagem('Pedido cancelado', `<p>Este pedido foi cancelado. Dúvidas: <a href="mailto:${esc(EMPRESA.CONTATO)}">${esc(EMPRESA.CONTATO)}</a> (pedido ${esc(p.orderNsu)}).</p>`);
   if (p.status !== 'AGUARDANDO_PAGAMENTO') return mensagem(`Pagamento confirmado, ${nome}!`,
     `<p>Obrigado pela compra. O acesso ao treinamento Líder na Prática e aos 3 materiais chega no seu e-mail.</p>
-<p>O livro é enviado após 10 dias, com frete grátis, e o código de rastreio também vai por e-mail.</p><p>Pedido ${esc(p.orderNsu)}</p>`);
+<p>O livro é enviado após 10 dias, com frete grátis, e o código de rastreio também vai por e-mail.</p><p>Pedido ${esc(p.orderNsu)}</p>`,
+    // Purchase da Meta: só com pagamento confirmado e só se o comprador aceitou os cookies (consentimento.js).
+    `${PIXEL_TAG}<script>window.LV_COMPRA=${JSON.stringify({ id: p.orderNsu, valor: p.valorCentavos / 100 }).replaceAll('<', '\\u003c')}</script>
+<script src="/consentimento.js" defer></script>`);
   if (t >= 12) return mensagem('Estamos confirmando seu pagamento',
     `<p>${nome}, a confirmação está demorando um pouco mais que o normal (no Pix e no cartão costuma ser imediata). Você receberá o e-mail de acesso assim que o pagamento for confirmado.</p><p>Pedido ${esc(p.orderNsu)}</p>`);
   const prox = new URLSearchParams({ order_nsu: p.orderNsu, t: String(t + 1) });

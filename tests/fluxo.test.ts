@@ -207,6 +207,7 @@ test('criar pedido → webhook → payment_check → PAGO e aviso assinado ao L�
   const pg = await (await fetch(`${m.base}/obrigado?order_nsu=${principal}`)).text();
   assert.match(pg, /Pagamento confirmado, Maria!/);
   assert.ok(!pg.includes(p!.email) && !pg.includes('Silva'), 'obrigado sem dado pessoal além do primeiro nome');
+  assert.ok(pg.includes(`window.LV_COMPRA={"id":"${principal}"`) && pg.includes('/consentimento.js'), 'Purchase só na página de pago');
 });
 
 test('webhook repetido não faz nada novo; inexistente ou inválido = 400', { skip: pular }, async () => {
