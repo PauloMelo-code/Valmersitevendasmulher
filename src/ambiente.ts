@@ -36,6 +36,6 @@ export const EMPRESA = {
 };
 
 // LGPD: o Pixel não carrega aqui. O consentimento.js só o liga depois do "Aceitar" (e sem <noscript>,
-// que dispararia sem escolha). Sem PIXEL, não há banner.
-const PIXEL = opcional('META_PIXEL_ID', /^\d{5,20}$/, 'deve ter só os números do pixel (ex.: 1234567890123456)');
+// que dispararia sem escolha). Padrão = pixel da campanha Liderança Inteligente; META_PIXEL_ID troca.
+const PIXEL = opcional('META_PIXEL_ID', /^\d{5,20}$/, 'deve ter só os números do pixel (ex.: 1234567890123456)') || '1181979381174003';
 export const PIXEL_TAG = PIXEL ? `<script>window.LV_PIXEL='${PIXEL}'</script>` : '';
