@@ -11,6 +11,7 @@ export type Evento = {
   origem: string;
   campanha: string | null;
   midia: string | null;
+  conjunto: string | null;
   conteudo: string | null;
   dispositivo: 'celular' | 'tablet' | 'computador';
   sistema: string;
@@ -76,6 +77,7 @@ export function lerEvento(corpo: string, ua: string, hostProprio: string): Event
     origem,
     campanha: texto(d.c),
     midia: texto(d.m, 60),
+    conjunto: texto(d.j),
     conteudo: texto(d.a),
     dispositivo: dispositivoDe(ua),
     sistema: sistemaDe(ua),

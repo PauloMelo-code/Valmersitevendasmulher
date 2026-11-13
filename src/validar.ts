@@ -43,7 +43,7 @@ export function chaveNfe(s: string): string {
 export type DadosCompra = {
   nome: string; email: string; telefone: string; cpf: string;
   cep: string; rua: string; numero: string; complemento: string | null; bairro: string; cidade: string; uf: string;
-  visitante: string | null; origem: string | null; campanha: string | null; midia: string | null; conteudo: string | null;
+  visitante: string | null; origem: string | null; campanha: string | null; midia: string | null; conjunto: string | null; conteudo: string | null;
 };
 export type Campo = 'nome' | 'email' | 'celular' | 'cpf' | 'cep' | 'rua' | 'numero' | 'complemento' | 'bairro' | 'cidade' | 'uf';
 
@@ -78,7 +78,7 @@ export function validarCompra(f: URLSearchParams): { dados?: DadosCompra; erros:
     dados: {
       nome, email, telefone: tel, cpf, cep, rua, numero, complemento: complemento || null, bairro, cidade, uf, visitante,
       origem: opt(f.get('utm_source'))?.toLowerCase() ?? null, campanha: opt(f.get('utm_campaign')),
-      midia: opt(f.get('utm_medium')), conteudo: opt(f.get('utm_content')),
+      midia: opt(f.get('utm_medium')), conjunto: opt(f.get('utm_term')), conteudo: opt(f.get('utm_content')),
     },
   };
 }

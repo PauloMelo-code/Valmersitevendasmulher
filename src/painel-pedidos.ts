@@ -196,7 +196,7 @@ async function detalhe(p: Pedido, url: URL, ctx: Ctx): Promise<string> {
     ...(p.envioErro ? [['Erro', `<span class="erro-envio">${esc(p.envioErro)}</span>`] as [string, string]] : [])]))}
   ${cartao('enviar', 'violeta', 'Acesso ao treinamento', dl([['Aviso', p.acessoStatus === 'DESLIGADO' ? 'desligado: liberar manualmente' : esc(p.acessoStatus.toLowerCase())],
     ['Enviado em', quando(p.acessoEm)], ['Tentativas', String(p.acessoTentativas)], ...(p.acessoErro ? [['Erro', esc(p.acessoErro)] as [string, string]] : []),
-    ['Origem', `${v(p.origem)} · ${v(p.midia)} · ${v(p.campanha)} · ${v(p.conteudo)}`]]))}
+    ['Origem', `${v(p.origem)} · ${v(p.midia)} · ${v(p.campanha)} · ${v(p.conjunto)} · ${v(p.conteudo)}`]]))}
   </div>
   ${acoes.length ? cartao('clique', 'ambar', 'Ações', `<div class="acoes-p">${acoes.join('')}</div>`) : ''}
   <section class="cartao"><header class="cartao-cab"><div class="tit"><span class="chip t-neutro">${icone('tabela', 'duotone')}</span><div><h2>Histórico</h2><p>Trilha de auditoria: quem fez o quê e quando</p></div></div></header>

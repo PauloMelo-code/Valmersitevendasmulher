@@ -125,7 +125,7 @@ const COLUNAS: [string, (p: Pedido) => unknown][] = [
   ['valor', (p) => (p.valorCentavos / 100).toFixed(2).replace('.', ',')], ['valor_pago', (p) => p.valorPagoCentavos == null ? '' : (p.valorPagoCentavos / 100).toFixed(2).replace('.', ',')],
   ['metodo', (p) => p.metodo], ['parcelas', (p) => p.parcelas], ['pago_em', (p) => p.pagoEm?.toISOString()],
   ['envio_previsto_em', (p) => p.envioPrevistoEm?.toISOString()], ['nota_chave', (p) => p.notaChave], ['nota_numero', (p) => p.notaNumero], ['rastreio', (p) => p.rastreio],
-  ['acesso', (p) => p.acessoStatus], ['origem', (p) => p.origem], ['midia', (p) => p.midia], ['campanha', (p) => p.campanha], ['conteudo', (p) => p.conteudo],
+  ['acesso', (p) => p.acessoStatus], ['origem', (p) => p.origem], ['midia', (p) => p.midia], ['campanha', (p) => p.campanha], ['conjunto', (p) => p.conjunto], ['conteudo', (p) => p.conteudo],
 ];
 export async function exportarPedidosCsv(status: StatusPedido | null): Promise<string> {
   const linhas = await db.select().from(P).where(and(eq(P.isDeleted, false), status ? eq(P.status, status) : undefined)).orderBy(P.createdAt).limit(50000);

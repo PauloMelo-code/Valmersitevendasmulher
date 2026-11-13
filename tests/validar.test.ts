@@ -36,7 +36,7 @@ test('formulário de compra: normaliza e aponta erro por campo', () => {
   const base = {
     nome: '  Maria   da Silva ', email: 'Maria@Email.COM', celular: '(44) 99999-8888', cpf: '529.982.247-25', cep: '87013-060',
     rua: 'Rua Néo Alves Martins', numero: '2789', complemento: '', bairro: 'Zona 01', cidade: 'Maringá', uf: 'PR',
-    visitante: 'abc123def456', utm_source: 'Facebook', utm_campaign: 'bf-mulheres',
+    visitante: 'abc123def456', utm_source: 'Facebook', utm_campaign: 'bf-mulheres', utm_term: 'lideres-35-55',
   };
   const ok = validarCompra(new URLSearchParams(base));
   assert.deepEqual(ok.erros, {});
@@ -47,6 +47,7 @@ test('formulário de compra: normaliza e aponta erro por campo', () => {
   assert.equal(ok.dados?.cep, '87013060');
   assert.equal(ok.dados?.complemento, null);
   assert.equal(ok.dados?.origem, 'facebook');
+  assert.equal(ok.dados?.conjunto, 'lideres-35-55');
   assert.equal(validarCompra(new URLSearchParams({ ...base, visitante: "x'; drop" })).dados?.visitante, null);
 
   const ruim = validarCompra(new URLSearchParams({ ...base, nome: 'Maria', cpf: '111.111.111-11', uf: 'XX', rua: '<script>' }));

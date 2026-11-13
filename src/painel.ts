@@ -16,7 +16,7 @@ const barrinha = (v: number, max: number) => `<span class="barrinha"><i style="w
 const rot = (d: Dimensao, v: string) => (d === 'pagina' && v in PAGINAS ? PAGINAS[v as NomePagina].nome : rotuloValor(v));
 
 const ICONE_DIM: Record<Dimensao, NomeIcone> = {
-  pagina: 'livro', origem: 'origem', midia: 'midia', campanha: 'campanha', conteudo: 'anuncio', dispositivo: 'celular', sistema: 'sistema',
+  pagina: 'livro', origem: 'origem', midia: 'midia', campanha: 'campanha', conjunto: 'conjunto', conteudo: 'anuncio', dispositivo: 'celular', sistema: 'sistema',
 };
 
 // Tendência contra o período anterior, sempre com ícone e texto (nunca só cor).
@@ -149,7 +149,7 @@ export function renderPainel(p: Painel, f: Filtro, ctx: { usuario: string; tema:
       : '<div class="vazio-mini">Nenhum clique em comprar neste período.</div>',
   });
 
-  const utm = 'utm_source=facebook&utm_medium=cpc&utm_campaign={{campaign.name}}&utm_content={{ad.name}}';
+  const utm = 'utm_source=facebook&utm_medium=cpc&utm_campaign={{campaign.name}}&utm_term={{adset.name}}&utm_content={{ad.name}}';
   const ajuda = `<section class="cartao ajuda">${chip('info', 'neutro')}<div>
     <p><b>Como ler:</b> “clicaram em comprar” são as pessoas que foram para o checkout. As vendas aprovadas ficam na plataforma de pagamento e no Gerenciador de Eventos da Meta. As setas comparam com o período anterior de mesmo tamanho.</p>
     <p><b>Para saber qual anúncio vende</b>, cole nos Parâmetros de URL dos anúncios da Meta:</p>

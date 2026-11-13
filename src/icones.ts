@@ -6,7 +6,7 @@ const NOMES = {
   painel: 'chart-line-up', visitantes: 'users', carrinho: 'shopping-cart-simple', alvo: 'target', relogio: 'clock',
   novos: 'user-plus', livro: 'book-open-text', saiu: 'sign-out', olho: 'eye', filtro: 'funnel', calendario: 'calendar-blank',
   baixar: 'download-simple', abrir: 'arrow-square-out', sol: 'sun', lua: 'moon', subiu: 'trend-up', desceu: 'trend-down',
-  igual: 'minus', origem: 'globe-hemisphere-west', campanha: 'megaphone', anuncio: 'film-strip', celular: 'device-mobile',
+  igual: 'minus', origem: 'globe-hemisphere-west', campanha: 'megaphone', conjunto: 'stack', anuncio: 'film-strip', celular: 'device-mobile',
   sistema: 'app-window', midia: 'share-network', clique: 'cursor-click', tabela: 'table', info: 'info', fechar: 'x',
   barras: 'chart-bar', copiar: 'copy', ok: 'check', vivo: 'broadcast', horario: 'clock-countdown',
   pacote: 'package', caminhao: 'truck', recibo: 'receipt', alerta: 'warning', cancelar: 'prohibit', entregue: 'seal-check',

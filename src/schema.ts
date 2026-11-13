@@ -14,6 +14,7 @@ export const paginaVendasEventos = pgTable(
     origem: text('origem').notNull(), // utm_source, domínio de quem indicou ou "direto"
     campanha: text('campanha'),
     midia: text('midia'),
+    conjunto: text('conjunto'), // utm_term: conjunto de anúncios
     conteudo: text('conteudo'), // utm_content: qual anúncio/criativo trouxe a visita
     pagina: text('pagina').notNull().default('mulheres'), // página de vendas do deploy (PAGINA), gravada pelo servidor
     dispositivo: text('dispositivo').notNull(),
@@ -52,7 +53,7 @@ export const paginaVendasPedidos = pgTable(
     orderNsu: text('order_nsu').notNull().unique(), // LI-XXXXXXXXXX: único identificador que vai em URL
     pagina: text('pagina').notNull(),
     visitante: text('visitante'), // lv_id do navegador: liga a venda à campanha
-    origem: text('origem'), campanha: text('campanha'), midia: text('midia'), conteudo: text('conteudo'),
+    origem: text('origem'), campanha: text('campanha'), midia: text('midia'), conjunto: text('conjunto'), conteudo: text('conteudo'),
     nome: text('nome').notNull(), email: text('email').notNull(),
     telefone: text('telefone').notNull(), cpf: text('cpf').notNull(), // só dígitos
     cep: text('cep').notNull(), rua: text('rua').notNull(), numero: text('numero').notNull(), complemento: text('complemento'),

@@ -108,7 +108,7 @@ function paginaCompra(f: URLSearchParams, erros: Partial<Record<Campo, string>> 
   const uf = f.get('uf') ?? '';
   const selUf = `<div><label for="uf">Estado</label><select id="uf" name="uf" autocomplete="address-level1" required${erros.uf ? ' aria-invalid="true" aria-describedby="e-uf"' : ''}${primeiro === 'uf' ? ' autofocus' : ''}>
 <option value="">UF</option>${UFS.map((u) => `<option${u === uf ? ' selected' : ''}>${u}</option>`).join('')}</select>${pe('uf')}</div>`;
-  const ocultos = ['visitante', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content']
+  const ocultos = ['visitante', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
     .map((k) => `<input type="hidden" name="${k}" value="${esc((f.get(k) ?? '').slice(0, 120))}">`).join('');
   const resumo = Object.keys(erros).length ? `<p class="aviso" role="alert">Confira ${Object.keys(erros).length > 1 ? 'os campos marcados' : 'o campo marcado'} abaixo.</p>` : '';
   const valor = INFINITEPAY.precoCentavos;
@@ -263,7 +263,7 @@ async function obrigado(req: http.IncomingMessage, res: http.ServerResponse, q: 
 
 // No GET só passam visitante e UTMs: link de terceiro não pré-preenche nome, CPF nem endereço de entrega.
 const soCampanha = (q: URLSearchParams) => new URLSearchParams(
-  ['visitante', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content'].flatMap((k) => (q.has(k) ? [[k, q.get(k)!]] : [])));
+  ['visitante', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].flatMap((k) => (q.has(k) ? [[k, q.get(k)!]] : [])));
 
 // true = a rota é do checkout (respondida aqui).
 export async function rotaCheckout(req: http.IncomingMessage, res: http.ServerResponse, url: URL): Promise<boolean> {

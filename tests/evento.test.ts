@@ -12,6 +12,7 @@ test('aceita view com UTM e detecta celular', () => {
   assert.equal(e?.dispositivo, 'celular');
   assert.equal(e?.sistema, 'iOS');
   assert.equal(ler({ t: 'view', v: 'abc123xyz', a: 'video-depoimento-01' })?.conteudo, 'video-depoimento-01');
+  assert.equal(ler({ t: 'view', v: 'abc123xyz', j: 'publico-lideres-35-55' })?.conjunto, 'publico-lideres-35-55');
 });
 
 test('origem cai para o domínio de quem indicou, e para "direto" se for o próprio site', () => {
