@@ -36,7 +36,7 @@ async function bloco(escopo: string, ler: () => Promise<string>): Promise<string
 }
 type Item = { id?: unknown; descricao?: unknown; nome?: unknown };
 const itens = (b: unknown) => (((b as { data?: unknown } | null)?.data ?? []) as Item[]).filter((x) => x && x.id != null).slice(0, 50);
-const linhas = (b: unknown, cfg: string) => itens(b).map((x) => [String(x.id), String(x.descricao ?? x.nome ?? ''), String(x.id) === cfg] as [string, string, boolean]);
+const linhas = (b: unknown, ...cfg: string[]) => itens(b).map((x) => [String(x.id), String(x.descricao ?? x.nome ?? ''), cfg.includes(String(x.id))] as [string, string, boolean]);
 
 async function conferencia(): Promise<string> {
   const c = B.BLING;
@@ -46,11 +46,11 @@ async function conferencia(): Promise<string> {
     return p ? `<dl class="dados"><dt>SKU</dt><dd>${esc(c.sku)}</dd><dt>Id</dt><dd>${p.id}</dd><dt>Nome</dt><dd>${esc(p.nome)}</dd><dt>Preço</dt><dd>${p.preco == null ? '—' : esc(p.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }))}</dd></dl>`
       : `<p class="msg erro">${icone('alerta')}SKU ${esc(c.sku)} não encontrado no Bling.</p>`;
   });
-  const formas = await bloco('Formas de pagamento', async () => tabela(linhas(await BC.api('GET', '/formas-pagamentos?situacao=1'), c.formaPagamentoId)));
+  const formas = await bloco('Formas de pagamento', async () => tabela(linhas(await BC.api('GET', '/formas-pagamentos?situacao=1'), c.formaPagamentoId, c.formaPagamentoPixId)));
   // Não existe GET /lojas na API v3: as lojas são os canais de venda.
   const lojas = await bloco('Lojas (canais de venda)', async () => tabela(linhas(await BC.api('GET', '/canais-venda'), c.lojaId)));
   const naturezas = await bloco('Naturezas de Operação', async () => tabela(linhas(await BC.api('GET', '/naturezas-operacoes?situacao=1'), c.naturezaId)));
-  return [secao('Produto do BLING_SKU', produto), secao('Formas de pagamento (BLING_FORMA_PAGAMENTO_ID)', formas),
+  return [secao('Produto do BLING_SKU', produto), secao('Formas de pagamento (BLING_FORMA_PAGAMENTO_ID = cartão; BLING_FORMA_PAGAMENTO_PIX_ID = Pix, opcional)', formas),
     secao('Lojas (BLING_LOJA_ID, opcional)', lojas), secao('Naturezas de operação ativas (BLING_NATUREZA_ID, opcional)', naturezas, 'Vazio = o Bling aplica a natureza padrão de venda')].join('');
 }
 

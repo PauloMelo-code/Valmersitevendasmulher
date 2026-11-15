@@ -10,7 +10,8 @@ export const BLING = {
   clientId: opcional('BLING_CLIENT_ID', /^[\w-]{8,100}$/, 'deve ser o Client ID do app no Bling'),
   clientSecret: opcional('BLING_CLIENT_SECRET', /^\S{16,200}$/, 'deve ser o Client Secret do app no Bling', true),
   sku: opcional('BLING_SKU', /^[^\s<>"']{1,60}$/, 'deve ser o código (SKU) do livro no Bling, sem espaço'),
-  formaPagamentoId: id('BLING_FORMA_PAGAMENTO_ID'),
+  formaPagamentoId: id('BLING_FORMA_PAGAMENTO_ID'), // cartão e qualquer outro método
+  formaPagamentoPixId: id('BLING_FORMA_PAGAMENTO_PIX_ID'), // opcional: pedido pago com Pix; vazio = usa a de cima
   lojaId: id('BLING_LOJA_ID'),
   naturezaId: id('BLING_NATUREZA_ID'),
   situacaoCanceladoId: id('BLING_SITUACAO_CANCELADO_ID'),
@@ -157,7 +158,7 @@ export function corpoPedido(c: ConfigBling, p: PedidoNota, contatoId: string, pr
       ...(c.naturezaId ? { naturezaOperacao: { id: Number(c.naturezaId) } } : {}),
     }],
     // Valor do pedido, não o paid_amount: os juros do parcelado ficam com a InfinitePay.
-    parcelas: [{ dataVencimento: diaSP(p.pagoEm ?? agora), valor, formaPagamento: { id: Number(c.formaPagamentoId) } }],
+    parcelas: [{ dataVencimento: diaSP(p.pagoEm ?? agora), valor, formaPagamento: { id: Number(p.metodo === 'pix' && c.formaPagamentoPixId ? c.formaPagamentoPixId : c.formaPagamentoId) } }],
     transporte: {
       fretePorConta: 0, frete: 0, // remetente paga (CIF), frete grátis para o comprador
       etiqueta: { nome: p.nome, endereco: p.rua, numero: p.numero, complemento: p.complemento ?? '', municipio: p.cidade, uf: p.uf, cep: cepFmt(p.cep), bairro: p.bairro, nomePais: 'Brasil' },

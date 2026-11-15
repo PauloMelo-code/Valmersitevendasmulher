@@ -101,3 +101,11 @@ test('erro do Bling legível e sem dado pessoal', () => {
   const m403 = legivel(403, { error: { type: 'insufficient_scope', description: `CPF 529.982.247-25 de maria@email.com ${'x'.repeat(600)}` } });
   assert.ok(m403.length <= 400 && !m403.includes('529.982') && !m403.includes('@'), '403 passa pelo mesmo filtro');
 });
+
+test('forma de pagamento: Pix usa BLING_FORMA_PAGAMENTO_PIX_ID quando definida; cartão e Pix sem ela usam a padrão', () => {
+  const forma = (c: typeof cfg, metodo: string) => corpoPedido(c, { ...pedido, metodo }, '9001', produto).parcelas[0].formaPagamento.id;
+  const ambas = { ...cfg, formaPagamentoPixId: '888' };
+  assert.equal(forma(ambas, 'pix'), 888);
+  assert.equal(forma(ambas, 'credit_card'), 777);
+  assert.equal(forma({ ...cfg, formaPagamentoPixId: '' }, 'pix'), 777);
+});
