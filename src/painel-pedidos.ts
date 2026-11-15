@@ -9,6 +9,7 @@ import { LIDER, liderLigado } from './lider.ts';
 import { MELHOR_ENVIO } from './melhorenvio.ts';
 import { barraPainel, SCRIPT_TEMA } from './painel.ts';
 import { ESTILO } from './painel-estilo.ts';
+import { cep, cpf, fichasHtml, STATUS_FICHA, tel } from './painel-fichas.ts';
 import { PAGINAS, type NomePagina } from './pagina.ts';
 import * as pedidos from './pedidos.ts';
 import { ANTES_DA_ETIQUETA, ehStatus, NSU, POR_PAGINA, reais, type Pedido } from './pedidos.ts';
@@ -29,10 +30,6 @@ const STATUS: Record<StatusPedido, [string, NomeIcone, Tom]> = {
 const chipStatus = (s: StatusPedido) => `<span class="etiqueta t-${STATUS[s][2]}">${icone(STATUS[s][1])}${STATUS[s][0]}</span>`;
 const quando = (d: Date | null) => (d ? new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short', timeStyle: 'short' }).format(d) : '—');
 const dia = (d: Date | null) => (d ? new Intl.DateTimeFormat('pt-BR', { timeZone: 'America/Sao_Paulo', dateStyle: 'short' }).format(d) : '—');
-const mascara = (s: string, m: RegExp, f: string) => s.replace(m, f);
-const cpf = (s: string) => mascara(s, /^(\d{3})(\d{3})(\d{3})(\d{2})$/, '$1.$2.$3-$4');
-const tel = (s: string) => mascara(s, /^(\d{2})(\d{4,5})(\d{4})$/, '($1) $2-$3');
-const cep = (s: string) => mascara(s, /^(\d{5})(\d{3})$/, '$1-$2');
 const v = (s: unknown) => (s == null || s === '' ? '—' : esc(s));
 // capture_method da InfinitePay em português (valor desconhecido aparece como veio).
 const METODOS: Record<string, string> = { credit_card: 'Cartão', pix: 'Pix' };
@@ -105,7 +102,8 @@ async function lista(url: URL, ctx: Ctx): Promise<string> {
     ${pg > 1 ? `<a class="bt bt-contorno" href="/painel/pedidos${q({ pg: pg - 1 })}">Anterior</a>` : ''} ${pg < paginas ? `<a class="bt bt-contorno" href="/painel/pedidos${q({ pg: pg + 1 })}">Próxima</a>` : ''}</span></div>` : '';
   return pagina('Pedidos', `<div class="cabecalho"><div class="cab-esq"><span class="chip lg t-azul">${icone('pacote', 'duotone')}</span><div>
     <h1>Pedidos ${status ? `<span class="etiqueta t-neutro">${STATUS[status][0]}</span>` : ''}</h1><p>Vendas do checkout próprio (InfinitePay) e envio do livro (Melhor Envio)</p></div></div>
-    <div class="acoes"><a class="bt bt-contorno" href="/painel/pedidos/exportar.csv${q({})}">${icone('baixar')}Exportar CSV</a></div></div>
+    <div class="acoes"><a class="bt bt-contorno" href="/painel/pedidos/fichas${status && STATUS_FICHA.includes(status) ? `?status=${status}` : ''}" target="_blank" rel="noopener">${icone('nota')}Fichas de envio (PDF)</a>
+    <a class="bt bt-contorno" href="/painel/pedidos/exportar.csv${q({})}">${icone('baixar')}Exportar CSV</a></div></div>
   <div class="pilha">${avisosConfig()}${cards}<section class="cartao">${tabela}${nav}</section></div>`, ctx);
 }
 
@@ -273,6 +271,10 @@ export async function rotaPedidos(req: http.IncomingMessage, res: http.ServerRes
     return fim(res, 200, await pedidos.exportarPedidosCsv(status), {
       'Content-Type': 'text/csv; charset=utf-8', ...PRIVADO, 'Content-Disposition': `attachment; filename="pedidos${status ? `_${status.toLowerCase()}` : ''}.csv"`,
     });
+  }
+  if (req.method === 'GET' && partes[0] === 'fichas' && partes.length === 1) {
+    const st = url.searchParams.get('status'), status = STATUS_FICHA.find((s) => s === st);
+    return html(res, 200, fichasHtml(await pedidos.paraFichas(status ? [status] : STATUS_FICHA)), req);
   }
   const p = NSU.test(partes[0] ?? '') ? await pedidos.porNsu(partes[0]) : undefined;
   if (!p) return fim(res, 404, 'Pedido não encontrado', PRIVADO);

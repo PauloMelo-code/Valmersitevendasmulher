@@ -16,14 +16,14 @@ export const MELHOR_ENVIO = {
 export type ConfigME = typeof MELHOR_ENVIO;
 
 // Remetente = Editora Signature Ltda (PJ com IE no PR).
-const REMETENTE = {
+export const REMETENTE = {
   name: 'Editora Signature Ltda', phone: '4488556073', email: 'editorasignature@gmail.com',
   company_document: '66911358000184', state_register: '9123226450',
   address: 'Rua Néo Alves Martins', number: '2789', complement: 'Sala 103/104', district: 'Zona 01',
   city: 'Maringá', state_abbr: 'PR', postal_code: '87013060', country_id: 'BR',
 };
 // Livro: 15 × 23 × 2 cm, 0,336 kg (cadastro real da loja). Correios: 1 volume por inserção.
-const LIVRO = { width: 15, height: 2, length: 23, weight: 0.336 };
+export const LIVRO = { width: 15, height: 2, length: 23, weight: 0.336 };
 
 export type PedidoEnvio = {
   orderNsu: string; valorCentavos: number; nome: string; email: string; telefone: string; cpf: string;

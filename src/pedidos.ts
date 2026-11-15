@@ -132,3 +132,7 @@ export async function exportarPedidosCsv(status: StatusPedido | null): Promise<s
   const corpo = linhas.map((p) => COLUNAS.map(([, f]) => celulaCsv(f(p))).join(';'));
   return '﻿' + [COLUNAS.map(([c]) => c).join(';'), ...corpo].join('\r\n') + '\r\n';
 }
+
+// Fichas de envio manual (/painel/pedidos/fichas): pedidos pagos que ainda não têm etiqueta, do mais antigo ao mais novo.
+export const paraFichas = (status: StatusPedido[]) =>
+  db.select().from(P).where(and(eq(P.isDeleted, false), inArray(P.status, status))).orderBy(P.pagoEm, P.createdAt).limit(500);
