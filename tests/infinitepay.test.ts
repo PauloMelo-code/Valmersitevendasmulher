@@ -17,7 +17,7 @@ test('corpo do /links: centavos, handle, telefone +55 e endereço', () => {
   assert.equal(c.webhook_url, 'https://lider.exemplo.com.br/api/infinitepay/webhook');
   assert.deepEqual(c.customer, { name: 'Maria da Silva', email: 'maria@email.com', phone_number: '+5544999998888' });
   assert.deepEqual(c.address, { cep: '87013060', street: 'Rua Néo Alves Martins', number: '2789', neighborhood: 'Zona 01', city: 'Maringá', state: 'PR', complement: '' });
-  assert.equal(INFINITEPAY.precoCentavos, 9700, 'preço padrão R$ 97');
+  assert.equal(INFINITEPAY.precoCentavos, 14700, 'preço padrão R$ 147');
 });
 
 test('link de pagamento: url, payment_url ou erro', () => {

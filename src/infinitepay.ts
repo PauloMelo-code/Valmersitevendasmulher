@@ -14,7 +14,7 @@ export function lerHandle(bruto: string): string {
 export const INFINITEPAY = {
   handle: lerHandle(env('INFINITEPAY_HANDLE')),
   base: (opcional('INFINITEPAY_API_URL', URL_API, 'deve ser https:// (ou http://127.0.0.1 em teste local)') || 'https://api.checkout.infinitepay.io').replace(/\/+$/, ''),
-  precoCentavos: Number(opcional('PRECO_CENTAVOS', /^[1-9]\d{2,6}$/, 'deve ser o preço em centavos, mínimo 100 (ex.: 9700)') || 9700),
+  precoCentavos: Number(opcional('PRECO_CENTAVOS', /^[1-9]\d{2,6}$/, 'deve ser o preço em centavos, mínimo 100 (ex.: 14700)') || 14700),
   descricao: opcional('PRODUTO_DESCRICAO', /^[^<>]{3,200}$/, 'deve ter de 3 a 200 caracteres, sem < >')
     || 'Liderança Inteligente: livro físico + treinamento Líder na Prática + 3 materiais',
   site: SITE_URL,
