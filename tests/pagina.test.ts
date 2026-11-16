@@ -15,9 +15,22 @@ test('cada página tem os arquivos que o servidor e o login usam', () => {
     for (const arq of ['index.html', 'llms.txt']) assert.ok(fs.existsSync(`${pasta}/${arq}`), `${pasta}/${arq}`);
     assert.ok(fs.existsSync(`${pasta}${p.foto}`) || fs.existsSync(`public${p.foto}`), `foto do login ${p.foto}`);
     const html = fs.readFileSync(`${pasta}/index.html`, 'utf8');
-    for (const marca of ['{{CHECKOUT_URL}}', '<!--PIXEL-->', '/t.js', '/consentimento.js', '{{EMPRESA_CNPJ}}', '/privacidade'])
-      assert.ok(html.includes(marca), `${pasta}/index.html sem ${marca}`);
+    // A página geral (refeita pelo Valmer) traz pixel, consentimento e rastreio próprios em js/main.js.
+    const marcas = p.pasta ? ['href="/comprar"', 'CNPJ', '/privacidade', 'js/config.js', 'js/main.js']
+      : ['{{CHECKOUT_URL}}', '<!--PIXEL-->', '/t.js', '/consentimento.js', '{{EMPRESA_CNPJ}}', '/privacidade'];
+    for (const marca of marcas) assert.ok(html.includes(marca), `${pasta}/index.html sem ${marca}`);
     assert.ok(!/livro digital|f[ií]sico \+ digital|aut[óo]graf/i.test(html), `${pasta}/index.html ainda promete digital ou autógrafo`);
     assert.ok(html.includes('BLACK FRIDAY') && !html.includes('R$ 197'), `${pasta}/index.html sem a tarja ou com o valor antigo`);
+    // Nenhum campo "{{...}}" a preencher pode aparecer para o visitante (fora de comentário e dos que o servidor troca).
+    const visivel = html.replace(/<!--[\s\S]*?-->/g, '').match(/\{\{(?!CHECKOUT_URL\}\}|EMPRESA_|CONTATO_EMAIL|SITE_URL)[A-Z0-9_]+\}\}/g);
+    assert.equal(visivel, null, `${pasta}/index.html com campo a preencher à mostra`);
   }
+});
+
+test('página geral: prazo da Black Friday no servidor é o mesmo do config.js e os botões vão ao /comprar', () => {
+  const cfg = fs.readFileSync('paginas/geral/js/config.js', 'utf8');
+  assert.equal(/DEADLINE = "([^"]+)"/.exec(cfg)?.[1], PAGINAS.geral.prazo.ate);
+  assert.match(cfg, /CHECKOUT_URL_147: "\/comprar"/);
+  assert.match(cfg, /CHECKOUT_URL_497: "\/comprar"/);
+  assert.match(cfg, new RegExp(`PRECO_CHEIO: ${PAGINAS.geral.prazo.depoisCentavos / 100}\\b`));
 });

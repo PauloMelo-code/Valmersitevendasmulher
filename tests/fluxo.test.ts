@@ -89,7 +89,7 @@ function responderBling(r: Pedido): [number, unknown] {
 async function preparar() {
   const ip = await fake((r) => {
     if (r.caminho === '/links') return [200, { url: `https://pagar.exemplo/${r.corpo.order_nsu}` }];
-    const a = amount.get(r.corpo.order_nsu) ?? 9700;
+    const a = amount.get(r.corpo.order_nsu) ?? 14700;
     return [200, { success: true, paid: true, amount: a, paid_amount: a + 500, installments: 3, capture_method: 'credit_card' }];
   });
   const me = await fake((r) => {
@@ -170,7 +170,7 @@ async function comprar(): Promise<string> {
 }
 const webhook = (corpo: unknown) => fetch(`${m.base}/api/infinitepay/webhook`, { method: 'POST', body: JSON.stringify(corpo), headers: { 'Content-Type': 'application/json' } });
 async function pagar(nsu: string) {
-  const r = await webhook({ order_nsu: nsu, transaction_nsu: `tx-${nsu}`, invoice_slug: `slug-${nsu}`, amount: 9700, paid_amount: 10200 });
+  const r = await webhook({ order_nsu: nsu, transaction_nsu: `tx-${nsu}`, invoice_slug: `slug-${nsu}`, amount: 14700, paid_amount: 15300 });
   assert.equal(r.status, 200);
   return esperar(() => status(nsu), (p) => p?.status !== 'AGUARDANDO_PAGAMENTO');
 }
@@ -192,7 +192,7 @@ test('criar pedido → webhook → payment_check → PAGO e aviso assinado ao L�
   assert.equal(p?.status, 'PAGO');
   assert.equal(p?.metodo, 'credit_card');
   assert.equal(p?.parcelas, 3);
-  assert.equal(p?.valorPagoCentavos, 10200, 'paid_amount com juros fica registrado');
+  assert.equal(p?.valorPagoCentavos, 15200, 'paid_amount com juros fica registrado');
   assert.ok(p?.pagoEm && p.envioPrevistoEm && p.envioPrevistoEm.getTime() === p.pagoEm.getTime(), 'ENVIO_APOS_DIAS=0');
   assert.equal(p?.origem, 'facebook');
 

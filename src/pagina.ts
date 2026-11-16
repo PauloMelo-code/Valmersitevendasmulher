@@ -6,10 +6,14 @@ export const PAGINAS = {
   mulheres: {
     nome: 'Campanha mulheres', pasta: null,
     slogan: 'Chegou a vez das mulheres <em>liderarem.</em>', foto: '/img/cinco-mulheres-profissionais-em-um-ambiente-corpor.jpg',
+    envio: 'O livro é enviado após 10 dias da compra', prazo: null,
   },
   geral: {
     nome: 'Página geral', pasta: 'paginas/geral',
-    slogan: 'Saber fazer não significa <em>saber liderar.</em>', foto: '/img/valmer-albuquerque.webp',
+    slogan: 'Saber fazer não significa <em>saber liderar.</em>', foto: '/assets/img/valmer-albuquerque.webp',
+    envio: 'O livro é enviado no dia seguinte à compra',
+    // Black Friday: igual ao DEADLINE de paginas/geral/js/config.js (o teste confere). Depois dele o /comprar cobra o preço cheio.
+    prazo: { ate: '2026-12-10T23:59:59-03:00', depoisCentavos: 49700 },
   },
 } as const;
 

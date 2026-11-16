@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { corpoLink, INFINITEPAY, lerHandle, reciboOk, regraConfirmacao, urlDoLink } from '../src/infinitepay.ts';
+import { corpoLink, INFINITEPAY, lerHandle, precoAgora, reciboOk, regraConfirmacao, urlDoLink } from '../src/infinitepay.ts';
+import { faixa } from '../src/http.ts';
 
 const cfg = { ...INFINITEPAY, handle: 'editorasignature', site: 'https://lider.exemplo.com.br', descricao: 'Liderança Inteligente' };
 const pedido = {
@@ -52,4 +53,21 @@ test('INFINITEPAY_HANDLE aceita a InfiniteTag com $, espaço e maiúsculas', () 
   assert.equal(lerHandle(' $EditoraSignature \n'), 'editorasignature');
   assert.equal(lerHandle(''), '');
   assert.equal(lerHandle('https://loja.infinitepay.io/editorasignature'), '');
+});
+
+test('preço: R$ 147 até o fim do prazo da página, preço cheio depois; página sem prazo não muda', () => {
+  const prazo = { ate: '2026-12-10T23:59:59-03:00', depoisCentavos: 49700 };
+  assert.equal(precoAgora(prazo, Date.parse('2026-12-10T23:59:59-03:00'), 14700), 14700);
+  assert.equal(precoAgora(prazo, Date.parse('2026-12-11T00:00:00-03:00'), 14700), 49700);
+  assert.equal(precoAgora(null, Date.parse('2030-01-01'), 14700), 14700);
+});
+
+test('vídeo em pedaços (Range) para o iPhone', () => {
+  assert.equal(faixa(undefined, 100), null);
+  assert.deepEqual(faixa('bytes=0-1', 100), [0, 1]);
+  assert.deepEqual(faixa('bytes=10-', 100), [10, 99]);
+  assert.deepEqual(faixa('bytes=-10', 100), [90, 99]);
+  assert.deepEqual(faixa('bytes=50-500', 100), [50, 99]);
+  assert.equal(faixa('bytes=200-300', 100), 'invalida');
+  assert.equal(faixa('bytes=0-1,5-6', 100), null);
 });

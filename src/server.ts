@@ -8,7 +8,7 @@ import { carregarPainel, exportarCsv } from './consultas.ts';
 import { erroSemDados, migrar, salvarEvento } from './db.ts';
 import { lerEvento } from './evento.ts';
 import { lerFiltro } from './filtros.ts';
-import { fim, html, ir, lerCorpo, mesmaOrigem, PRIVADO, SEGURANCA } from './http.ts';
+import { faixa, fim, html, ir, lerCorpo, mesmaOrigem, PRIVADO, SEGURANCA } from './http.ts';
 import { INFINITEPAY } from './infinitepay.ts';
 import { NOME_PAGINA, PAGINA } from './pagina.ts';
 import { COOKIE_TEMA, lerTema } from './tema.ts';
@@ -38,13 +38,15 @@ const preencher = (t: string) => t
   .replaceAll('{{CONTATO_EMAIL}}', esc(EMPRESA.CONTATO))
   .replace('<!--PIXEL-->', PIXEL_TAG);
 
-// Tudo de public/ fica em memória (≈1 MB): sem leitura de disco por request e sem path traversal.
+// Tudo fica em memória (≈1 MB + os vídeos da página geral, ≈27 MB): sem leitura de disco por request e sem path traversal.
+// ponytail: vídeos em memória; se passarem de ~100 MB, servir do disco com fs.createReadStream({ start, end }).
 type Arquivo = { corpo: Buffer; gz?: Buffer; tipo: string; cache: string };
 const TIPOS: Record<string, string> = {
-  '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.txt': 'text/plain; charset=utf-8',
-  '.xml': 'application/xml; charset=utf-8', '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp',
+  '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8',
+  '.txt': 'text/plain; charset=utf-8', '.xml': 'application/xml; charset=utf-8',
+  '.jpg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.mp4': 'video/mp4',
 };
-const BINARIOS = new Set(['.jpg', '.png', '.webp']);
+const BINARIOS = new Set(['.jpg', '.png', '.webp', '.mp4']);
 const arquivos = new Map<string, Arquivo>();
 function registrar(rota: string, corpo: Buffer, ext: string, cache = 'public, max-age=300') {
   const texto = !BINARIOS.has(ext);
@@ -75,6 +77,16 @@ registrar('/sitemap.xml', Buffer.from(`<?xml version="1.0" encoding="UTF-8"?>
 </urlset>\n`), '.xml');
 
 function enviar(req: http.IncomingMessage, res: http.ServerResponse, a: Arquivo) {
+  if (a.tipo === 'video/mp4') {
+    const f = faixa(req.headers.range, a.corpo.length);
+    if (f === 'invalida') return fim(res, 416, '', { 'Content-Range': `bytes */${a.corpo.length}` });
+    const [ini, ult] = f ?? [0, a.corpo.length - 1];
+    res.writeHead(f ? 206 : 200, {
+      ...SEGURANCA, 'Content-Type': a.tipo, 'Cache-Control': a.cache, 'Accept-Ranges': 'bytes', 'Content-Length': ult - ini + 1,
+      ...(f ? { 'Content-Range': `bytes ${ini}-${ult}/${a.corpo.length}` } : {}),
+    });
+    return res.end(req.method === 'HEAD' ? undefined : a.corpo.subarray(ini, ult + 1));
+  }
   const gzip = a.gz && /\bgzip\b/.test(String(req.headers['accept-encoding']));
   const corpo = gzip ? a.gz! : a.corpo;
   res.writeHead(200, {

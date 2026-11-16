@@ -25,6 +25,14 @@ export function mesmaOrigem(req: http.IncomingMessage): boolean {
   try { return new URL(req.headers.origin).host === req.headers.host; } catch { return false; }
 }
 
+// Pedaço do arquivo pedido em Range ("bytes=ini-fim", "bytes=ini-" ou "bytes=-ultimos"): o Safari do iPhone só toca vídeo assim.
+export function faixa(cabecalho: string | undefined, tam: number): [number, number] | 'invalida' | null {
+  const m = /^bytes=(\d*)-(\d*)$/.exec(cabecalho ?? '');
+  if (!m || (!m[1] && !m[2])) return null;
+  const [ini, ult] = m[1] ? [Number(m[1]), m[2] ? Math.min(Number(m[2]), tam - 1) : tam - 1] : [Math.max(tam - Number(m[2]), 0), tam - 1];
+  return ini <= ult && ini < tam ? [ini, ult] : 'invalida';
+}
+
 export function lerCorpo(req: http.IncomingMessage, limite: number): Promise<string | null> {
   return new Promise((ok) => {
     let tam = 0; const partes: Buffer[] = [];

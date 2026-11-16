@@ -1,4 +1,5 @@
 import { env, opcional, SITE_URL, URL_API } from './ambiente.ts';
+import { PAGINA } from './pagina.ts';
 
 // Checkout Integrado da InfinitePay (https://www.infinitepay.io/checkout-documentacao). Sem API key:
 // o handle identifica a conta, e só o payment_check confirma pagamento (o webhook não tem assinatura).
@@ -16,10 +17,16 @@ export const INFINITEPAY = {
   base: (opcional('INFINITEPAY_API_URL', URL_API, 'deve ser https:// (ou http://127.0.0.1 em teste local)') || 'https://api.checkout.infinitepay.io').replace(/\/+$/, ''),
   precoCentavos: Number(opcional('PRECO_CENTAVOS', /^[1-9]\d{2,6}$/, 'deve ser o preço em centavos, mínimo 100 (ex.: 14700)') || 14700),
   descricao: opcional('PRODUTO_DESCRICAO', /^[^<>]{3,200}$/, 'deve ter de 3 a 200 caracteres, sem < >')
-    || 'Liderança Inteligente: livro físico + treinamento Líder na Prática + 3 materiais',
+    || 'Liderança Inteligente: livro físico + Líder na Prática + Jornada Metanoia + 3 manuais',
   site: SITE_URL,
 };
 export type ConfigIP = typeof INFINITEPAY;
+
+// Preço cobrado agora: o de PRECO_CENTAVOS até o prazo da página; depois dele, o preço cheio da página.
+type Prazo = { readonly ate: string; readonly depoisCentavos: number } | null;
+export function precoAgora(prazo: Prazo = PAGINA.prazo, agora = Date.now(), base = INFINITEPAY.precoCentavos): number {
+  return prazo && agora > Date.parse(prazo.ate) ? prazo.depoisCentavos : base;
+}
 
 type PedidoLink = {
   orderNsu: string; valorCentavos: number; nome: string; email: string; telefone: string;

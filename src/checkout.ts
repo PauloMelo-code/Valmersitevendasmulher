@@ -4,8 +4,8 @@ import { esc } from './graficos.ts';
 import { fim, html, ir, lerCorpo, mesmaOrigem } from './http.ts';
 import { and, isNull } from 'drizzle-orm';
 import { erroSemDados } from './db.ts';
-import { criarLink, INFINITEPAY, reciboOk } from './infinitepay.ts';
-import { NOME_PAGINA } from './pagina.ts';
+import { criarLink, INFINITEPAY, precoAgora, reciboOk } from './infinitepay.ts';
+import { NOME_PAGINA, PAGINA } from './pagina.ts';
 import { anotar, criarPedido, em, mudar, porNsu, type Pedido } from './pedidos.ts';
 import { confirmarPagamento } from './rotina.ts';
 import { paginaVendasPedidos as P } from './schema.ts';
@@ -111,17 +111,17 @@ function paginaCompra(f: URLSearchParams, erros: Partial<Record<Campo, string>> 
   const ocultos = ['visitante', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
     .map((k) => `<input type="hidden" name="${k}" value="${esc((f.get(k) ?? '').slice(0, 120))}">`).join('');
   const resumo = Object.keys(erros).length ? `<p class="aviso" role="alert">Confira ${Object.keys(erros).length > 1 ? 'os campos marcados' : 'o campo marcado'} abaixo.</p>` : '';
-  const valor = INFINITEPAY.precoCentavos;
+  const valor = precoAgora();
 
   return moldura('Finalizar compra', `<main>
 <section class="oferta" aria-labelledby="t-oferta">
   <div class="prod"><img src="/img/livro-lideranca-inteligente.jpg" alt="Livro Liderança Inteligente, de Valmer Albuquerque" width="84" height="120">
-  <div><h1 id="t-oferta">Liderança Inteligente</h1><p>Livro físico + treinamento Líder na Prática + 3 materiais</p></div></div>
+  <div><h1 id="t-oferta">Liderança Inteligente</h1><p>Livro físico + Líder na Prática + Jornada Metanoia + 3 manuais</p></div></div>
   <div class="valor">${preco(valor)}<small>à vista</small></div>
   <p class="formas">ou em até 12x no cartão · Pix</p>
   <ul class="itens">
-    <li>${OK}<span><b>Frete grátis</b> para todo o Brasil. O livro é enviado após 10 dias da compra, com código de rastreio.</span></li>
-    <li>${OK}<span><b>Acesso ao treinamento</b> Líder na Prática e aos 3 materiais após a confirmação do pagamento.</span></li>
+    <li>${OK}<span><b>Frete grátis</b> para todo o Brasil. ${PAGINA.envio}, com código de rastreio.</span></li>
+    <li>${OK}<span><b>Acesso imediato</b> ao Líder na Prática, à Jornada Metanoia e aos 3 manuais após a confirmação do pagamento.</span></li>
     <li>${OK}<span><b>Garantia de 7 dias:</b> não gostou, devolvemos seu dinheiro.</span></li>
   </ul>
 </section>
@@ -209,7 +209,7 @@ async function comprar(req: http.IncomingMessage, res: http.ServerResponse) {
   if (!dados) return html(res, 422, paginaCompra(form, erros), req);
   let p: Pedido;
   try {
-    p = await criarPedido({ ...dados, pagina: NOME_PAGINA, valorCentavos: INFINITEPAY.precoCentavos });
+    p = await criarPedido({ ...dados, pagina: NOME_PAGINA, valorCentavos: precoAgora() });
   } catch (e) {
     console.error('checkout: falha ao gravar o pedido:', erroSemDados(e)); // nunca o erro cru: ele traz os dados do comprador
     return html(res, 503, mensagem('Não conseguimos registrar seu pedido', '<p>Tivemos uma falha momentânea. Volte e tente de novo em alguns instantes.</p>'));
