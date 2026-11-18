@@ -95,8 +95,8 @@
     if (a) { e.preventDefault(); try { localStorage.removeItem(CHAVE); } catch (er) {} mostrarAviso(); }
   });
 
-  /* Rastreio próprio da página atual (alimenta /painel). Só no domínio de produção. */
-  var emProducao = /lideresdeimpacto\.com\.br$/.test(location.hostname);
+  /* Rastreio próprio da página atual (alimenta /painel). Só no domínio publicado (lider, Maringá...), nunca no localhost. */
+  var emProducao = !/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
   var visitante = (function () {
     var id; try { id = localStorage.getItem("lv_id"); if (!id) { id = (Math.random().toString(36).slice(2) + Date.now().toString(36)).slice(0, 24); localStorage.setItem("lv_id", id); } } catch (e) { id = Math.random().toString(36).slice(2); }
     return id;

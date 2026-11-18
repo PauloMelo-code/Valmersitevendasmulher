@@ -1,20 +1,24 @@
 import { env } from './ambiente.ts';
 
-// Qual página de vendas este deploy serve (variável PAGINA). Mesmo código para as duas;
+// Qual página de vendas este deploy serve (variável PAGINA). Mesmo código para todas;
 // `pasta` sobrepõe public/ (index.html, llms.txt e imagens próprias).
+const GERAL = {
+  nome: 'Página geral', pasta: 'paginas/geral',
+  slogan: 'Saber fazer não significa <em>saber liderar.</em>', foto: '/assets/img/valmer-albuquerque.webp',
+  envio: 'O livro é enviado no dia seguinte à compra',
+  // Black Friday: igual ao DEADLINE de paginas/geral/js/config.js (o teste confere). Depois dele o /comprar cobra o preço cheio.
+  prazo: { ate: '2026-12-10T23:59:59-03:00', depoisCentavos: 49700 },
+} as const;
+
 export const PAGINAS = {
   mulheres: {
     nome: 'Campanha mulheres', pasta: null,
     slogan: 'Chegou a vez das mulheres <em>liderarem.</em>', foto: '/img/cinco-mulheres-profissionais-em-um-ambiente-corpor.jpg',
     envio: 'O livro é enviado após 10 dias da compra', prazo: null,
   },
-  geral: {
-    nome: 'Página geral', pasta: 'paginas/geral',
-    slogan: 'Saber fazer não significa <em>saber liderar.</em>', foto: '/assets/img/valmer-albuquerque.webp',
-    envio: 'O livro é enviado no dia seguinte à compra',
-    // Black Friday: igual ao DEADLINE de paginas/geral/js/config.js (o teste confere). Depois dele o /comprar cobra o preço cheio.
-    prazo: { ate: '2026-12-10T23:59:59-03:00', depoisCentavos: 49700 },
-  },
+  geral: GERAL,
+  // Mesma página da geral em outro domínio (SITE_URL do serviço); a chave separa visitas e pedidos de Maringá no painel.
+  maringa: { ...GERAL, nome: 'Página Maringá' },
 } as const;
 
 export type NomePagina = keyof typeof PAGINAS;
