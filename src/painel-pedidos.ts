@@ -10,7 +10,7 @@ import { MELHOR_ENVIO } from './melhorenvio.ts';
 import { barraPainel, SCRIPT_TEMA } from './painel.ts';
 import { ESTILO } from './painel-estilo.ts';
 import { cep, cpf, fichasHtml, STATUS_FICHA, tel } from './painel-fichas.ts';
-import { PAGINAS, type NomePagina } from './pagina.ts';
+import { emMaos, PAGINAS, type NomePagina } from './pagina.ts';
 import * as pedidos from './pedidos.ts';
 import { ANTES_DA_ETIQUETA, ehStatus, NSU, POR_PAGINA, reais, type Pedido } from './pedidos.ts';
 import { STATUS_PEDIDO, type StatusPedido } from './schema.ts';
@@ -114,6 +114,7 @@ const OK: Record<string, string> = {
   'tentar-nota': 'O pedido voltou para "Pago": a próxima rodada (até 5 minutos) retoma a NF-e pelo Bling (sem gerar outra se já existe) e segue para a etiqueta.',
   'reenviar-acesso': 'Aviso de acesso na fila: sai na próxima rodada da rotina (até 5 minutos).',
   cancelar: 'Pedido cancelado: não será enviado. O reembolso, se houver, é feito no app da InfinitePay.',
+  'entregar-em-maos': 'Pedido marcado como entregue em mãos.',
 };
 const ERRO: Record<string, string> = {
   chave: 'Chave inválida: confira os 44 números (o último é o dígito verificador).',
@@ -133,9 +134,10 @@ async function detalhe(p: Pedido, url: URL, ctx: Ctx): Promise<string> {
 
   const acoes: string[] = [];
   const resumo = `${p.nome} (${p.cidade}/${p.uf})`;
+  const maos = emMaos(p);
   if (st === 'PAGO' || st === 'AGUARDANDO_NOTA') {
     // Prazo vencido: a chave libera a compra na próxima rodada (débito na carteira), então pede confirmação com bloqueio.
-    const vencido = !!p.envioPrevistoEm && p.envioPrevistoEm.getTime() <= Date.now();
+    const vencido = !maos && !!p.envioPrevistoEm && p.envioPrevistoEm.getTime() <= Date.now();
     const botao = vencido
       ? `<button type="button" class="bt bt-primario" data-confirmar="f-nota" data-campo="chave-nfe" data-titulo="Informar a chave e enviar o pedido ${p.orderNsu}?"
         data-texto="${esc(`A etiqueta de ${resumo} será comprada em até 5 minutos, debitando o frete da carteira do Melhor Envio. Confira se a nota é deste pedido.`)}">${icone('recibo')}Informar chave</button>`
@@ -144,7 +146,17 @@ async function detalhe(p: Pedido, url: URL, ctx: Ctx): Promise<string> {
     acoes.push(`<form id="f-nota" method="post" action="${base}/nota">${gerada}<p>Chave de acesso da NF-e (44 números; pode colar com espaços ou pontos)</p>
       <div class="linha-f"><input id="chave-nfe" name="chave" inputmode="numeric" autocomplete="off" maxlength="60" required value="${esc(p.notaChave ?? '')}" aria-label="Chave da NF-e">${botao}</div></form>`);
   }
-  if (st === 'PAGO') {
+  if (st === 'PAGO' && maos) {
+    acoes.push(p.notaChave
+      ? `<div><p>Entrega em mãos (Maringá): sem etiqueta. Marque quando o livro chegar à pessoa.</p>
+      <button type="button" class="bt bt-primario" data-confirmar="f-entregar" data-titulo="Marcar o pedido ${p.orderNsu} como entregue em mãos?"
+      data-texto="${esc(`Confirme que ${resumo} já recebeu o livro em mãos. O pedido vai para "Entregue" e sai da lista de pendentes.`)}">${icone('entregue')}Marcar como entregue em mãos</button>
+      <form id="f-entregar" method="post" action="${base}/entregar-em-maos" hidden></form></div>`
+      : `<div><p>Entrega em mãos (Maringá): sem etiqueta. NF-e prevista para ${dia(p.envioPrevistoEm)}; depois dela aparece "Marcar como entregue em mãos". Vai entregar antes? Emita a nota agora.</p>
+      <button type="button" class="bt bt-contorno" data-confirmar="f-enviar" data-titulo="Emitir a NF-e do pedido ${p.orderNsu} agora?"
+      data-texto="${esc(`A NF-e de ${resumo} será emitida pelo Bling na próxima rodada (até 5 minutos), mesmo antes de terminar a garantia de 7 dias.`)}">${icone('recibo')}Emitir NF-e agora</button>
+      <form id="f-enviar" method="post" action="${base}/enviar-agora" hidden></form></div>`);
+  } else if (st === 'PAGO') {
     const semNota = MELHOR_ENVIO.modo !== 'nota' || p.notaChave ? ' na próxima rodada da rotina (até 5 minutos)'
       : blingConfigurado() ? ' logo depois que o Bling emitir a NF-e (a emissão começa na próxima rodada)' : ' assim que a chave da NF-e for informada';
     acoes.push(`<div><p>Previsto para ${dia(p.envioPrevistoEm)}. Antecipa a compra da etiqueta (debita o frete da carteira do Melhor Envio).</p>
@@ -156,9 +168,9 @@ async function detalhe(p: Pedido, url: URL, ctx: Ctx): Promise<string> {
   if (st === 'EMITINDO_NOTA') acoes.push(`<p class="erro-envio">NF-e em emissão no Bling: a rotina consulta a cada rodada e segue para a etiqueta quando a SEFAZ autorizar (sem retorno em 2 h, o pedido volta para "Aguardando nota").</p>`);
   if (st === 'AGUARDANDO_NOTA' && blingConfigurado()) {
     const como = p.blingNfeId ? `retoma a nota ${p.blingNfeId} já gerada no Bling (não gera outra)` : 'emite a NF-e pelo Bling';
-    acoes.push(`<div><p>Volta o pedido para "Pago"; a rotina ${como} e, autorizada, compra a etiqueta.</p>
+    acoes.push(`<div><p>Volta o pedido para "Pago"; a rotina ${como}${maos ? '' : ' e, autorizada, compra a etiqueta'}.</p>
       <button type="button" class="bt bt-contorno" data-confirmar="f-tentar-nota" data-titulo="Tentar de novo a NF-e do pedido ${p.orderNsu}?"
-      data-texto="${esc(`Em até 5 minutos a rotina ${como}. Se a SEFAZ autorizar, a etiqueta de ${resumo} é comprada na mesma rodada, debitando o frete da carteira do Melhor Envio.`)}">${icone('repetir')}Tentar de novo</button>
+      data-texto="${esc(`Em até 5 minutos a rotina ${como}.${maos ? '' : ` Se a SEFAZ autorizar, a etiqueta de ${resumo} é comprada na mesma rodada, debitando o frete da carteira do Melhor Envio.`}`)}">${icone('repetir')}Tentar de novo</button>
       <form id="f-tentar-nota" method="post" action="${base}/tentar-nota" hidden></form></div>`);
   }
   if (st === 'ERRO_ENVIO') {
@@ -188,7 +200,7 @@ async function detalhe(p: Pedido, url: URL, ctx: Ctx): Promise<string> {
   ${cartao('nota', 'violeta', 'Nota fiscal', dl([['Número', v(p.notaNumero)], ['Situação', situacaoNota(p)], ['Chave', v(p.notaChave)],
     ['DANFE', link(p.notaDanfeUrl, 'abrir')], ['No Bling', p.blingPedidoId || p.blingNfeId ? `pedido ${v(p.blingPedidoId)} · nota ${v(p.blingNfeId)}` : '—'],
     ...(p.notaErro ? [['Erro', `<span class="erro-envio">${esc(p.notaErro)}</span>`] as [string, string]] : [])]))}
-  ${cartao('pacote', 'ambar', 'Envio', dl([['Previsto', quando(p.envioPrevistoEm)], ['Serviço', p.meServico ? `${p.meServico === 1 ? 'PAC' : p.meServico === 2 ? 'SEDEX' : p.meServico} · ${reais(p.meFreteCentavos)}` : '—'],
+  ${cartao('pacote', 'ambar', 'Envio', dl([['Previsto', quando(p.envioPrevistoEm)], ['Serviço', maos ? 'entrega em mãos (sem etiqueta)' : p.meServico ? `${p.meServico === 1 ? 'PAC' : p.meServico === 2 ? 'SEDEX' : p.meServico} · ${reais(p.meFreteCentavos)}` : '—'],
     ['Etiqueta', `${v(p.meEtiquetaId)}${p.meImpressaoUrl ? ` · ${link(p.meImpressaoUrl, 'imprimir (logado no ME)')}` : ''}`], ['Comprada em', quando(p.meCompradaEm)],
     ['Rastreio', v(p.rastreio)], ['Postado', quando(p.postadoEm)], ['Entregue', quando(p.entregueEm)], ['Tentativas', String(p.envioTentativas)],
     ...(p.envioErro ? [['Erro', `<span class="erro-envio">${esc(p.envioErro)}</span>`] as [string, string]] : [])]))}
@@ -228,7 +240,7 @@ function situacaoNota(p: Pedido): string {
 }
 
 export type Ctx = { usuario: string; tema: Tema };
-const ACOES = ['nota', 'enviar-agora', 'tentar', 'tentar-nota', 'reenviar-acesso', 'cancelar'] as const;
+const ACOES = ['nota', 'enviar-agora', 'tentar', 'tentar-nota', 'reenviar-acesso', 'cancelar', 'entregar-em-maos'] as const;
 
 async function agir(req: http.IncomingMessage, res: http.ServerResponse, p: Pedido, acao: (typeof ACOES)[number], usuario: string) {
   if (!mesmaOrigem(req)) return fim(res, 403, 'Origem inválida');
@@ -243,6 +255,7 @@ async function agir(req: http.IncomingMessage, res: http.ServerResponse, p: Pedi
   else if (acao === 'tentar') feito = await pedidos.tentarDeNovo(p, quem);
   else if (acao === 'tentar-nota') feito = await pedidos.tentarNota(p, quem);
   else if (acao === 'reenviar-acesso') feito = await pedidos.reenviarAcesso(p, quem);
+  else if (acao === 'entregar-em-maos') feito = await pedidos.entregarEmMaos(p, quem);
   else if ((feito = await pedidos.cancelar(p, quem))) await cancelarNoBling(p, quem);
   console.log(`painel: ${acao} ${p.orderNsu} ${feito ? 'ok' : 'recusada (status mudou)'}`);
   return volta(feito ? `ok=${acao}` : 'erro=estado');

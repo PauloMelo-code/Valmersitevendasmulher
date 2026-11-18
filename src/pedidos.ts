@@ -1,8 +1,9 @@
 import crypto from 'node:crypto';
-import { and, count, desc, eq, inArray, isNull, sql, type SQL } from 'drizzle-orm';
+import { and, count, desc, eq, inArray, isNotNull, isNull, notInArray, sql, type SQL } from 'drizzle-orm';
 import type { PgColumn, PgUpdateSetSource } from 'drizzle-orm/pg-core';
 import { celulaCsv } from './consultas.ts';
 import { db } from './db.ts';
+import { emMaos, PAGINAS_EM_MAOS } from './pagina.ts';
 import { paginaVendasPedidos as P, paginaVendasPedidosHistorico as H, STATUS_PEDIDO, type StatusPedido } from './schema.ts';
 import type { DadosCompra } from './validar.ts';
 
@@ -61,7 +62,12 @@ export async function anotar(id: string, quem: string, acao: string, detalhe: st
 export const informarNota = (p: Pedido, chave: string, quem: string) =>
   mudar(p.id, em('PAGO', 'AGUARDANDO_NOTA'), { notaChave: chave, notaErro: null, status: 'PAGO' }, quem, 'chave da NF-e informada', `chave terminada em ${chave.slice(-6)}`);
 export const enviarAgora = (p: Pedido, quem: string) =>
-  mudar(p.id, em('PAGO'), { envioPrevistoEm: new Date() }, quem, 'envio antecipado', 'a próxima rodada da rotina compra a etiqueta');
+  mudar(p.id, em('PAGO'), { envioPrevistoEm: new Date() }, quem, 'envio antecipado',
+    emMaos(p) ? 'a próxima rodada da rotina emite a NF-e' : 'a próxima rodada da rotina compra a etiqueta');
+// Entrega em mãos (Maringá): só depois da NF-e, e só para pedido dessas páginas.
+export const entregarEmMaos = (p: Pedido, quem: string) => (emMaos(p)
+  ? mudar(p.id, and(em('PAGO'), isNotNull(P.notaChave)), { status: 'ENTREGUE', entregueEm: new Date() }, quem, 'entregue em mãos', null)
+  : Promise.resolve(false));
 // Item do carrinho não comprado é cancelado pelo ME em 7 dias: depois disso o id não serve mais e a rotina cota de novo.
 // Só descarta se a compra nunca foi confirmada (me_comprada_em vazio).
 // A retomada automática de COMPRANDO_ETIQUETA (rotina, após 15 min) nunca descarta o id; só este "Tentar de novo" manual.
@@ -134,5 +140,7 @@ export async function exportarPedidosCsv(status: StatusPedido | null): Promise<s
 }
 
 // Fichas de envio manual (/painel/pedidos/fichas): pedidos pagos que ainda não têm etiqueta, do mais antigo ao mais novo.
+// Entrega em mãos fica de fora: não vai pelos Correios.
 export const paraFichas = (status: StatusPedido[]) =>
-  db.select().from(P).where(and(eq(P.isDeleted, false), inArray(P.status, status))).orderBy(P.pagoEm, P.createdAt).limit(500);
+  db.select().from(P).where(and(eq(P.isDeleted, false), inArray(P.status, status),
+    PAGINAS_EM_MAOS.length ? notInArray(P.pagina, PAGINAS_EM_MAOS) : undefined)).orderBy(P.pagoEm, P.createdAt).limit(500);

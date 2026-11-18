@@ -1,4 +1,4 @@
-import { and, eq, gt, inArray, isNotNull, isNull, lt, lte, ne, or } from 'drizzle-orm';
+import { and, eq, gt, inArray, isNotNull, isNull, lt, lte, ne, notInArray, or } from 'drizzle-orm';
 import { opcional } from './ambiente.ts';
 import * as B from './bling.ts';
 import * as BC from './bling-conta.ts';
@@ -6,6 +6,7 @@ import { db, erroSemDados, pool } from './db.ts';
 import { checarPagamento, INFINITEPAY, reciboOk, regraConfirmacao } from './infinitepay.ts';
 import { avisarLider, LIDER, liderLigado } from './lider.ts';
 import * as ME from './melhorenvio.ts';
+import { emMaos, PAGINAS_EM_MAOS } from './pagina.ts';
 import { anotar, em, mais1, mudar, PAGOS, porNsu, reais, type Pedido } from './pedidos.ts';
 import { paginaVendasPedidos as P, paginaVendasPedidosHistorico as H, type StatusPedido } from './schema.ts';
 import { chaveNfe } from './validar.ts';
@@ -110,6 +111,7 @@ const PARADA_ETIQUETA = 15 * 60_000, PARADA_NOTA = 3 * 60_000, LIMITE_NOTA = 2 *
 const parado = (s: StatusPedido, ms: number) => and(em(s), lt(P.updatedAt, new Date(Date.now() - ms)));
 
 export async function comprarEtiqueta(p: Pedido, cfg = ME.MELHOR_ENVIO, retomada = false): Promise<void> {
+  if (emMaos(p)) return; // entrega em mãos (Maringá): nunca compra etiqueta, venha de onde vier a chamada
   const reivindicou = retomada
     ? await mudar(p.id, parado('COMPRANDO_ETIQUETA', PARADA_ETIQUETA), {}, 'sistema', 'compra da etiqueta retomada', 'o processo anterior parou no meio; segue pelos ids já gravados')
     : await mudar(p.id, em('PAGO'), { status: 'COMPRANDO_ETIQUETA', envioErro: null, envioTentativas: mais1(P.envioTentativas) },
@@ -256,8 +258,11 @@ async function retomadas() {
 
 async function envios() {
   await retomadas();
-  const ps = await db.select().from(P).where(and(vivo, em('PAGO'), lte(P.envioPrevistoEm, new Date()))).orderBy(P.envioPrevistoEm).limit(50);
   const nota = ME.MELHOR_ENVIO.modo === 'nota';
+  // Entrega em mãos só entra enquanto falta a NF-e; com a chave, o pedido espera o "entregue em mãos" no painel.
+  const naoEmMaos = PAGINAS_EM_MAOS.length ? notInArray(P.pagina, PAGINAS_EM_MAOS) : undefined;
+  const ps = await db.select().from(P).where(and(vivo, em('PAGO'), lte(P.envioPrevistoEm, new Date()),
+    nota && naoEmMaos ? or(naoEmMaos, isNull(P.notaChave)) : naoEmMaos)).orderBy(P.envioPrevistoEm).limit(50);
   // Bling: null = desligado (chave manual), false = configurado mas sem autorização, true = emite.
   const bling = nota && B.blingConfigurado() && ps.some((p) => !p.notaChave) ? await BC.autorizada() : null;
   for (const p of ps) {

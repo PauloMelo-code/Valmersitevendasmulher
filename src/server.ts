@@ -10,7 +10,7 @@ import { lerEvento } from './evento.ts';
 import { lerFiltro } from './filtros.ts';
 import { faixa, fim, html, ir, lerCorpo, mesmaOrigem, PRIVADO, SEGURANCA } from './http.ts';
 import { INFINITEPAY } from './infinitepay.ts';
-import { NOME_PAGINA, PAGINA } from './pagina.ts';
+import { aplicarTrocas, NOME_PAGINA, PAGINA } from './pagina.ts';
 import { COOKIE_TEMA, lerTema } from './tema.ts';
 import { renderLogin } from './login.ts';
 import { renderPainel } from './painel.ts';
@@ -52,20 +52,26 @@ function registrar(rota: string, corpo: Buffer, ext: string, cache = 'public, ma
   const texto = !BINARIOS.has(ext);
   arquivos.set(rota, { corpo, gz: texto ? zlib.gzipSync(corpo) : undefined, tipo: TIPOS[ext], cache });
 }
-function carregarPasta(pasta: string) {
+function carregarPasta(pasta: string, trocas: Parameters<typeof aplicarTrocas>[1] = []) {
   const base = path.join(import.meta.dirname, '..', pasta);
   for (const rel of fs.readdirSync(base, { recursive: true }) as string[]) {
     const abs = path.join(base, rel), ext = path.extname(rel);
     if (!TIPOS[ext] || fs.statSync(abs).isDirectory()) continue;
     const rota = '/' + rel.split(path.sep).join('/');
-    if (BINARIOS.has(ext)) registrar(rota, fs.readFileSync(abs), ext, 'public, max-age=604800');
-    else registrar(rota, Buffer.from(preencher(fs.readFileSync(abs, 'utf8'))), ext);
+    if (BINARIOS.has(ext)) { registrar(rota, fs.readFileSync(abs), ext, 'public, max-age=604800'); continue; }
+    let texto = fs.readFileSync(abs, 'utf8');
+    if (rota === '/index.html' && trocas.length) {
+      const r = aplicarTrocas(texto, trocas);
+      for (const de of r.faltando) console.warn(`${PAGINA.nome}: trecho a trocar não encontrado em ${pasta}/index.html: ${de.slice(0, 80)}`);
+      texto = r.html;
+    }
+    registrar(rota, Buffer.from(preencher(texto)), ext);
   }
 }
 // public/ tem o que é comum (privacidade, consentimento, rastreio) e a página das mulheres;
 // a pasta da página escolhida em PAGINA sobrepõe index.html, llms.txt e imagens.
 carregarPasta('public');
-if (PAGINA.pasta) carregarPasta(PAGINA.pasta);
+if (PAGINA.pasta) carregarPasta(PAGINA.pasta, PAGINA.trocas);
 // Endereço sem ".html" para a política (é o que vai no rodapé, no banner e no cadastro da Meta).
 arquivos.set('/privacidade', arquivos.get('/privacidade.html')!);
 const hoje = new Date().toISOString().slice(0, 10);

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { test } from 'node:test';
-import { lerPagina, PAGINAS } from '../src/pagina.ts';
+import { aplicarTrocas, emMaos, lerPagina, PAGINAS } from '../src/pagina.ts';
 
 test('PAGINA aceita só as páginas que existem; padrão é a das mulheres', () => {
   assert.equal(lerPagina(), PAGINAS.mulheres);
@@ -33,4 +33,13 @@ test('página geral: prazo da Black Friday no servidor é o mesmo do config.js e
   assert.match(cfg, /CHECKOUT_URL_147: "\/comprar"/);
   assert.match(cfg, /CHECKOUT_URL_497: "\/comprar"/);
   assert.match(cfg, new RegExp(`PRECO_CHEIO: ${PAGINAS.geral.prazo.depoisCentavos / 100}\\b`));
+});
+
+test('Maringá: todas as trocas acham o texto da página geral e não sobra frete nem envio', () => {
+  const geral = fs.readFileSync('paginas/geral/index.html', 'utf8');
+  const { html, faltando } = aplicarTrocas(geral, PAGINAS.maringa.trocas);
+  assert.deepEqual(faltando, [], 'o texto da página geral mudou: ajustar PAGINAS.maringa.trocas');
+  assert.equal(html.replace(/<!--[\s\S]*?-->/g, '').match(/frete|enviad|correio|rastreio|sua casa/gi), null);
+  assert.ok(html.includes('entregue em mãos pelo Valmer em Maringá'));
+  assert.ok(emMaos({ pagina: 'maringa' }) && !emMaos({ pagina: 'geral' }) && !emMaos({ pagina: 'mulheres' }));
 });

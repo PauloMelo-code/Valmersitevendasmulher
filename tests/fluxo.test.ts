@@ -363,6 +363,27 @@ test('Bling: PAGO no dia ⇒ EMITINDO_NOTA ⇒ autorizada ⇒ ETIQUETA_COMPRADA 
   assert.ok(h.every((x) => !String(x.detalhe).includes('52998224725') && !String(x.detalhe).includes('acc-')), 'histórico sem CPF nem token');
 });
 
+test('Maringá (entrega em mãos): NF-e sai pelo Bling, nenhuma etiqueta, fora das fichas; "entregue em mãos" fecha o pedido', { skip: pular }, async () => {
+  const nsu = await pagoNoDia();
+  await m.db.pool.query(`update pagina_vendas_pedidos set pagina = 'maringa' where order_nsu = $1`, [nsu]);
+  assert.equal(await m.pedidos.entregarEmMaos((await status(nsu))!, 'painel:teste'), false, 'sem NF-e ainda não entrega');
+  await m.rotina.rodarRotina();
+  await m.rotina.rodarRotina(); // a 2ª rodada não pode comprar etiqueta
+  const p = (await status(nsu))!;
+  assert.equal(p.status, 'PAGO', resumo(p));
+  assert.equal(p.notaChave, chaveDaNota(Number(p.blingNfeId)));
+  assert.ok(!m.me.recebidos.some((r) => r.caminho === '/api/v2/me/cart' && r.corpo.options.tags[0].tag === nsu), 'sem carrinho no Melhor Envio');
+  assert.ok(!(await m.pedidos.paraFichas(['PAGO'])).some((x) => x.orderNsu === nsu), 'fora das fichas de envio');
+  assert.equal(await m.pedidos.entregarEmMaos(p, 'painel:teste'), true);
+  const fim = (await status(nsu))!;
+  assert.equal(fim.status, 'ENTREGUE');
+  assert.ok(fim.entregueEm);
+  assert.ok((await historico(nsu)).some((x) => x.acao === 'entregue em mãos' && x.quem === 'painel:teste'));
+
+  const outro = (await status(principal))!; // pedido da página das mulheres: a ação não vale
+  assert.equal(await m.pedidos.entregarEmMaos(outro, 'painel:teste'), false);
+});
+
 test('Bling: NF-e pendente na 1ª consulta fica em EMITINDO_NOTA e é autorizada na rodada seguinte', { skip: pular }, async () => {
   const nsu = await pagoNoDia();
   bl.roteiro.set(nsu, [8, 5]);

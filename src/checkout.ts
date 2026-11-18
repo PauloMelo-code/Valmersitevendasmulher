@@ -120,7 +120,7 @@ function paginaCompra(f: URLSearchParams, erros: Partial<Record<Campo, string>> 
   <div class="valor">${preco(valor)}<small>à vista</small></div>
   <p class="formas">ou em até 12x no cartão · Pix</p>
   <ul class="itens">
-    <li>${OK}<span><b>Frete grátis</b> para todo o Brasil. ${PAGINA.envio}, com código de rastreio.</span></li>
+    <li>${OK}<span><b>${PAGINA.emMaos ? 'Entrega em mãos:' : 'Frete grátis:'}</b> ${PAGINA.envio}.</span></li>
     <li>${OK}<span><b>Acesso imediato</b> ao Líder na Prática, à Jornada Metanoia e aos 3 manuais após a confirmação do pagamento.</span></li>
     <li>${OK}<span><b>Garantia de 7 dias:</b> não gostou, devolvemos seu dinheiro.</span></li>
   </ul>
@@ -170,8 +170,8 @@ function paginaObrigado(p: Pedido | undefined, q: URLSearchParams, t: number): s
   const nome = esc(p.nome.split(' ')[0]);
   if (p.status === 'CANCELADO') return mensagem('Pedido cancelado', `<p>Este pedido foi cancelado. Dúvidas: <a href="mailto:${esc(EMPRESA.CONTATO)}">${esc(EMPRESA.CONTATO)}</a> (pedido ${esc(p.orderNsu)}).</p>`);
   if (p.status !== 'AGUARDANDO_PAGAMENTO') return mensagem(`Pagamento confirmado, ${nome}!`,
-    `<p>Obrigado pela compra. O acesso ao treinamento Líder na Prática e aos 3 materiais chega no seu e-mail.</p>
-<p>O livro é enviado após 10 dias, com frete grátis, e o código de rastreio também vai por e-mail.</p><p>Pedido ${esc(p.orderNsu)}</p>`,
+    `<p>Obrigado pela compra. O acesso ao Líder na Prática, à Jornada Metanoia e aos 3 manuais chega no seu e-mail.</p>
+<p>${PAGINA.envio}.</p><p>Pedido ${esc(p.orderNsu)}</p>`,
     // Purchase da Meta: só com pagamento confirmado e só se o comprador aceitou os cookies (consentimento.js).
     `${PIXEL_TAG}<script>window.LV_COMPRA=${JSON.stringify({ id: p.orderNsu, valor: p.valorCentavos / 100 }).replaceAll('<', '\\u003c')}</script>
 <script src="/consentimento.js" defer></script>`);
