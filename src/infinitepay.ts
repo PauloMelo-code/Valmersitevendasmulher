@@ -28,6 +28,14 @@ export function precoAgora(prazo: Prazo = PAGINA.prazo, agora = Date.now(), base
   return prazo && agora > Date.parse(prazo.ate) ? prazo.depoisCentavos : base;
 }
 
+// Cupom digitado ("maringa ", "MARINGA") → código da página ou null. Só a lista da página vale: o navegador nunca define preço.
+export function lerCupom(bruto: string | null, cupons: Readonly<Record<string, number>> = PAGINA.cupons): string | null {
+  const c = (bruto ?? '').trim().toUpperCase();
+  return Object.hasOwn(cupons, c) ? c : null;
+}
+export const precoComCupom = (cupom: string | null, cupons: Readonly<Record<string, number>> = PAGINA.cupons) =>
+  (cupom && Object.hasOwn(cupons, cupom) ? cupons[cupom] : precoAgora());
+
 type PedidoLink = {
   orderNsu: string; valorCentavos: number; nome: string; email: string; telefone: string;
   cep: string; rua: string; numero: string; complemento: string | null; bairro: string; cidade: string; uf: string;

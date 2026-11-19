@@ -4,9 +4,11 @@ import { env } from './ambiente.ts';
 // `pasta` sobrepõe public/ (index.html, llms.txt e imagens próprias).
 // `envio` é a frase de entrega do /comprar e do /obrigado. `emMaos`: o livro não vai pelo Melhor Envio
 // (a rotina emite a NF-e e para; o painel marca "entregue em mãos"). `trocas`: [de, para] aplicadas ao index.html da pasta.
+// `cupons`: código (maiúsculas) → preço final em centavos, sem prazo, aceito só no /comprar desta página.
 type Pagina = {
   nome: string; pasta: string | null; slogan: string; foto: string; envio: string; emMaos: boolean;
   prazo: { ate: string; depoisCentavos: number } | null; trocas: readonly (readonly [string, string])[];
+  cupons: Readonly<Record<string, number>>;
 };
 
 const GERAL = {
@@ -14,7 +16,7 @@ const GERAL = {
   slogan: 'Saber fazer não significa <em>saber liderar.</em>', foto: '/assets/img/valmer-albuquerque.webp',
   envio: 'O livro é enviado no dia seguinte à compra, com frete grátis e código de rastreio por e-mail', emMaos: false,
   // Black Friday: igual ao DEADLINE de paginas/geral/js/config.js (o teste confere). Depois dele o /comprar cobra o preço cheio.
-  prazo: { ate: '2026-12-10T23:59:59-03:00', depoisCentavos: 49700 }, trocas: [],
+  prazo: { ate: '2026-12-10T23:59:59-03:00', depoisCentavos: 49700 }, trocas: [], cupons: {},
 } as const satisfies Pagina;
 
 const EM_MAOS = 'entregue em mãos pelo Valmer em Maringá';
@@ -23,12 +25,13 @@ export const PAGINAS = {
   mulheres: {
     nome: 'Campanha mulheres', pasta: null,
     slogan: 'Chegou a vez das mulheres <em>liderarem.</em>', foto: '/img/cinco-mulheres-profissionais-em-um-ambiente-corpor.jpg',
-    envio: 'O livro é enviado após 10 dias da compra, com frete grátis e código de rastreio por e-mail', emMaos: false, prazo: null, trocas: [],
+    envio: 'O livro é enviado após 10 dias da compra, com frete grátis e código de rastreio por e-mail', emMaos: false, prazo: null, trocas: [], cupons: {},
   },
   geral: GERAL,
   // A página geral em outro domínio (SITE_URL do serviço), com o livro entregue em mãos no lugar do frete.
   maringa: {
     ...GERAL, nome: 'Página Maringá', envio: `O livro é ${EM_MAOS}`, emMaos: true,
+    cupons: { MARINGA: 11900 }, // condição exclusiva do Valmer em Maringá: R$ 119, sem prazo
     trocas: [
       ['Frete grátis para todo o Brasil e garantia de 7 dias.', 'Livro entregue em mãos em Maringá e garantia de 7 dias.'],
       ['3 manuais. Frete grátis e garantia de 7 dias.', '3 manuais. Livro entregue em mãos em Maringá e garantia de 7 dias.'],

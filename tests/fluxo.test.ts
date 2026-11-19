@@ -158,6 +158,7 @@ const historico = async (nsu: string) => m.pedidos.historicoDe((await status(nsu
 const FORM = {
   nome: 'Maria da Silva', celular: '(44) 99999-8888', cpf: '529.982.247-25', cep: '01310-100', rua: 'Av. Paulista', numero: '1000',
   complemento: '', bairro: 'Bela Vista', cidade: 'São Paulo', uf: 'SP', visitante: 'abc123def456', utm_source: 'facebook',
+  cupom: 'MARINGA', // o teste roda como página das mulheres: o cupom de Maringá não vale aqui e o pedido sai a R$ 147
 };
 let ip = 0; // um IP por compra: o limite de 10 compras/10 min por IP não entra no caminho do teste
 async function comprar(): Promise<string> {

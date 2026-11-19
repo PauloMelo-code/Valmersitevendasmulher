@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { corpoLink, INFINITEPAY, lerHandle, precoAgora, reciboOk, regraConfirmacao, urlDoLink } from '../src/infinitepay.ts';
+import { corpoLink, INFINITEPAY, lerHandle, lerCupom, precoAgora, precoComCupom, reciboOk, regraConfirmacao, urlDoLink } from '../src/infinitepay.ts';
 import { faixa } from '../src/http.ts';
 
 const cfg = { ...INFINITEPAY, handle: 'editorasignature', site: 'https://lider.exemplo.com.br', descricao: 'Liderança Inteligente' };
@@ -70,4 +70,15 @@ test('vídeo em pedaços (Range) para o iPhone', () => {
   assert.deepEqual(faixa('bytes=50-500', 100), [50, 99]);
   assert.equal(faixa('bytes=200-300', 100), 'invalida');
   assert.equal(faixa('bytes=0-1,5-6', 100), null);
+});
+
+test('cupom: só os códigos da página valem, em qualquer caixa; o preço vem da lista, nunca do navegador', () => {
+  const cupons = { MARINGA: 11900 };
+  assert.equal(lerCupom(' maringa ', cupons), 'MARINGA');
+  assert.equal(lerCupom('MARINGA', {}), null, 'página sem cupom (geral, mulheres) recusa');
+  assert.equal(lerCupom('toString', cupons), null);
+  assert.equal(lerCupom(null, cupons), null);
+  assert.equal(precoComCupom('MARINGA', cupons), 11900);
+  assert.equal(precoComCupom(null, cupons), precoAgora());
+  assert.equal(precoComCupom('MARINGA', {}), precoAgora());
 });

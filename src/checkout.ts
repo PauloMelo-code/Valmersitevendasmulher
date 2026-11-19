@@ -4,7 +4,7 @@ import { esc } from './graficos.ts';
 import { fim, html, ir, lerCorpo, mesmaOrigem } from './http.ts';
 import { and, isNull } from 'drizzle-orm';
 import { erroSemDados } from './db.ts';
-import { criarLink, INFINITEPAY, precoAgora, reciboOk } from './infinitepay.ts';
+import { criarLink, INFINITEPAY, lerCupom, precoAgora, precoComCupom, reciboOk } from './infinitepay.ts';
 import { NOME_PAGINA, PAGINA } from './pagina.ts';
 import { anotar, criarPedido, em, mudar, porNsu, type Pedido } from './pedidos.ts';
 import { confirmarPagamento } from './rotina.ts';
@@ -44,6 +44,10 @@ h1{margin:0;font:800 26px/1.2 Montserrat,sans-serif;letter-spacing:-.3px}h2{marg
 .prod p{margin:4px 0 0;color:var(--mut);font-size:14px}
 .valor{margin:18px 0 6px;font:400 54px/1 'Bebas Neue',sans-serif;color:#fff}.valor small{font:600 14px Inter,sans-serif;color:var(--mut);margin-left:6px}
 .formas{margin:0 0 16px;color:var(--gold-hi);font-weight:600;font-size:15px}
+.valor s{font-size:30px;color:var(--mut);margin-right:6px}
+.cupom{margin:0 0 16px}.cupom-l{display:flex;gap:8px}.cupom-l input{text-transform:uppercase}
+.cupom-l button{flex:none;min-width:96px;border:1px solid var(--gold);border-radius:12px;background:transparent;color:var(--gold);font:700 15px Montserrat,sans-serif;cursor:pointer}
+.cupom-l button:focus-visible{outline:2px solid var(--gold-hi);outline-offset:2px}.cupom-ok{margin:6px 0 0;color:#9BE3B5;font-size:14px;font-weight:600}
 .itens{list-style:none;margin:0;padding:16px 0 0;border-top:1px solid var(--linha);display:grid;gap:10px;font-size:15px}
 .itens li{display:flex;gap:10px;align-items:flex-start}.itens svg{flex:none;margin-top:3px;color:var(--gold)}
 .aviso{margin:0 0 18px;padding:12px 14px;border-radius:12px;background:rgba(244,167,150,.08);border:1px solid rgba(244,167,150,.35);color:var(--erro);font-size:15px}
@@ -111,14 +115,20 @@ function paginaCompra(f: URLSearchParams, erros: Partial<Record<Campo, string>> 
   const ocultos = ['visitante', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content']
     .map((k) => `<input type="hidden" name="${k}" value="${esc((f.get(k) ?? '').slice(0, 120))}">`).join('');
   const resumo = Object.keys(erros).length ? `<p class="aviso" role="alert">Confira ${Object.keys(erros).length > 1 ? 'os campos marcados' : 'o campo marcado'} abaixo.</p>` : '';
-  const valor = precoAgora();
+  // Cupom só nas páginas que têm (Maringá). "Aplicar" recarrega o /comprar por GET; o POST revalida o código no servidor.
+  const digitado = (f.get('cupom') ?? '').trim().slice(0, 30), cupom = lerCupom(digitado);
+  const valor = precoComCupom(cupom), cheio = precoAgora();
+  const caixaCupom = Object.keys(PAGINA.cupons).length ? `<form class="cupom" method="get" action="/comprar">
+    <label for="cupom">Cupom de desconto</label><div class="cupom-l"><input id="cupom" name="cupom" maxlength="30" autocomplete="off" autocapitalize="characters" spellcheck="false" value="${esc(digitado)}"${digitado && !cupom ? ' aria-invalid="true" aria-describedby="e-cupom"' : ''}><button type="submit">Aplicar</button></div>
+    ${cupom ? `<p class="cupom-ok" role="status">Cupom ${esc(cupom)} aplicado.</p>` : digitado ? '<p class="erro" id="e-cupom" role="alert">Cupom inválido. Confira o código.</p>' : ''}
+    ${ocultos}</form>` : '';
 
   return moldura('Finalizar compra', `<main>
 <section class="oferta" aria-labelledby="t-oferta">
   <div class="prod"><img src="/img/livro-lideranca-inteligente.jpg" alt="Livro Liderança Inteligente, de Valmer Albuquerque" width="84" height="120">
   <div><h1 id="t-oferta">Liderança Inteligente</h1><p>Livro físico + Líder na Prática + Jornada Metanoia + 3 manuais</p></div></div>
-  <div class="valor">${preco(valor)}<small>à vista</small></div>
-  <p class="formas">ou em até 12x no cartão · Pix</p>
+  <div class="valor">${valor < cheio ? `<s>${preco(cheio)}</s> ` : ''}${preco(valor)}<small>à vista</small></div>
+  <p class="formas">ou em até 12x no cartão · Pix</p>${caixaCupom}
   <ul class="itens">
     <li>${OK}<span><b>${PAGINA.emMaos ? 'Entrega em mãos:' : 'Frete grátis:'}</b> ${PAGINA.envio}.</span></li>
     <li>${OK}<span><b>Acesso imediato</b> ao Líder na Prática, à Jornada Metanoia e aos 3 manuais após a confirmação do pagamento.</span></li>
@@ -131,7 +141,7 @@ function paginaCompra(f: URLSearchParams, erros: Partial<Record<Campo, string>> 
     ${campo('nome')}${campo('email')}<div class="lin">${campo('celular')}${campo('cpf')}</div>
     <div class="lin">${campo('cep')}${selUf}</div>${campo('rua')}
     <div class="lin">${campo('numero')}${campo('complemento')}</div><div class="lin">${campo('bairro')}${campo('cidade')}</div>
-    ${ocultos}
+    ${ocultos}${cupom ? `<input type="hidden" name="cupom" value="${esc(cupom)}">` : ''}
     <button class="enviar" type="submit">IR PARA O PAGAMENTO</button>
     <p class="seguro">Pagamento seguro pela InfinitePay. Ao continuar, você concorda com a <a href="/privacidade">política de privacidade</a>.
     <a href="/privacidade" class="js-preferencias">Preferências de cookies</a></p>
@@ -207,13 +217,15 @@ async function comprar(req: http.IncomingMessage, res: http.ServerResponse) {
   const form = new URLSearchParams(corpo);
   const { dados, erros } = validarCompra(form);
   if (!dados) return html(res, 422, paginaCompra(form, erros), req);
+  const cupom = lerCupom(form.get('cupom'));
   let p: Pedido;
   try {
-    p = await criarPedido({ ...dados, pagina: NOME_PAGINA, valorCentavos: precoAgora() });
+    p = await criarPedido({ ...dados, pagina: NOME_PAGINA, valorCentavos: precoComCupom(cupom) });
   } catch (e) {
     console.error('checkout: falha ao gravar o pedido:', erroSemDados(e)); // nunca o erro cru: ele traz os dados do comprador
     return html(res, 503, mensagem('Não conseguimos registrar seu pedido', '<p>Tivemos uma falha momentânea. Volte e tente de novo em alguns instantes.</p>'));
   }
+  if (cupom) await anotar(p.id, 'sistema', 'cupom aplicado', cupom).catch((e) => console.error(`cupom ${p.orderNsu}:`, erroSemDados(e)));
   return irParaPagamento(res, p);
 }
 
@@ -263,7 +275,7 @@ async function obrigado(req: http.IncomingMessage, res: http.ServerResponse, q: 
 
 // No GET só passam visitante e UTMs: link de terceiro não pré-preenche nome, CPF nem endereço de entrega.
 const soCampanha = (q: URLSearchParams) => new URLSearchParams(
-  ['visitante', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].flatMap((k) => (q.has(k) ? [[k, q.get(k)!]] : [])));
+  ['visitante', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'cupom'].flatMap((k) => (q.has(k) ? [[k, q.get(k)!]] : [])));
 
 // true = a rota é do checkout (respondida aqui).
 export async function rotaCheckout(req: http.IncomingMessage, res: http.ServerResponse, url: URL): Promise<boolean> {
