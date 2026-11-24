@@ -8,10 +8,11 @@
      nunca diz que a inscrição foi concluída. */
   var CONFIG = {
     FORM_ENDPOINT: 'https://lider-de-impacto.lideresdeimpacto.com.br/api/paginas/inscricao/palestra-maringa',
-    EVENT_START: '2026-12-16T19:00:00-03:00',
+    EVENT_START: '2026-12-14T19:00:00-03:00',
     EVENT_TITLE: 'Palestra Liderança Inteligente, com Valmer Albuquerque',
     EVENT_PLACE: 'Família Vida Nova, Rua Estados Unidos, Av. Colombo, 2073, Jardim América, Maringá, PR, 87045-010',
-    HEADLINE_B: 'A liderança mais importante começa dentro de você.'
+    HEADLINE_B: 'A liderança mais importante começa dentro de você.',
+    PIXEL_ID: '1181979381174003' // mesmo pixel das páginas do livro
   };
   /* ================================================ */
 
@@ -30,6 +31,42 @@
       }
     } catch (e) {}
   }
+
+  /* Pixel da Meta só depois do "Aceitar" (LGPD), mesma regra das páginas do livro.
+     autoConfig desligado: a correspondência automática leria e-mail e WhatsApp do formulário. */
+  var CHAVE = 'lv_consentimento', barra = null;
+  function lerEscolha() { try { return localStorage.getItem(CHAVE); } catch (e) { return null; } }
+  function carregarPixel() {
+    if (window.fbq) return;
+    !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s); }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('set', 'autoConfig', false, CONFIG.PIXEL_ID);
+    window.fbq('init', CONFIG.PIXEL_ID);
+    window.fbq('track', 'PageView');
+  }
+  function mostrarAviso() {
+    if (barra) return;
+    barra = document.createElement('div');
+    barra.className = 'cookies';
+    barra.setAttribute('role', 'region');
+    barra.setAttribute('aria-label', 'Preferências de cookies');
+    barra.innerHTML = '<p>Usamos cookies da Meta para medir a divulgação desta palestra. Você escolhe. <a href="privacidade.html">Aviso de Privacidade</a>.</p>' +
+      '<div><button type="button" class="btn btn--ghost btn--sm" data-v="recusado">Recusar</button>' +
+      '<button type="button" class="btn btn--sm" data-v="aceito">Aceitar</button></div>';
+    barra.addEventListener('click', function (e) {
+      var v = e.target.getAttribute && e.target.getAttribute('data-v');
+      if (!v) return;
+      try { localStorage.setItem(CHAVE, v); } catch (er) { /* aba anônima: vale só nesta visita */ }
+      barra.remove(); barra = null;
+      if (v === 'aceito') { carregarPixel(); track('view_content'); }
+    });
+    document.body.appendChild(barra);
+  }
+  var cookiesBtn = $('#cookiesBtn');
+  if (cookiesBtn) cookiesBtn.addEventListener('click', function () { try { localStorage.removeItem(CHAVE); } catch (e) {} mostrarAviso(); });
+  var escolha = lerEscolha();
+  if (escolha === 'aceito') carregarPixel();
+  else if (escolha !== 'recusado') mostrarAviso();
+
   track('view_content');
 
   /* Teste A/B de headline: abra a página com ?h=b para ver a versão B */
@@ -70,7 +107,7 @@
     var diff = Math.max(0, target - Date.now()), s = Math.floor(diff / 1000);
     var d = Math.floor(s / 86400);
     put(cd.d, String(d)); put(cd.h, pad(Math.floor(s % 86400 / 3600))); put(cd.m, pad(Math.floor(s % 3600 / 60))); put(cd.s, pad(s % 60));
-    if (daysLeft) daysLeft.textContent = diff === 0 ? 'Quarta-feira' : d > 1 ? 'Quarta-feira. Faltam ' + d + ' dias.' : d === 1 ? 'Quarta-feira. Falta 1 dia.' : 'Quarta-feira. É hoje.';
+    if (daysLeft) daysLeft.textContent = diff === 0 ? 'Segunda-feira' : d > 1 ? 'Segunda-feira. Faltam ' + d + ' dias.' : d === 1 ? 'Segunda-feira. Falta 1 dia.' : 'Segunda-feira. É hoje.';
     if (diff === 0) { var c = $('.count__label'); if (c) c.textContent = 'A palestra já começou'; clearInterval(timer); }
   }
   var timer = setInterval(tickCd, 1000); tickCd();
@@ -127,7 +164,6 @@
   /* ================= FORMULÁRIO ================= */
   var form = $('#form'), btn = $('#submit'), msg = $('#formMsg'), done = $('#done');
   var demo = !CONFIG.FORM_ENDPOINT;
-  if (demo) $('#demoBanner').hidden = false;
 
   var whats = $('#whats');
   whats.addEventListener('input', function () {
@@ -158,7 +194,7 @@
   function showDone() {
     form.hidden = true; done.hidden = false; done.focus();
     var s = new Date(CONFIG.EVENT_START).toISOString().replace(/[-:]|\.\d{3}/g, '');
-    $('#invite').href = 'https://wa.me/?text=' + encodeURIComponent('Vou à palestra Liderança Inteligente, com Valmer Albuquerque, dia 16 de dezembro, às 19h, em Maringá. A entrada é 1 kg de alimento não perecível e as vagas são limitadas. Vem comigo? A inscrição é por aqui: ' + location.origin + location.pathname);
+    $('#invite').href = 'https://wa.me/?text=' + encodeURIComponent('Vou à palestra Liderança Inteligente, com Valmer Albuquerque, dia 14 de dezembro, às 19h, em Maringá. A entrada é 1 kg de alimento não perecível e as vagas são limitadas. Vem comigo? A inscrição é por aqui: ' + location.origin + location.pathname);
     $('#gcal').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(CONFIG.EVENT_TITLE) +
       '&dates=' + s + '/' + s + '&location=' + encodeURIComponent(CONFIG.EVENT_PLACE) +
       '&details=' + encodeURIComponent('Entrada solidária: leve 1 kg de alimento não perecível.');
@@ -166,7 +202,7 @@
   $('#ics').addEventListener('click', function () {
     var s = new Date(CONFIG.EVENT_START).toISOString().replace(/[-:]|\.\d{3}/g, '');
     var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Lideranca Inteligente//PT-BR', 'BEGIN:VEVENT',
-      'UID:lideranca-inteligente-20261216@palestra', 'DTSTAMP:' + s, 'DTSTART:' + s,
+      'UID:lideranca-inteligente-20261214@palestra', 'DTSTAMP:' + s, 'DTSTART:' + s,
       'SUMMARY:' + CONFIG.EVENT_TITLE, 'LOCATION:' + CONFIG.EVENT_PLACE.replace(/,/g, '\\,'),
       'DESCRIPTION:Entrada solidária: leve 1 kg de alimento não perecível.', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
     var a = document.createElement('a');
