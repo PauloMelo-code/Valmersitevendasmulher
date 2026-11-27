@@ -36,7 +36,9 @@ const CSS = `:root{--navy:#08132B;--navy-2:#0C1A3A;--campo:#0A1733;--gold:#D4A85
 *{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--navy);color:var(--txt);font:16px/1.55 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
 a{color:var(--gold)}a:hover{color:var(--gold-hi)}
-.topo{border-bottom:1px solid var(--linha)}.topo div{max-width:1080px;margin:0 auto;padding:16px;font:400 20px/1 'Bebas Neue',sans-serif;letter-spacing:3px}.topo b{font-weight:400;color:var(--gold)}
+.topo{border-bottom:1px solid var(--linha)}.topo div{max-width:1080px;margin:0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.marca{font:400 20px/1 'Bebas Neue',sans-serif;letter-spacing:3px}.marca b{font-weight:400;color:var(--gold)}
+.selo-seg{display:inline-flex;align-items:center;gap:6px;color:#9BE3B5;font-size:13.5px;font-weight:600}
 main{max-width:1080px;margin:0 auto;padding:24px 16px 48px;display:grid;gap:24px}
 h1{margin:0;font:800 26px/1.2 Montserrat,sans-serif;letter-spacing:-.3px}h2{margin:0 0 12px;font:700 18px/1.3 Montserrat,sans-serif}
 .oferta,.cartao{background:linear-gradient(180deg,rgba(19,38,80,.6),rgba(10,23,51,.7));border:1px solid var(--linha);border-radius:18px;padding:20px}
@@ -65,11 +67,31 @@ input:focus,select:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 
 .rodape{border-top:1px solid var(--linha);color:#7D8AA5;font-size:13px}.rodape div{max-width:1080px;margin:0 auto;padding:20px 16px;display:flex;flex-wrap:wrap;gap:6px 16px}
 .rodape a{color:#9AA6BF}
 .msg{max-width:560px;margin:0 auto;text-align:center}.msg p{color:#C9D2E3}.msg .bt{display:inline-block;margin-top:12px;padding:16px 28px;border:0;border-radius:12px;background:var(--gold);color:#0A1430;font:800 15px Montserrat,sans-serif;text-decoration:none;cursor:pointer}
+.rot{margin:0 0 14px;color:var(--mut);font-size:14px;font-weight:600}
+.linhas{list-style:none;margin:18px 0 0;padding:16px 0 0;border-top:1px solid var(--linha);display:grid;gap:9px;font-size:15px;color:#D5DCEA}
+.linhas li{display:flex;justify-content:space-between;gap:12px}.linhas li span{display:flex;gap:10px;align-items:flex-start}.linhas svg{flex:none;margin-top:3px;color:var(--gold)}
+.linhas .ent{padding-top:9px;border-top:1px dashed var(--linha)}.linhas .ent b{color:#9BE3B5}
+.total{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:16px 0;padding-top:16px;border-top:1px solid var(--linha)}
+.total>span{font-weight:600;color:#D5DCEA}.total>div{text-align:right}.total .valor{margin:0}.total .formas{margin:4px 0 0;font-size:14px}
+.garantia{display:flex;gap:14px;align-items:flex-start;padding:14px;border-radius:14px;background:rgba(155,227,181,.06);border:1px solid rgba(155,227,181,.25)}
+.garantia svg{flex:none;color:#9BE3B5}.garantia b{display:block;font-size:15px}.garantia p{margin:2px 0 0;color:var(--mut);font-size:14px}
+.oferta .itens{margin-top:16px}
+.etapas{list-style:none;margin:0 0 18px;padding:0;display:flex;gap:8px;align-items:center;color:var(--mut);font-size:13.5px;font-weight:600}
+.etapas li{display:flex;align-items:center;gap:8px}.etapas li+li::before{content:"";width:28px;height:1px;background:var(--linha);margin-right:2px}
+.etapas i{font-style:normal;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;border:1px solid rgba(147,160,189,.4);font-size:12.5px}
+.etapas .on{color:var(--txt)}.etapas .on i{border-color:var(--gold);background:var(--gold);color:#0A1430}
+.enviar{display:flex;align-items:center;justify-content:center;gap:10px}
+.pagto{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px 0 0}
+.pagto span{padding:6px 12px;border-radius:999px;border:1px solid rgba(147,160,189,.3);color:#D5DCEA;font-size:13px;font-weight:600}
+.vendedor{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--linha);color:var(--mut);font-size:13px;text-align:center}.vendedor b{color:#D5DCEA;font-weight:600}
 @media (min-width:560px){.lin{grid-template-columns:repeat(2,minmax(0,1fr))}.lin.l3{grid-template-columns:1.4fr .8fr 1fr}}
 @media (min-width:900px){main{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:start;padding-top:40px}.oferta{position:sticky;top:24px}h1{font-size:30px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}`;
 
 const OK = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+
+const CADEADO = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>';
+const ESCUDO = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>';
 
 function moldura(titulo: string, corpo: string, extra = '') {
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -78,7 +100,7 @@ function moldura(titulo: string, corpo: string, extra = '') {
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Inter:wght@400;500;600&amp;family=Montserrat:wght@700;800&amp;display=swap" rel="stylesheet">
 <style>${CSS}</style>${extra}</head><body>
-<header class="topo"><div>LIDERANÇA <b>INTELIGENTE</b></div></header>
+<header class="topo"><div><span class="marca">LIDERANÇA <b>INTELIGENTE</b></span><span class="selo-seg">${CADEADO}Compra segura</span></div></header>
 ${corpo}
 <footer class="rodape"><div><span>${esc(EMPRESA.RAZAO)} · CNPJ ${esc(EMPRESA.CNPJ)}</span><span>${esc(EMPRESA.ENDERECO)}</span>
 <a href="mailto:${esc(EMPRESA.CONTATO)}">${esc(EMPRESA.CONTATO)}</a><a href="/privacidade">Política de privacidade</a></div></footer>
@@ -90,7 +112,7 @@ const CAMPOS: Record<Exclude<Campo, 'uf'>, Def> = {
   nome: { rotulo: 'Nome completo', attrs: 'autocomplete="name" maxlength="100" autocapitalize="words"' },
   email: { rotulo: 'E-mail', attrs: 'type="email" autocomplete="email" inputmode="email" maxlength="120" autocapitalize="off" spellcheck="false"', dica: 'O acesso ao treinamento chega neste e-mail.' },
   celular: { rotulo: 'Celular com DDD', attrs: 'type="tel" autocomplete="tel-national" inputmode="tel" maxlength="20" placeholder="(44) 99999-8888"' },
-  cpf: { rotulo: 'CPF', attrs: 'inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00"', dica: 'Necessário para a nota fiscal e o envio.' },
+  cpf: { rotulo: 'CPF', attrs: 'inputmode="numeric" autocomplete="off" maxlength="14" placeholder="000.000.000-00"', dica: 'Exigido para emitir a nota fiscal do livro.' },
   cep: { rotulo: 'CEP', attrs: 'inputmode="numeric" autocomplete="postal-code" maxlength="9" placeholder="00000-000"', dica: '' },
   rua: { rotulo: 'Rua', attrs: 'autocomplete="address-line1" maxlength="120"' },
   numero: { rotulo: 'Número', attrs: 'maxlength="10"' },
@@ -123,28 +145,40 @@ function paginaCompra(f: URLSearchParams, erros: Partial<Record<Campo, string>> 
     ${cupom ? `<p class="cupom-ok" role="status">Cupom ${esc(cupom)} aplicado.</p>` : digitado ? '<p class="erro" id="e-cupom" role="alert">Cupom inválido. Confira o código.</p>' : ''}
     ${ocultos}</form>` : '';
 
+  const entrega = PAGINA.emMaos ? ['Entrega em mãos em Maringá', 'Incluída'] : ['Frete para todo o Brasil', 'Grátis'];
   return moldura('Finalizar compra', `<main>
 <section class="oferta" aria-labelledby="t-oferta">
+  <p class="rot">Resumo do pedido</p>
   <div class="prod"><img src="/img/livro-lideranca-inteligente.jpg" alt="Livro Liderança Inteligente, de Valmer Albuquerque" width="84" height="120">
-  <div><h1 id="t-oferta">Liderança Inteligente</h1><p>Livro físico + Líder na Prática + Jornada Metanoia + 3 manuais</p></div></div>
-  <div class="valor">${valor < cheio ? `<s>${preco(cheio)}</s> ` : ''}${preco(valor)}<small>à vista</small></div>
-  <p class="formas">ou em até 12x no cartão · Pix</p>${caixaCupom}
+  <div><h1 id="t-oferta">Liderança Inteligente</h1><p>de Valmer Albuquerque · Editora Signature</p></div></div>
+  <ul class="linhas">
+    <li><span>${OK}Livro físico Liderança Inteligente</span></li>
+    <li><span>${OK}Líder na Prática · 15 aulas online</span></li>
+    <li><span>${OK}Jornada Metanoia do Líder · 45 dias</span></li>
+    <li><span>${OK}3 manuais práticos</span></li>
+    <li class="ent"><span>${entrega[0]}</span><b>${entrega[1]}</b></li>
+  </ul>
+  <div class="total"><span>Total</span><div><div class="valor">${valor < cheio ? `<s>${preco(cheio)}</s> ` : ''}${preco(valor)}</div>
+  <p class="formas">à vista no Pix ou em até 12x no cartão</p></div></div>${caixaCupom}
+  <div class="garantia">${ESCUDO}<div><b>Garantia de 7 dias</b><p>Não gostou? Peça o reembolso em até 7 dias e devolvemos o seu dinheiro.</p></div></div>
   <ul class="itens">
-    <li>${OK}<span><b>${PAGINA.emMaos ? 'Entrega em mãos:' : 'Frete grátis:'}</b> ${PAGINA.envio}.</span></li>
-    <li>${OK}<span><b>Acesso imediato</b> ao Líder na Prática, à Jornada Metanoia e aos 3 manuais após a confirmação do pagamento.</span></li>
-    <li>${OK}<span><b>Garantia de 7 dias:</b> não gostou, devolvemos seu dinheiro.</span></li>
+    <li>${OK}<span><b>${PAGINA.emMaos ? 'Entrega em mãos:' : 'Envio:'}</b> ${PAGINA.envio}.</span></li>
+    <li>${OK}<span><b>Acesso imediato</b> às aulas e aos manuais no seu e-mail, logo após a confirmação do pagamento.</span></li>
   </ul>
 </section>
 <section class="cartao" aria-labelledby="t-dados">
-  <h2 id="t-dados">Seus dados para entrega</h2>${resumo}
+  <ol class="etapas" aria-label="Etapas da compra"><li class="on" aria-current="step"><i>1</i>Seus dados</li><li><i>2</i>Pagamento</li></ol>
+  <h2 id="t-dados">${PAGINA.emMaos ? 'Seus dados' : 'Seus dados para entrega'}</h2>${resumo}
   <form id="compra" method="post" action="/comprar" novalidate class="grade">
     ${campo('nome')}${campo('email')}<div class="lin">${campo('celular')}${campo('cpf')}</div>
     <div class="lin">${campo('cep')}${selUf}</div>${campo('rua')}
     <div class="lin">${campo('numero')}${campo('complemento')}</div><div class="lin">${campo('bairro')}${campo('cidade')}</div>
     ${ocultos}${cupom ? `<input type="hidden" name="cupom" value="${esc(cupom)}">` : ''}
-    <button class="enviar" type="submit">IR PARA O PAGAMENTO</button>
-    <p class="seguro">Pagamento seguro pela InfinitePay. Ao continuar, você concorda com a <a href="/privacidade">política de privacidade</a>.
+    <button class="enviar" type="submit">${CADEADO}<span>Continuar para o pagamento</span></button>
+    <div class="pagto" aria-label="Formas de pagamento"><span>Pix</span><span>Cartão de crédito</span><span>Até 12x</span></div>
+    <p class="seguro">No próximo passo você paga no ambiente seguro da InfinitePay. Seus dados são usados só para este pedido, conforme a <a href="/privacidade">política de privacidade</a>.
     <a href="/privacidade" class="js-preferencias">Preferências de cookies</a></p>
+    <p class="vendedor">Vendido por <b>${esc(EMPRESA.RAZAO)}</b> · CNPJ ${esc(EMPRESA.CNPJ)}<br>Dúvidas: <a href="mailto:${esc(EMPRESA.CONTATO)}">${esc(EMPRESA.CONTATO)}</a></p>
   </form>
 </section></main>
 <script>
@@ -159,8 +193,8 @@ function paginaCompra(f: URLSearchParams, erros: Partial<Record<Campo, string>> 
       aviso.textContent='';(f.elements.rua.value?f.elements.numero:f.elements.rua).focus();
     }).catch(function(){aviso.textContent='Não encontramos este CEP. Preencha o endereço abaixo.'});
   });
-  f.addEventListener('submit',function(){try{f.elements.visitante.value=localStorage.getItem('lv_id')||''}catch(e){}b.disabled=true;b.textContent='Indo para o pagamento...'});
-  addEventListener('pageshow',function(){b.disabled=false;b.textContent='IR PARA O PAGAMENTO'});
+  f.addEventListener('submit',function(){try{f.elements.visitante.value=localStorage.getItem('lv_id')||''}catch(e){}b.disabled=true;b.lastChild.textContent='Indo para o pagamento...'});
+  addEventListener('pageshow',function(){b.disabled=false;b.lastChild.textContent='Continuar para o pagamento'});
 })();
 </script>
 <script src="/consentimento.js" defer></script>
