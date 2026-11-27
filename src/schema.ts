@@ -7,7 +7,7 @@ export const paginaVendasEventos = pgTable(
   'pagina_vendas_eventos',
   {
     id: bigserial('id', { mode: 'number' }).primaryKey(),
-    tipo: text('tipo').notNull(), // view | scroll | click | sair
+    tipo: text('tipo').notNull(), // view | scroll | click | sair | quiz_inicio | quiz_fim | quiz_cta
     visitante: text('visitante').notNull(),
     valor: integer('valor'), // scroll: % lido · sair: segundos na página
     detalhe: text('detalhe'), // click: texto do botão

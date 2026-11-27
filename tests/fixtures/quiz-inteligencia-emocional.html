@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liderança Inteligente | Valmer Albuquerque</title>
+<meta name="description" content="Descubra seu nível de inteligência emocional em 15 situações do dia a dia. Resultado na hora, sem cadastro.">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f%5B%5D=sentient@500,700,501,701&amp;display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+<style>
+
+:root{--ink:#142921;--pale:#f7f5ed;--green:#18392e;--lime:#d5ef9a;--muted:#4b5d53;--line:#ced6c6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--pale);color:var(--ink);font:17px/1.6 system-ui,sans-serif}
+html{scroll-behavior:smooth}
+a{color:inherit} button,input{font:inherit} button{cursor:pointer}
+:focus-visible{outline:3px solid #956117;outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1120px,calc(100% - 40px));margin:auto}
+header,footer{background:#10271f;color:#edf3e7}
+nav,footer .wrap{min-height:72px;display:flex;justify-content:space-between;align-items:center;gap:18px}
+nav strong{font-size:.94rem;letter-spacing:.06em}
+nav a{font-size:.88rem;text-underline-offset:4px}
+.hero{background:radial-gradient(ellipse at 84% 43%,#315746,#132d24 66%);color:#fff;padding:clamp(48px,8vw,112px) 0}
+.split{display:grid;grid-template-columns:1.35fr .85fr;gap:clamp(32px,7vw,96px);align-items:center}
+h1,h2,h3,p{margin:0 0 1rem}
+h1,h2{font-family:Georgia,serif;font-weight:normal;line-height:1.04;letter-spacing:-.045em}
+h1{font-size:clamp(2.65rem,6.3vw,5.1rem);max-width:760px}
+h1 em{color:var(--lime);font-weight:normal}
+h2{font-size:clamp(2rem,4.4vw,3.7rem)}
+h3{line-height:1.25}
+.hero p{max-width:570px;color:#e1e9df;font-size:1.12rem}
+.actions{display:flex;align-items:center;flex-wrap:wrap;gap:16px 22px;margin-top:24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;border:0;border-radius:9px;padding:.83rem 1.18rem;background:var(--lime);color:#132a20;text-decoration:none;font-weight:750}
+.btn:hover{background:#e5f9b9}
+.btn.dark{background:var(--green);color:white}
+.btn.dark:hover{background:#285744}
+.btn:disabled{opacity:.48;cursor:default}
+.book{aspect-ratio: .73;width:min(100%,310px);margin:auto;padding:clamp(24px,4vw,42px) 24px 30px 32px;border-radius:4px 10px 10px 4px;background:radial-gradient(ellipse at 78% 78%,#3b6e57,transparent 65%),linear-gradient(90deg,#10251e 0%,#2a5240 4%,#17372c 7%,#244738);box-shadow:9px 4px 0 -2px #e2dcc6,15px 7px 0 -3px #9b9f89,24px 26px 58px #081a1488;color:#fbf7df;display:flex;flex-direction:column;justify-content:space-between;transform:rotate(6deg)}
+.book span{font-size:.75rem;letter-spacing:.14em;text-transform:uppercase}
+.book strong{font:clamp(1.75rem,3.1vw,2.65rem)/.98 Georgia,serif;letter-spacing:-.05em}
+.book i{display:block;width:58%;height:4px;background:var(--lime);margin-top:18px}
+section{padding:clamp(48px,7vw,90px) 0}
+.hero section{padding:0}
+.narrow{max-width:760px}
+.kicker{font-size:.76rem;font-weight:800;text-transform:uppercase;letter-spacing:.14em;color:#41604d}
+.hero .kicker{color:var(--lime)}
+.quiz-band{background:#e9efdf}
+.quiz{background:white;border-radius:20px;padding:clamp(22px,5vw,48px);border:1px solid var(--line);box-shadow:0 16px 45px #2b41200d}
+.quiz h2:focus,.quiz h3:focus{outline:none}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+legend{font-size:clamp(1.2rem,3vw,1.55rem);font-weight:750;margin-bottom:15px;line-height:1.3}
+.choice{display:flex;align-items:center;gap:12px;padding:11px 14px;margin-bottom:8px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
+.choice:has(input:checked){background:#e9f6d7;border-color:#547342}
+input{accent-color:#25553d}
+progress{display:block;width:100%;height:10px;accent-color:#416a45;margin:.4rem 0 1.25rem}
+.plain{background:none;border:0;color:var(--green);padding:10px;text-decoration:underline;text-underline-offset:3px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}
+.card{padding:22px;border:1px solid var(--line);background:#fffdf7;border-radius:12px}
+.card p{margin-bottom:0;color:var(--muted)}
+.story{background:#f0eee1}
+.example{border-left:4px solid #7c985b;padding:4px 0 4px 20px;margin:20px 0 0}
+.offer{background:#17372c;color:#f7f6ed}
+.offer .split{grid-template-columns:1.15fr 1fr}
+.offer .kicker{color:var(--lime)}
+.price-card{background:#f7f5ed;color:var(--ink);padding:clamp(22px,4vw,38px);border-radius:18px}
+.price{font:3.4rem/1 Georgia,serif;display:block;margin:10px 0}
+.price-card .btn{width:100%}
+ul{padding-left:1.15em}
+li{margin:.4rem 0}
+details{padding:16px 0;border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-weight:700}
+details p{margin:10px 0 0}
+.small{font-size:.9rem}
+.breakdown{list-style:none;padding:0;margin:20px 0 26px}
+.breakdown li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;margin:10px 0;font-size:.9rem}
+.breakdown progress{grid-column:1/-1;margin:0;height:7px}
+@media(max-width:740px){.split,.offer .split,.grid{grid-template-columns:1fr}.hero .book{width:190px}.book strong{font-size:1.65rem}.hero{padding-bottom:60px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+:root{--ink:#F5F5F0;--pale:#07090F;--green:#0A142B;--lime:#C9A760;--muted:#B8BCC6;--line:rgba(201,167,96,.29)}
+body{font-family:Inter,system-ui,sans-serif}
+header,footer{background:#07090F;border-bottom:1px solid var(--line);color:var(--ink)}
+nav a,.actions>a:not(.btn){color:#E6CD94}
+.hero{background:radial-gradient(ellipse at 78% 28%,#172c4c,#0A142B 54%,#07090F 100%);padding:clamp(35px,6vw,86px) 0}
+.hero .split{grid-template-columns:1.1fr 1fr;gap:clamp(30px,5vw,72px)}
+h1,h2{font-family:Sentient,Georgia,serif;font-weight:700;letter-spacing:-.025em}
+h1{font-size:clamp(2.55rem,5.6vw,4.65rem)}
+h2{font-size:clamp(2rem,4.2vw,3.35rem)}
+h1 em{color:#E6CD94}
+.hero p,.card p{color:var(--muted)}
+.hero p.hero-note{margin:14px 0 0;font-size:.83rem}
+.kicker,.hero .kicker,.offer .kicker{color:#E6CD94}
+.btn,.btn.dark{color:#07090F;background:#C9A760}
+.btn:hover,.btn.dark:hover{background:#E6CD94}
+:focus-visible{outline-color:#E6CD94}
+.kit{margin:0;position:relative;aspect-ratio:1.18;border:1px solid var(--line);border-radius:20px;background:radial-gradient(ellipse at 50% 62%,#263e59,#101d36 63%,#0a142b);overflow:hidden}
+.kit img{position:absolute;width:28%;height:auto;filter:drop-shadow(0 9px 12px #0009)}
+.kit .rear{top:5%;left:36%}
+.kit .outer{top:36%}
+.kit .outer.left{left:5%;transform:rotate(-13deg)}
+.kit .outer.right{right:5%;transform:rotate(13deg)}
+.kit .inner{top:29%}
+.kit .inner.left{left:20%;transform:rotate(-8deg)}
+.kit .inner.right{right:20%;transform:rotate(8deg)}
+.kit .center{width:43%;left:28.5%;bottom:4%}
+.quiz-band{background:#0A142B;border-block:1px solid var(--line);scroll-margin-top:12px}
+.quiz{background:#142338;box-shadow:0 18px 50px #0004}
+.choice{background:#0A142B}
+.choice:hover,.choice:has(input:checked){background:#29354a;border-color:#C9A760}
+input,progress{accent-color:#C9A760}
+.plain{color:#E6CD94}
+.card,.price-card{background:#142338;color:var(--ink);border:1px solid var(--line)}
+.bridge .grid{grid-template-columns:repeat(2,1fr)}
+.story{background:#0A142B}
+.portrait{display:block;width:min(100%,360px);aspect-ratio:1;object-fit:cover;border:1px solid var(--line);border-radius:16px;margin:auto}
+.offer{background:radial-gradient(ellipse at 70% 30%,#162d4a,#07090F 76%)}
+.offer-book{display:block;max-width:140px;width:45%;margin:0 auto 14px}
+.price{color:#E6CD94}
+#chapter{color:#E6CD94}
+#score:empty,#attention:empty,#consequence:empty,#exercise:empty,#chapter:empty{display:none}
+@media(max-width:740px){.hero .split,.bridge .grid{grid-template-columns:1fr}.kit{max-width:420px;width:100%;margin:auto}.hero .btn{width:100%}}
+
+
+/* ===== Acréscimos: oferta, prova, garantia e urgência ===== */
+img{max-width:100%;height:auto}
+.btn-buy,.btn.btn-buy{background:#F26B1D;color:#fff;box-shadow:0 10px 28px rgba(242,107,29,.32)}
+.btn-buy:hover,.btn.btn-buy:hover{background:#FF8A3D}
+.bar{background:#F26B1D;color:#fff;text-align:center;font-weight:700;font-size:.9rem;line-height:1.35;padding:9px 14px}
+.bar b{white-space:nowrap}
+.cd{font-variant-numeric:tabular-nums}
+.hero-auth{margin-top:8px!important;font-size:.85rem!important;color:#E6CD94!important}
+.pain{max-width:760px;font-size:1.1rem;color:var(--ink)}
+.pain strong{color:#E6CD94}
+.clients{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-wrap:wrap;gap:8px}
+.clients li{margin:0;font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 11px}
+.nums{display:flex;gap:22px;flex-wrap:wrap;margin:6px 0 0}
+.nums b{display:block;font:700 1.7rem/1.1 Sentient,Georgia,serif;color:#E6CD94}
+.nums span{font-size:.82rem;color:var(--muted)}
+.proof{background:#07090F}
+.tgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.tcard{background:#142338;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tcard .vid{aspect-ratio:9/16;background:#0A142B;display:flex;align-items:center;justify-content:center}
+.tcard .vid video,.tcard .vid iframe{width:100%;height:100%;object-fit:cover;border:0}
+.play{width:52px;height:52px;border-radius:50%;background:rgba(242,107,29,.9);display:flex;align-items:center;justify-content:center}
+.play:after{content:"";border-left:16px solid #fff;border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+.tcard .who{padding:10px 12px;font-size:.84rem;color:var(--muted)}
+.tcard .who b{display:block;color:var(--ink);font-size:.95rem}
+.stack{display:grid;gap:10px;margin:20px 0 0}
+.item{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:12px;align-items:center;background:#142338;border:1px solid var(--line);border-radius:12px;padding:10px 12px;position:relative}
+.item img{width:58px;border-radius:3px}
+.item h3{font-size:.98rem;margin:0 0 2px}
+.item p{margin:0;font-size:.86rem;color:var(--muted)}
+.item .val{font-weight:700;white-space:nowrap}
+.item.match{border-color:#F26B1D;box-shadow:0 0 0 2px rgba(242,107,29,.35)}
+.tag{position:absolute;top:-10px;left:12px;background:#F26B1D;color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:4px 8px;border-radius:6px}
+.total{display:flex;justify-content:space-between;padding:12px 4px 0;font-weight:700}
+.ladder{list-style:none;padding:0;margin:0 0 8px;text-align:left}
+.ladder li{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed var(--line);padding:7px 0;margin:0;color:var(--muted);font-size:.95rem}
+.ladder li.now{border:0;color:var(--ink);font-weight:700}
+.price-card{text-align:center}
+.perday{color:var(--muted);font-size:.92rem;margin:0 0 12px}
+.cdbox{display:inline-block;border:1px solid var(--line);border-radius:10px;padding:7px 12px;margin:0 0 14px;font-size:.9rem}
+.price-card .micro{font-size:.84rem;color:var(--muted);margin:10px 0 0}
+.guarantee{display:grid;grid-template-columns:130px minmax(0,1fr);gap:24px;align-items:center;background:#142338;border:1px solid var(--line);border-radius:18px;padding:26px}
+.g-seal{width:120px;height:120px;border-radius:50%;border:3px solid #E6CD94;display:flex;flex-direction:column;align-items:center;justify-content:center;font:700 2.4rem/1 Sentient,Georgia,serif;color:#E6CD94}
+.g-seal small{font:800 .68rem/1.2 Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:center}
+.sticky{position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(7,9,15,.96);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:none;gap:12px;align-items:center;transform:translateY(110%);transition:transform .25s}
+.sticky.on{transform:none}
+.sticky .s-price{line-height:1.15;font-size:.78rem;color:var(--muted);white-space:nowrap}
+.sticky .s-price b{display:block;font-size:1.2rem;color:var(--ink)}
+.sticky .btn{flex:1;min-height:48px}
+.disc{font-size:.8rem;color:#8d93a1}
+@media(max-width:740px){
+  .tgrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding-bottom:8px;margin-inline:-20px;padding-inline:20px}
+  .tcard{flex:0 0 46%;scroll-snap-align:start}
+  .guarantee{grid-template-columns:1fr;text-align:center}.g-seal{margin:auto}
+  .sticky{display:flex}
+  footer{padding-bottom:84px}
+  .hero{padding-top:26px}
+}
+@media(prefers-reduced-motion:reduce){.sticky{transition:none}}
+</style>
+</head>
+<body>
+<div class="bar" data-bf>Black Friday: livro e materiais por <b data-preco>R$ 147</b> até 10/12. Termina em <b class="cd" data-cd>10 dias</b></div>
+<header><nav class="wrap" aria-label="Navegação principal"><strong>VALMER ALBUQUERQUE</strong><a href="#oferta">Conhecer a oferta</a></nav></header>
+<main>
+
+<!-- 1. HERO: a sua estrutura, com a dor emocional na frente -->
+<section class="hero" id="inicio">
+<div class="wrap split">
+<div>
+<p class="kicker">Autoavaliação gratuita · Valmer Albuquerque</p>
+<h1>Descubra seu nível de <em>inteligência emocional</em></h1>
+<p>Você chega em casa cansado e responde num tom que nem queria usar. Uma crítica fica na sua cabeça por horas. Responda a 15 situações e entenda o que suas reações podem mostrar sobre como você está hoje.</p>
+<div class="actions"><button class="btn" id="hero-start" type="button">Descobrir meu nível</button><a href="#oferta">Conhecer o livro</a></div>
+<p class="hero-note small">15 situações · Resultado na hora · Sem cadastro</p>
+<p class="hero-note small hero-auth">Por Valmer Albuquerque · 22 anos formando líderes · +30 mil pessoas treinadas</p>
+</div>
+<figure class="kit" aria-label="Livro Liderança Inteligente e materiais do kit"><img class="rear" src="img/lidere-cada-perfil.webp" width="320" height="452" alt=""><img class="outer left" src="img/feedback-que-transforma.webp" width="320" height="452" alt=""><img class="outer right" src="img/processos-claros.webp" width="320" height="452" alt=""><img class="inner left" src="img/lider-na-pratica.webp" width="320" height="427" alt=""><img class="inner right" src="img/metanoia.webp" width="320" height="427" alt=""><img class="center" src="img/livro.webp" width="520" height="594" alt="Livro Liderança Inteligente" fetchpriority="high"></figure>
+</div>
+</section>
+
+<!-- 2. QUIZ: as suas 15 situações -->
+<section class="quiz-band" id="quiz" aria-labelledby="quiz-title">
+<div class="wrap narrow quiz">
+<div id="intro">
+<p class="kicker">15 situações · Resultado na hora</p>
+<h2 id="quiz-title" tabindex="-1">Como você tem reagido?</h2>
+<p>Pense nas últimas quatro semanas. Marque o que mais se parece com o que você fez de verdade.</p>
+<button class="btn dark" id="start" type="button">Começar o quiz</button>
+<p class="small" style="margin:12px 0 0">Sem cadastro. Suas respostas ficam nesta página.</p>
+<noscript>Ative o JavaScript para responder ao quiz.</noscript>
+</div>
+<form id="questions" hidden>
+<p class="kicker" id="counter"></p>
+<progress id="progress" max="15" aria-label="Progresso do quiz"></progress>
+<fieldset><legend id="question" tabindex="-1"></legend><div id="choices"></div></fieldset>
+<div class="actions"><button class="plain" id="back" type="button">Voltar</button><button class="plain" id="skip" type="button">Pular situação</button></div>
+</form>
+<div id="result" hidden>
+<p class="kicker">Sua autoavaliação</p>
+<strong class="price" id="score"></strong>
+<h3 id="result-title" tabindex="-1"></h3>
+<p id="level-description"></p><p id="answered-count" class="small"></p>
+<ul id="breakdown" class="breakdown" aria-label="Notas por habilidade"></ul>
+<h3 id="attention" tabindex="-1"></h3><p id="consequence"></p><p id="exercise"></p>
+<p id="chapter"></p>
+<div class="actions"><a class="btn btn-buy" href="#ponte" id="result-cta">Quero mudar esse padrão</a><button class="plain" id="review" type="button">Rever respostas</button><button class="plain" id="restart" type="button">Refazer o quiz</button></div>
+<p class="small disc" style="margin-top:14px">A nota resume suas respostas nestas situações. É uma ferramenta de reflexão, não uma avaliação psicológica.</p>
+</div>
+</div>
+</section>
+
+<!-- 3. PONTE: a sua seção, com o custo emocional nomeado -->
+<section class="bridge" id="ponte">
+<div class="wrap">
+<p class="kicker">Da reflexão à prática</p>
+<h2>Agora que você percebeu o padrão, o que pode fazer diferente?</h2>
+<p class="pain">Quando a emoção decide antes de você, quem paga é quem está mais perto: <strong>seu filho, seu marido ou sua esposa, quem trabalha com você.</strong> A palavra dita no impulso não volta. O silêncio que afasta também não.</p>
+<p class="narrow">Eu escrevi <em>Liderança Inteligente</em> para ajudar você a entender o que acontece por dentro, escolher como reagir e cuidar melhor das relações que importam.</p>
+<div class="grid">
+<article class="card"><h3>Gestão emocional</h3><p>Reconheça os sinais de que a pressão está subindo antes de responder no impulso.</p></article>
+<article class="card"><h3>Identidade</h3><p>Aprenda a reconhecer um erro sem deixar que ele defina quem você é.</p></article>
+<article class="card"><h3>Comunicação</h3><p>Expresse o que sentiu e o que precisa sem deixar que o outro tenha de adivinhar.</p></article>
+<article class="card"><h3>Relacionamentos</h3><p>Observe o efeito das suas reações e aprenda a retomar o contato quando suas palavras ferem.</p></article>
+</div>
+</div>
+</section>
+
+<!-- 4. HISTÓRIA: o seu texto + autoridade -->
+<section class="story" id="autor">
+<div class="wrap split">
+<div><p class="kicker">Valmer Albuquerque · Autor</p><h2>Eu aprendi isso quando tentar dar conta de tudo me custou caro.</h2><p>Em 2019, vivi um burnout. Eu liderava centenas de pessoas e tinha uma filha pequena. Foi um período que me fez olhar para a forma como eu lidava com a pressão e para o que isso custava a mim e a quem estava perto de mim.</p><p><strong>O primeiro passo para influenciar melhor quem está perto é aprender a conduzir a si mesmo.</strong></p>
+<p>Hoje, com 22 anos formando líderes, levo esse caminho para empresas, órgãos públicos e famílias.</p>
+<div class="nums"><div><b>22 anos</b><span>formando pessoas</span></div><div><b>+30 mil</b><span>pessoas treinadas</span></div><div><b>6</b><span>obras publicadas</span></div></div>
+<ul class="clients"><li>Governo do Acre</li><li>Prefeitura de Maceió</li><li>Prefeitura de Maringá</li><li>Prefeitura de Sarandi</li><li>Câmara de Maringá</li><li>Câmara de Apucarana</li><li>Escola de Governo de Maringá</li><li>ABRASEL</li><li>Grupo DM</li><li>MGA Capital</li><li>Klir Gestão Patrimonial</li></ul>
+</div>
+<img class="portrait" src="img/valmer.webp" width="560" height="700" alt="Valmer Albuquerque" loading="lazy">
+</div>
+</section>
+
+<!-- 5. PROVA: os 8 depoimentos da página antiga -->
+<section class="proof" id="depoimentos">
+<div class="wrap">
+<p class="kicker">Quem aplicou</p>
+<h2>Pessoas que já mudaram a forma de reagir e de liderar</h2>
+<p class="small" style="color:var(--muted);margin:0">Deslize para ver mais depoimentos.</p>
+<!-- PARA O DEV: preencha data-video com a URL de cada vídeo da página antiga (mp4 ou embed). -->
+<div class="tgrid">
+<div class="tcard"><div class="vid" data-video=""><span class="play"></span></div><div class="who"><b>William</b>Gestor da Metalúrgica Fusion, Maringá</div></div>
+<div class="tcard"><div class="vid" data-video=""><span class="play"></span></div><div class="who"><b>Dra. Rafaela</b>&nbsp;</div></div>
+<div class="tcard"><div class="vid" data-video=""><span class="play"></span></div><div class="who"><b>Rubens Eduardo</b>Empresário, Maringá</div></div>
+<div class="tcard"><div class="vid" data-video=""><span class="play"></span></div><div class="who"><b>Mariana</b>Empresária de serralheria e metalúrgica</div></div>
+<div class="tcard"><div class="vid" data-video=""><span class="play"></span></div><div class="who"><b>Paulo</b>Loja da Câmera</div></div>
+<div class="tcard"><div class="vid" data-video=""><span class="play"></span></div><div class="who"><b>Natalie</b>Empresária de energia solar, Maringá</div></div>
+<div class="tcard"><div class="vid" data-video=""><span class="play"></span></div><div class="who"><b>Danilo</b>Sócio do Grupo DM</div></div>
+<div class="tcard"><div class="vid" data-video=""><span class="play"></span></div><div class="who"><b>Júlio César</b>Jade Energy</div></div>
+</div>
+</div>
+</section>
+
+<!-- 6. OFERTA: a sua seção + a ancoragem da página antiga -->
+<section id="oferta" class="offer">
+<div class="wrap split">
+<div><p class="kicker">Livro físico e materiais digitais</p><h2>Liderança Inteligente</h2><p id="offer-chapter">Comece pelo capítulo indicado no quiz e leve uma prática para uma situação real da sua semana.</p>
+<div class="stack">
+<div class="item" data-dim="1"><img src="img/livro.webp" width="520" height="594" alt="" loading="lazy"><div><h3>Livro físico Liderança Inteligente</h3><p>15 capítulos e exercícios para entender o que acontece por dentro antes de reagir.</p></div><span class="val">R$ 97</span></div>
+<div class="item"><img src="img/lider-na-pratica.webp" width="320" height="427" alt="" loading="lazy"><div><h3>Treinamento Líder na Prática · 15 aulas</h3><p>Para levar o que você aprendeu para as conversas reais.</p></div><span class="val">R$ 297</span></div>
+<div class="item" data-dim="0"><img src="img/metanoia.webp" width="320" height="427" alt="" loading="lazy"><div><h3>Jornada Metanoia do Líder · 45 dias</h3><p>Uma missão por dia, para a mudança virar hábito e não ficar só na intenção.</p></div><span class="val">R$ 347</span></div>
+<div class="item" data-dim="2"><img src="img/feedback-que-transforma.webp" width="320" height="452" alt="" loading="lazy"><div><h3>Manual Feedback que Transforma</h3><p>Para dizer o que sentiu e o que precisa sem ferir e sem se calar.</p></div><span class="val">R$ 97</span></div>
+<div class="item" data-dim="3"><img src="img/lidere-cada-perfil.webp" width="320" height="452" alt="" loading="lazy"><div><h3>Manual Lidere Cada Perfil</h3><p>Para entender por que cada pessoa reage de um jeito e se aproximar de cada uma.</p></div><span class="val">R$ 97</span></div>
+<div class="item"><img src="img/processos-claros.webp" width="320" height="452" alt="" loading="lazy"><div><h3>Manual Processos Claros</h3><p>Para parar de carregar tudo sozinho.</p></div><span class="val">R$ 97</span></div>
+</div>
+<div class="total"><span>Valor somado dos itens</span><span>R$ 1.032</span></div>
+</div>
+<div class="price-card"><img class="offer-book" src="img/livro.webp" width="520" height="594" alt="Capa oficial do livro Liderança Inteligente" loading="lazy">
+<ul class="ladder">
+<li><span>Valor somado dos 6 itens</span><span>R$ 1.032</span></li>
+<li data-bf><span>Preço a partir de 11/12</span><span>R$ 497</span></li>
+<li class="now"><span data-bf>Até 10/12, você leva tudo por</span><span data-after hidden>Você leva tudo por</span></li>
+</ul>
+<strong class="price" id="offer-price" data-preco>R$ 147</strong>
+<p class="perday" data-bf>Menos de R$ 3,30 por dia durante os 45 dias da Jornada</p>
+<div class="cdbox" data-bf>Termina em <b class="cd" data-cd>10 dias</b></div>
+<a class="btn btn-buy" href="https://lider.lideresdeimpacto.com.br/comprar" data-buy="oferta">Quero receber o livro e os materiais</a>
+<p class="micro">À vista · Frete grátis · Pix ou cartão · Garantia de 7 dias</p>
+</div>
+</div>
+</section>
+
+<!-- 7. GARANTIA -->
+<section>
+<div class="wrap narrow">
+<div class="guarantee">
+<div class="g-seal">7<small>dias de<br>garantia</small></div>
+<div><h3>Experimente por 7 dias</h3><p style="margin:0;color:var(--muted)">Comece pelo capítulo indicado no seu resultado e faça a primeira missão da Jornada. Se em 7 dias você sentir que não é para você, devolvemos 100% do valor, sem perguntas e sem burocracia.</p></div>
+</div>
+</div>
+</section>
+
+<!-- 8. FAQ: as suas perguntas + as objeções que faltavam -->
+<section>
+<div class="wrap narrow"><h2>Perguntas frequentes</h2>
+<details><summary>O livro serve para quem não lidera uma equipe?</summary><p>Sim. O livro traz exemplos de empresas e ensina ferramentas de gestão das emoções e comunicação que você pode aplicar também em casa e nos seus relacionamentos.</p></details>
+<details><summary>Não tenho tempo para ler e fazer curso.</summary><p>Você não precisa fazer tudo de uma vez. Comece pelo capítulo indicado no quiz. A Jornada Metanoia traz uma missão curta por dia, durante 45 dias.</p></details>
+<details><summary>É só mais um livro?</summary><p>Não. O livro mostra o que acontece por dentro, as 15 aulas mostram a aplicação, a Jornada transforma em hábito e os manuais servem de consulta na hora da conversa real.</p></details>
+<details><summary>O quiz é gratuito?</summary><p>Sim. Você recebe o resultado completo na hora, sem cadastro.</p></details>
+<details><summary>Eu recebo o livro físico?</summary><p>Sim. O livro é enviado ao endereço informado na compra, com frete grátis. O treinamento, os manuais e a jornada são digitais.</p></details>
+<details><summary>Quando recebo acesso aos materiais digitais?</summary><p>O acesso chega por e-mail assim que o pagamento é confirmado.</p></details>
+<details><summary>O preço de R$ 147 vale até quando?</summary><p>Até 10 de dezembro de 2026, às 23h59. A partir de 11 de dezembro, o mesmo kit passa a custar R$ 497.</p></details>
+<details><summary>Onde vejo as formas de pagamento?</summary><p>Você pode pagar no Pix ou no cartão. As condições aparecem no checkout antes de você concluir a compra.</p></details>
+<details><summary>Qual é a garantia?</summary><p>Você tem 7 dias. Se não for para você, devolvemos 100% do valor, sem perguntas e sem burocracia.</p></details>
+<div class="actions"><a class="btn btn-buy" href="https://lider.lideresdeimpacto.com.br/comprar" data-buy="faq">Quero o livro e os materiais por <span data-preco>&nbsp;R$ 147</span></a></div>
+</div>
+</section>
+</main>
+<!-- PARA O DEV: copie da página antiga o rodapé completo (razão social, CNPJ, e-mail, política de privacidade e cookies). -->
+<footer><div class="wrap small"><span>Valmer Albuquerque</span><span>Liderança Inteligente</span></div></footer>
+
+<div class="sticky" id="sticky" aria-hidden="true">
+<div class="s-price"><span data-bf>Até 10/12</span><b data-preco>R$ 147</b></div>
+<a class="btn btn-buy" href="https://lider.lideresdeimpacto.com.br/comprar" data-buy="sticky" tabindex="-1">Quero o livro</a>
+</div>
+
+<script>
+(function(){
+/* ===== Preço e prazo. O preço já vem escrito no HTML; troque no servidor em 11/12 junto com o checkout. ===== */
+const DEADLINE = new Date('2026-12-10T23:59:59-03:00');
+const ended = Date.now() > DEADLINE.getTime();
+if (ended) {
+  document.querySelectorAll('[data-preco]').forEach(el => el.textContent = 'R$ 497');
+  document.querySelectorAll('[data-bf]').forEach(el => el.hidden = true);
+  document.querySelectorAll('[data-after]').forEach(el => el.hidden = false);
+} else {
+  const cds = document.querySelectorAll('[data-cd]');
+  const tick = () => {
+    let ms = Math.max(0, DEADLINE - Date.now());
+    const d = Math.floor(ms/864e5), h = Math.floor(ms%864e5/36e5), m = Math.floor(ms%36e5/6e4), s = Math.floor(ms%6e4/1e3);
+    const t = (d ? d + 'd ' : '') + String(h).padStart(2,'0') + 'h ' + String(m).padStart(2,'0') + 'm ' + String(s).padStart(2,'0') + 's';
+    cds.forEach(el => el.textContent = t);
+  };
+  tick(); setInterval(tick, 1000);
+}
+const valor = ended ? 497 : 147;
+
+/* ===== Rastreio: Pixel da Meta, se carregado com consentimento, e evento para o painel ===== */
+function track(nome, dados = {}) {
+  try { if (window.fbq) nome === 'InitiateCheckout' ? fbq('track', nome, dados) : fbq('trackCustom', nome, dados); } catch(e){}
+  try { (window.dataLayer = window.dataLayer || []).push(Object.assign({event: nome}, dados)); } catch(e){}
+  try { window.dispatchEvent(new CustomEvent('li-evento', {detail: {nome, dados}})); } catch(e){}
+}
+
+/* ===== UTMs e fbclid seguem para o checkout ===== */
+const pass = new URLSearchParams();
+new URLSearchParams(location.search).forEach((v,k) => { if (/^utm_|^fbclid$|^gclid$/.test(k)) pass.set(k, v); });
+document.querySelectorAll('[data-buy]').forEach(a => {
+  const u = new URL(a.href); pass.forEach((v,k) => u.searchParams.set(k, v)); a.href = u.toString();
+  a.addEventListener('click', () => track('InitiateCheckout', {value: valor, currency: 'BRL', content_category: a.dataset.buy}));
+});
+
+/* ===== Botão fixo no celular: aparece depois do quiz, some na oferta ===== */
+const sticky = document.getElementById('sticky');
+let pastQuiz = false, inOffer = false;
+const upd = () => { const on = pastQuiz && !inOffer; sticky.classList.toggle('on', on); sticky.setAttribute('aria-hidden', on ? 'false' : 'true'); };
+if ('IntersectionObserver' in window) {
+  const ioQuiz = new IntersectionObserver(e => { pastQuiz = !e[0].isIntersecting && e[0].boundingClientRect.top < 0; upd(); });
+  ioQuiz.observe(document.getElementById('quiz'));
+  const ioOffer = new IntersectionObserver(e => { inOffer = e[0].isIntersecting; upd(); });
+  ioOffer.observe(document.getElementById('oferta'));
+  let seen = false;
+  const ioSeen = new IntersectionObserver(e => { if (e[0].isIntersecting && !seen) { seen = true; track('VerOferta'); } }, {threshold: .3});
+  ioSeen.observe(document.getElementById('oferta'));
+}
+
+/* ===== Depoimentos: o vídeo só carrega ao tocar ===== */
+document.querySelectorAll('.vid').forEach(box => {
+  const url = box.dataset.video;
+  if (!url) { box.querySelector('.play').style.opacity = '.35'; return; }
+  box.style.cursor = 'pointer';
+  box.addEventListener('click', () => {
+    box.innerHTML = /\.mp4(\?|$)/i.test(url) ? '<video src="' + url + '" controls autoplay playsinline></video>' : '<iframe src="' + url + '" allow="autoplay; fullscreen" allowfullscreen></iframe>';
+  }, {once: true});
+});
+
+/* ===== Quiz: as suas 15 situações, 4 dimensões e capítulos ===== */
+const dimensions = [
+  {name:'Gestão emocional', insight:'Observe o que acontece entre sentir a pressão subir e responder. É nesse intervalo que você pode escolher como agir.', practice:'Hoje, perceba o primeiro sinal de que está chegando ao limite: tensão no corpo, pressa de falar ou vontade de se fechar.', chapter:'Capítulo 7 · O Código Emocional da Liderança.'},
+  {name:'Identidade e autoimagem', insight:'Um erro ou a falta de reconhecimento pode pesar na forma como você se enxerga.', practice:'Descreva o que aconteceu em uma frase, deixando de fora “sempre”, “nunca” e “eu sou”. Depois, escreva o que está ao seu alcance fazer.', chapter:'Capítulo 4 · Identidade, o Alicerce Invisível.'},
+  {name:'Comunicação', insight:'Quando bate a mágoa ou a vontade de se defender, o outro pode perceber o tom antes de entender o que você queria dizer.', practice:'Na próxima vez, tente nomear o que sentiu em uma frase. Depois, pergunte como a outra pessoa viu a situação.', chapter:'Capítulo 8 · Comunicação Inteligente.'},
+  {name:'Relacionamentos', insight:'Silêncio e distância podem deixar uma mágoa sem resposta, mesmo depois que a rotina volta ao normal.', practice:'Se lembrar de uma reação sua que feriu alguém, pergunte como a pessoa ficou e escute antes de explicar o que aconteceu com você.', chapter:'Capítulo 10 · Líder Especialista em Pessoas.'}
+];
+const questions = [
+  {
+    "prompt": "Num dia pesado, seu filho te chama ou seu marido ou sua esposa quer conversar. O que sua família recebe de você?",
+    "answers": [
+      "Respondo o necessário, mas fico distante.",
+      "Peço alguns minutos e depois volto para ouvir.",
+      "Respondo com impaciência. Só noto quando alguém se cala ou pergunta o que fez de errado.",
+      "Percebo que descontei em casa e volto para reconhecer isso."
+    ],
+    "points": [
+      1,
+      3,
+      0,
+      2
+    ],
+    "group": 0
+  },
+  {
+    "prompt": "Quando o cansaço começa a virar irritação, em que momento você percebe?",
+    "answers": [
+      "Antes de responder. Noto a tensão no corpo ou a pressa de falar.",
+      "Só depois que alguém aponta meu jeito de agir.",
+      "Na hora em que escuto meu próprio tom.",
+      "Mais tarde, quando lembro da cena e penso: “De onde veio aquilo?”"
+    ],
+    "points": [
+      3,
+      0,
+      2,
+      1
+    ],
+    "group": 0
+  },
+  {
+    "prompt": "Alguém diz: “O jeito que você falou comigo me machucou.” O que você faz primeiro?",
+    "answers": [
+      "Explico que a pessoa entendeu errado e defendo o que eu quis dizer.",
+      "Pergunto o que machucou e escuto antes de explicar meu lado.",
+      "Encerro o assunto e fico remoendo a reclamação.",
+      "Na hora me defendo. Depois, volto para ouvir e reconhecer o efeito das minhas palavras."
+    ],
+    "points": [
+      0,
+      3,
+      1,
+      2
+    ],
+    "group": 0
+  },
+  {
+    "prompt": "Uma criança repete algo que você já pediu várias vezes para ela parar de fazer. O que sai de você?",
+    "answers": [
+      "Falo mais alto. Quando me acalmo, volto para reconhecer que passei do ponto.",
+      "Acabo dizendo algo sobre ela, como “você nunca me escuta”.",
+      "Faço uma pausa e digo com firmeza qual comportamento precisa mudar.",
+      "Evito gritar, mas digo algo atravessado, como “claro, você fez de novo”."
+    ],
+    "points": [
+      2,
+      0,
+      3,
+      1
+    ],
+    "group": 0
+  },
+  {
+    "prompt": "Alguém importante manda um “depois a gente conversa”. O que acontece até lá?",
+    "answers": [
+      "Fico preocupado, mas sigo o dia. Se precisar, pergunto quando podemos falar.",
+      "Abro a mensagem várias vezes, tentando descobrir se fiz alguma coisa.",
+      "Já me preparo para uma briga e começo a tratar a pessoa de outro jeito.",
+      "Imagino o pior por um momento. Quando noto, espero ter mais informação antes de agir."
+    ],
+    "points": [
+      3,
+      1,
+      0,
+      2
+    ],
+    "group": 0
+  },
+  {
+    "prompt": "Você está sobrecarregado e alguém pergunta do que você precisa. O que você responde?",
+    "answers": [
+      "“Deixa que eu resolvo.” Depois fico ressentido porque parece que ninguém me ajuda.",
+      "“Tô cansado.” Espero que a pessoa entenda sozinha o que precisa fazer.",
+      "Digo exatamente o que me aliviaria e peço essa ajuda.",
+      "Na hora digo que está tudo bem. Quando me dou conta, volto e faço um pedido claro."
+    ],
+    "points": [
+      0,
+      1,
+      3,
+      2
+    ],
+    "group": 0
+  },
+  {
+    "prompt": "Você recebe uma notícia que te abala, mas precisa continuar o dia. O que faz com o que sentiu?",
+    "answers": [
+      "Reconheço que fiquei mexido e separo um momento para entender o que aconteceu comigo.",
+      "Me ocupo até esquecer. Só quando paro percebo que aquilo ainda está pesando.",
+      "Dou nome ao que sinto e percebo do que preciso, mesmo que só possa cuidar disso depois.",
+      "Sei que fiquei mal, mas sigo no automático e deixo para ver depois se passa."
+    ],
+    "points": [
+      2,
+      0,
+      3,
+      1
+    ],
+    "group": 0
+  },
+  {
+    "prompt": "Uma conversa acaba. Horas depois, ela ainda está rodando na sua cabeça. O que você faz?",
+    "answers": [
+      "Tento me distrair. Quando paro, volto para a mesma cena.",
+      "Identifico o que ficou pendente e decido se preciso agir ou seguir.",
+      "Repasso a conversa e invento novas respostas. Às vezes, perco até o sono.",
+      "Demoro a sair daquilo, mas consigo entender o que me pegou e voltar ao meu dia."
+    ],
+    "points": [
+      1,
+      3,
+      0,
+      2
+    ],
+    "group": 0
+  },
+  {
+    "prompt": "Você erra em algo importante. Qual pensamento mais se parece com o seu?",
+    "answers": [
+      "“Eu estrago tudo. Como é que alguém ainda confia em mim?”",
+      "“Isso doeu. Preciso entender o que eu posso corrigir.”",
+      "“Eu sei que foi um erro, mas passo o dia me sentindo incapaz.”",
+      "“Na hora me diminuo. Depois consigo separar o que fiz de quem eu sou.”"
+    ],
+    "points": [
+      0,
+      3,
+      1,
+      2
+    ],
+    "group": 1
+  },
+  {
+    "prompt": "Você se esforça e alguém importante para você nem percebe. O que isso mexe aí dentro?",
+    "answers": [
+      "Fico decepcionado, mas ainda consigo reconhecer meu esforço.",
+      "Faço ainda mais, torcendo para a pessoa finalmente me reconhecer.",
+      "Por um tempo, duvido do valor do que fiz. Depois consigo olhar com mais equilíbrio.",
+      "Começo a sentir que nada do que eu faço é suficiente."
+    ],
+    "points": [
+      3,
+      1,
+      2,
+      0
+    ],
+    "group": 1
+  },
+  {
+    "prompt": "Te pedem algo que você sabe que não consegue assumir. O que costuma pesar na sua resposta?",
+    "answers": [
+      "O medo de decepcionar. Digo sim e fico com raiva de mim depois.",
+      "Digo o que posso oferecer e onde está meu limite.",
+      "Peço tempo para responder. Depois digo com clareza o que consigo assumir.",
+      "Dou uma resposta vaga e fico torcendo para a pessoa desistir do pedido."
+    ],
+    "points": [
+      0,
+      3,
+      2,
+      1
+    ],
+    "group": 1
+  },
+  {
+    "prompt": "Seu marido, sua esposa ou alguém próximo pergunta: “Você ficou magoado comigo?” O que você costuma dizer?",
+    "answers": [
+      "“Agora você percebeu?” A mágoa sai em forma de ironia.",
+      "“Fiquei, sim.” Explico o que me doeu e ouço como a pessoa viu a situação.",
+      "“Não aconteceu nada.” Depois espero que a pessoa perceba pelo meu jeito.",
+      "“Fiquei, mas ainda preciso entender o que me pegou.” Volto ao assunto quando consigo falar."
+    ],
+    "points": [
+      1,
+      3,
+      0,
+      2
+    ],
+    "group": 2
+  },
+  {
+    "prompt": "No trabalho, alguém questiona algo que você fez. Nos primeiros segundos, o que acontece?",
+    "answers": [
+      "Percebo a vontade de me defender e pergunto o que a pessoa viu antes de responder.",
+      "Começo a justificar minha decisão sem deixar a pessoa terminar.",
+      "Deixo a pessoa falar, mas por dentro já estou montando minha defesa.",
+      "Minha primeira reação é me defender. Quando percebo, paro e peço que a pessoa termine."
+    ],
+    "points": [
+      3,
+      0,
+      1,
+      2
+    ],
+    "group": 2
+  },
+  {
+    "prompt": "Alguém de quem você gosta anda mais quieto e menos disponível. Como você lida com essa mudança?",
+    "answers": [
+      "Penso que pode ter a ver comigo, mas pergunto antes de tirar conclusão.",
+      "Começo a me afastar. Penso: “Se a pessoa quisesse estar perto, estaria.”",
+      "Fico observando o jeito da pessoa e tentando adivinhar o que fiz.",
+      "Pergunto como ela está e dou espaço para responder no tempo dela."
+    ],
+    "points": [
+      2,
+      0,
+      1,
+      3
+    ],
+    "group": 3
+  },
+  {
+    "prompt": "Você percebe que suas palavras feriram alguém em casa. No dia seguinte, a rotina voltou ao normal. O que você faz?",
+    "answers": [
+      "Sigo com a rotina e espero que o tempo resolva.",
+      "Peço desculpas, mas logo explico o que a pessoa fez para eu reagir daquele jeito.",
+      "Volto ao assunto, reconheço o que fiz e pergunto como aquilo afetou a pessoa.",
+      "Peço desculpas pelo jeito de falar. Ainda tenho dificuldade de ouvir como a pessoa ficou."
+    ],
+    "points": [
+      0,
+      1,
+      3,
+      2
+    ],
+    "group": 3
+  }
+];
+const byId = id => document.getElementById(id);
+const form = byId('questions'), choices = byId('choices');
+let index = 0, answers = [], started = false;
+
+function showQuestion() {
+  byId('counter').textContent = 'Pergunta ' + (index + 1) + ' de ' + questions.length;
+  byId('progress').value = index + 1;
+  const question = questions[index];
+  byId('question').textContent = question.prompt;
+  choices.replaceChildren(...question.answers.map((answer, value) => {
+    const label = document.createElement('label'); label.className = 'choice';
+    const radio = document.createElement('input');
+    radio.type = 'radio'; radio.name = 'frequency'; radio.value = value; radio.checked = answers[index] === value;
+    label.append(radio, answer); return label;
+  }));
+  byId('back').style.visibility = index === 0 ? 'hidden' : 'visible';
+  byId('question').focus({preventScroll: true});
+}
+function showResult() {
+  const results = dimensions.map(d => ({...d, total: 0, count: 0}));
+  questions.forEach((q, i) => { const sel = answers[i]; if (!Number.isInteger(sel)) return; const r = results[q.group]; r.total += q.points[sel]; r.count++; });
+  const count = results.reduce((s, r) => s + r.count, 0), total = results.reduce((s, r) => s + r.total, 0);
+  const score = count ? Math.round(100 * total / (count * 3)) : 0;
+  const enough = count >= 8;
+  const rated = results.filter(r => r.count >= 2);
+  const focus = rated.reduce((low, r) => !low || r.total / r.count < low.total / low.count ? r : low, null);
+  const focusIdx = focus ? results.indexOf(focus) : -1;
+  form.hidden = true; byId('result').hidden = false;
+  byId('score').textContent = enough ? score + ' / 100' : '';
+  const band = !enough ? 0 : score < 45 ? 1 : score < 75 ? 2 : 3;
+  byId('result-title').textContent = ['Ainda dá para completar seu retrato', 'Hoje, a emoção está decidindo antes de você', 'Você já percebe, mas ainda percebe tarde', 'Você já tem recursos. Agora é transformar em hábito'][band];
+  byId('level-description').textContent = [
+    'Responda a pelo menos oito situações para ver uma nota geral. Você pode voltar às perguntas.',
+    'Em várias situações, a reação chega antes da escolha. E quem sente primeiro são as pessoas mais próximas: quem mora com você e quem trabalha com você. Isso não é defeito de caráter. É um padrão, e padrão se aprende a mudar.',
+    'Em algumas situações você escolhe como agir. Em outras, só entende o que sentiu quando a conversa já acabou e a palavra já foi dita. O caminho é encurtar esse intervalo, e dá para começar esta semana.',
+    'Suas respostas mostram que você costuma se conduzir bem sob pressão. Ainda existe uma área em que a reação vence a escolha, e é por ela que vale começar.'
+  ][band];
+  byId('answered-count').textContent = count + ' de ' + questions.length + ' situações respondidas';
+  byId('breakdown').replaceChildren(...(enough ? results : []).map(r => {
+    const item = document.createElement('li'); const v = document.createElement('strong');
+    v.textContent = r.count < 2 ? 'Poucas respostas' : Math.round(100 * r.total / (r.count * 3)) + '/100';
+    item.append(r.name, v);
+    if (r.count >= 2) { const bar = document.createElement('progress'); bar.max = r.count * 3; bar.value = r.total; bar.setAttribute('aria-label', r.name); item.append(bar); }
+    return item;
+  }));
+  const rec = enough ? focus : null;
+  byId('attention').textContent = rec ? (score === 100 ? 'Para continuar praticando · ' : 'Por onde começar · ') + rec.name : '';
+  byId('consequence').textContent = rec && score < 100 ? rec.insight : '';
+  byId('exercise').textContent = rec ? rec.practice : '';
+  byId('chapter').textContent = rec ? 'No livro · ' + rec.chapter : '';
+  byId('offer-chapter').textContent = rec ? 'Seu ponto de partida no livro: ' + rec.chapter : 'Comece pelo capítulo indicado no quiz e leve uma prática para uma situação real da sua semana.';
+  document.querySelectorAll('.item').forEach(it => { it.classList.remove('match'); it.querySelector('.tag')?.remove(); });
+  const alvo = rec ? document.querySelector('.item[data-dim="' + focusIdx + '"]') : null;
+  if (alvo) { alvo.classList.add('match'); const tag = document.createElement('span'); tag.className = 'tag'; tag.textContent = 'Indicado no seu resultado'; alvo.append(tag); }
+  track('QuizConcluido', {pontos: score, faixa: band, dimensao: rec ? rec.name : ''});
+  byId('result-title').focus({preventScroll: true});
+  byId('quiz').scrollIntoView({block: 'start'});
+}
+function advance() { if (index === questions.length - 1) { showResult(); return; } index++; showQuestion(); }
+byId('hero-start').addEventListener('click', () => {
+  if (!byId('result').hidden) byId('result-title').focus();
+  else if (!form.hidden) byId('question').focus();
+  else byId('start').click();
+  byId('quiz').scrollIntoView({block: 'start'});
+});
+byId('start').addEventListener('click', () => { byId('intro').hidden = true; form.hidden = false; showQuestion(); });
+/* Avança sozinho ao tocar na resposta: menos toques até o resultado */
+choices.addEventListener('change', e => {
+  if (!started) { started = true; track('QuizInicio'); }
+  answers[index] = Number(e.target.value);
+  setTimeout(advance, 220);
+});
+form.addEventListener('submit', e => e.preventDefault());
+byId('skip').addEventListener('click', () => { answers[index] = null; advance(); });
+byId('review').addEventListener('click', () => { index = 0; byId('result').hidden = true; form.hidden = false; showQuestion(); });
+byId('back').addEventListener('click', () => { if (index > 0) { index--; showQuestion(); return; } form.hidden = true; byId('intro').hidden = false; byId('start').focus(); });
+byId('restart').addEventListener('click', () => {
+  answers = []; index = 0;
+  byId('offer-chapter').textContent = 'Comece pelo capítulo indicado no quiz e leve uma prática para uma situação real da sua semana.';
+  byId('result').hidden = true; form.hidden = false; showQuestion();
+});
+byId('result-cta').addEventListener('click', () => track('QuizCTA'));
+})();
+</script>
+</body>
+</html>

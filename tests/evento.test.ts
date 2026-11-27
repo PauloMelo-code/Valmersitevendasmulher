@@ -36,3 +36,13 @@ test('limita tempo e texto do botão', () => {
   assert.equal(ler({ t: 'sair', v: 'abc123xyz', n: 999999 })?.valor, 86400);
   assert.equal(ler({ t: 'click', v: 'abc123xyz', b: 'x'.repeat(500) })?.detalhe?.length, 80);
 });
+
+test('eventos do quiz: nota de 0 a 100 em valor e faixa|dimensão|respondidas em detalhe', () => {
+  const fim = ler({ t: 'quiz_fim', v: 'abc123xyz', n: 67, f: 2, d: 'Comunicação', q: 15 });
+  assert.equal(fim?.valor, 67);
+  assert.equal(fim?.detalhe, '2|Comunicação|15');
+  assert.equal(ler({ t: 'quiz_fim', v: 'abc123xyz', n: 101 }), null);
+  assert.equal(ler({ t: 'quiz_fim', v: 'abc123xyz', n: 'x' }), null);
+  assert.equal(ler({ t: 'quiz_inicio', v: 'abc123xyz' })?.tipo, 'quiz_inicio');
+  assert.equal(ler({ t: 'quiz_cta', v: 'abc123xyz', variante_cor: 'verde' })?.detalhe, null);
+});

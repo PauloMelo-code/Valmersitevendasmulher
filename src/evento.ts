@@ -1,6 +1,7 @@
 // Valida o que o navegador manda para /api/evento. Tudo aqui vem de fora: desconfiar.
 
-const TIPOS = ['view', 'scroll', 'click', 'sair'] as const;
+// quiz_inicio (1ª resposta), quiz_fim (nota em `valor`, "faixa|dimensão|respondidas" em `detalhe`), quiz_cta (clique de compra no resultado).
+const TIPOS = ['view', 'scroll', 'click', 'sair', 'quiz_inicio', 'quiz_fim', 'quiz_cta'] as const;
 type Tipo = (typeof TIPOS)[number];
 
 export type Evento = {
@@ -64,6 +65,9 @@ export function lerEvento(corpo: string, ua: string, hostProprio: string): Event
   } else if (tipo === 'sair') {
     if (!Number.isInteger(d.n) || (d.n as number) < 0) return null;
     valor = Math.min(d.n as number, 86400);
+  } else if (tipo === 'quiz_fim') {
+    if (!Number.isInteger(d.n) || (d.n as number) < 0 || (d.n as number) > 100) return null;
+    valor = d.n as number;
   }
 
   const ref = hostDe(texto(d.r, 500));
@@ -73,7 +77,8 @@ export function lerEvento(corpo: string, ua: string, hostProprio: string): Event
     tipo,
     visitante,
     valor,
-    detalhe: tipo === 'click' ? texto(d.b, 80) : null,
+    detalhe: tipo === 'click' ? texto(d.b, 80)
+      : tipo === 'quiz_fim' ? texto([d.f, d.d, d.q].map((x) => String(x ?? '').replaceAll('|', '')).join('|'), 80) : null,
     origem,
     campanha: texto(d.c),
     midia: texto(d.m, 60),

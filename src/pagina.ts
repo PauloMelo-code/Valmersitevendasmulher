@@ -15,8 +15,8 @@ const GERAL = {
   nome: 'Página geral', pasta: 'paginas/geral',
   slogan: 'Saber fazer não significa <em>saber liderar.</em>', foto: '/assets/img/valmer-albuquerque.webp',
   envio: 'O livro é enviado no dia seguinte à compra, com frete grátis e código de rastreio por e-mail', emMaos: false,
-  // Black Friday: igual ao DEADLINE de paginas/geral/js/config.js (o teste confere). Depois dele o /comprar cobra o preço cheio.
-  prazo: { ate: '2026-12-10T23:59:59-03:00', depoisCentavos: 49700 }, trocas: [], cupons: {},
+  // Sem prazo desde a página do quiz (27/11/2026): o /comprar cobra sempre PRECO_CENTAVOS, igual ao PRECO de js/config.js (o teste confere).
+  prazo: null, trocas: [], cupons: {},
 } as const satisfies Pagina;
 
 const EM_MAOS = 'entregue em mãos pelo Valmer em Maringá';
@@ -33,12 +33,10 @@ export const PAGINAS = {
     ...GERAL, nome: 'Página Maringá', envio: `O livro é ${EM_MAOS}`, emMaos: true,
     cupons: { MARINGA: 11900 }, // condição exclusiva do Valmer em Maringá: R$ 119, sem prazo
     trocas: [
-      ['Frete grátis para todo o Brasil e garantia de 7 dias.', 'Livro entregue em mãos em Maringá e garantia de 7 dias.'],
-      ['3 manuais. Frete grátis e garantia de 7 dias.', '3 manuais. Livro entregue em mãos em Maringá e garantia de 7 dias.'],
-      ['Frete grátis · Garantia de 7 dias · Acesso imediato às aulas', 'Entrega em mãos em Maringá · Garantia de 7 dias · Acesso imediato às aulas'],
-      ['o livro físico, enviado para a sua casa com frete grátis.', `o livro físico, ${EM_MAOS}.`],
-      ['<span>Frete para todo o Brasil</span><i></i><b>GRÁTIS</b>', '<span>Entrega em mãos em Maringá</span><i></i><b>INCLUÍDA</b>'],
-      ['Compra 100% segura · Frete grátis · Garantia de 7 dias', 'Compra 100% segura · Entrega em mãos em Maringá · Garantia de 7 dias'],
+      ['Livro físico Liderança Inteligente, com frete grátis', 'Livro físico Liderança Inteligente, entregue em mãos em Maringá'],
+      ['Frete grátis · Pix ou cartão · Garantia de 7 dias', 'Entrega em mãos em Maringá · Pix ou cartão · Garantia de 7 dias'],
+      ['<h3>Frete para todo o Brasil</h3></div><b>GRÁTIS</b>', '<h3>Entrega em mãos em Maringá</h3></div><b>INCLUÍDA</b>'],
+      ['Frete grátis · Acesso por e-mail após a confirmação do pagamento', 'Entrega em mãos em Maringá · Acesso por e-mail após a confirmação do pagamento'],
       ['<h3>No dia seguinte.</h3><p>O livro físico é enviado para a sua casa, com frete grátis.</p>', `<h3>Em mãos.</h3><p>O livro físico é ${EM_MAOS}.</p>`],
       ['Você começa antes mesmo de o livro chegar.', 'Você começa antes mesmo de receber o livro.'],
       ['Quando o livro é enviado?</button></h3><div class="acc-p"><div><p>No dia seguinte à compra, com frete grátis para todo o Brasil.</p>',

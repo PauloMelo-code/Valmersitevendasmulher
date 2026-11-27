@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Liderança Inteligente · O plano para ser um líder respeitado em 2027</title>
-<meta name="description" content="Livro físico Liderança Inteligente, treinamento Líder na Prática, Jornada Metanoia de 45 dias e 3 manuais. R$ 1.032 em ferramentas. Frete grátis para todo o Brasil e garantia de 7 dias.">
+<title>Descubra seu nível de inteligência emocional · Liderança Inteligente</title>
+<meta name="description" content="Descubra seu nível de inteligência emocional em 15 situações do dia a dia. Resultado na hora, sem cadastro. Por Valmer Albuquerque.">
 <meta name="robots" content="index,follow">
 <meta name="theme-color" content="#07090F">
 <link rel="canonical" href="{{SITE_URL}}/">
@@ -12,11 +12,10 @@
 <meta property="og:locale" content="pt_BR">
 <meta property="og:site_name" content="Liderança Inteligente · Valmer Albuquerque">
 <meta property="og:url" content="{{SITE_URL}}/">
-<meta property="og:title" content="Liderança Inteligente · O plano para ser um líder respeitado em 2027">
-<meta property="og:description" content="6 ferramentas práticas: livro físico, treinamento, jornada de 45 dias e 3 manuais. Frete grátis e garantia de 7 dias.">
-<!-- {{IMG_KIT_COMPLETO}}: trocar pela imagem do kit completo (1200x630) quando existir -->
+<meta property="og:title" content="Descubra seu nível de inteligência emocional">
+<meta property="og:description" content="15 situações do dia a dia. Resultado na hora, sem cadastro.">
 <meta property="og:image" content="{{SITE_URL}}/assets/img/livro-lideranca-inteligente.webp">
-<meta property="og:image:alt" content="Kit Liderança Inteligente, de Valmer Albuquerque">
+<meta property="og:image:alt" content="Programa Liderança Inteligente, de Valmer Albuquerque">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -25,327 +24,158 @@
 <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Títulos: Sentient (Fontshare). Texto: Inter, substituta da Nimbus Sans enquanto não houver licença web. -->
+<link rel="preload" as="image" href="assets/img/livro-lideranca-inteligente.webp" type="image/webp">
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=sentient@500,700,501,701&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <link rel="stylesheet" href="css/style.css">
 
-<!-- Configuração (prazo, checkout, pixel). Pequeno e síncrono para a página já nascer no preço certo. -->
+<!-- Lógica pura do quiz e da cor de teste (testada em tests/), e a configuração. Pequenos e síncronos. -->
+<script src="js/quiz-logica.js"></script>
 <script src="js/config.js"></script>
 </head>
 <body>
 
-<a class="skip" href="#hero">Pular para o conteúdo</a>
+<a class="skip" href="#inicio">Pular para o conteúdo</a>
 
-<!-- ============ BLOCO 0 · BARRA DE URGÊNCIA ============ -->
-<a class="urgencia" id="urgencia" href="#oferta" data-bf-only aria-label="Black Friday Liderança Inteligente: R$ 147 até 10/12, depois R$ 497. Ver a oferta.">
-  <span class="urg-txt urg-full">BLACK FRIDAY LIDERANÇA INTELIGENTE · R$ 147 ATÉ 10/12 · DEPOIS R$ 497</span>
-  <span class="urg-txt urg-short">R$ 147 ATÉ 10/12</span>
-  <span class="cd cd--bar" data-countdown aria-hidden="true"></span>
-</a>
+<header class="topo">
+  <div class="wrap topo-in"><strong>VALMER ALBUQUERQUE</strong><a href="#oferta">Conhecer o Programa</a></div>
+</header>
 
 <main>
 
 <!-- ============ BLOCO 1 · HERO ============ -->
-<section class="hero" id="hero">
-  <div class="wrap hero-in">
-    <p class="pre h-anim h-1">2027 VAI SEPARAR OS LÍDERES</p>
-    <h1 class="h1 h-anim h-2">Os líderes preparados serão os mais respeitados e os mais bem pagos de 2027. <em>Este é o seu plano para estar entre eles.</em></h1>
-    <p class="sub h-anim h-3">O método Liderança Inteligente, testado em 22 anos com mais de 30 mil pessoas treinadas, agora numa caixa de ferramentas completa para você aplicar a partir da próxima segunda-feira.</p>
-
-    <!-- Vídeo de entrada (recebido, vertical). Configurado em js/config.js. Depois do prazo volta a imagem do kit. -->
-    <div class="hero-video h-anim h-4" id="heroVideo">
-      <div class="kit" role="img" aria-label="Kit completo Liderança Inteligente: livro físico, treinamento Líder na Prática, Jornada Metanoia do Líder e três manuais">
+<section class="hero hero2" id="inicio">
+  <div class="wrap hero2-in">
+    <div class="hero2-txt">
+      <p class="pre h-anim h-1">Autoavaliação gratuita · Valmer Albuquerque</p>
+      <h1 class="h1 h1--quiz h-anim h-2"><span class="h1-antes">Descubra seu nível de</span> <strong class="h1-destaque"><span>INTELIGÊNCIA</span> <span>EMOCIONAL</span></strong></h1>
+      <p class="sub h-anim h-3">Você chega em casa cansado e responde num tom que nem queria usar. Uma crítica fica na sua cabeça por horas. Responda a 15 situações e entenda o que suas reações podem mostrar sobre como você está hoje.</p>
+      <div class="hero2-acoes h-anim h-4">
+        <a class="btn-ouro btn-ouro--xl" href="#diagnostico" id="heroStart">Descobrir meu nível <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a class="btn js-buy h-btn" href="/comprar" data-block="hero">Quero o Programa Liderança Inteligente <span class="btn-preco" data-price>R$ 147</span></a>
+      </div>
+      <p class="micro h-anim h-5">15 situações · Resultado na hora · Sem cadastro</p>
+      <p class="micro micro--ouro h-anim h-5">22 anos formando líderes · +30 mil pessoas treinadas</p>
+    </div>
+    <figure class="hero-kit h-anim h-4">
+      <div class="kit" role="img" aria-label="Programa Liderança Inteligente: livro físico, treinamento Líder na Prática, Jornada Metanoia do Líder e três manuais">
         <img class="kit-c kit-c3" src="assets/img/capa-perfis.webp" alt="" width="720" height="1018">
         <img class="kit-c kit-c1" src="assets/img/capa-feedback.webp" alt="" width="720" height="1018">
         <img class="kit-c kit-c5" src="assets/img/capa-processos.webp" alt="" width="720" height="1018">
         <img class="kit-c kit-c2" src="assets/img/lider-na-pratica-retrato.webp" alt="" width="760" height="1013">
         <img class="kit-c kit-c4" src="assets/img/jornada-metanoia.webp" alt="" width="760" height="1013">
-        <img class="kit-book" src="assets/img/livro-lideranca-inteligente.webp" alt="" width="633" height="723" loading="lazy">
+        <img class="kit-book" src="assets/img/livro-lideranca-inteligente.webp" alt="" width="633" height="723" fetchpriority="high">
       </div>
-      <button class="video-btn" type="button" id="videoBtn">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-        ASSISTA COM SOM
-      </button>
-    </div>
-
-    <ul class="provas h-anim h-5">
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.700-7-5.500-7-10V6l7-3z"/><path d="M8.500 12l2.500 2.500 4.500-5"/></svg>
-        <span>Método testado em 22 anos e com mais de 30 mil pessoas treinadas</span>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="12" rx="1.500"/><path d="M9 8V5.500A1.500 1.500 0 0110.500 4h3A1.500 1.500 0 0115 5.500V8M3 13h18M10.500 12v2.500M13.500 12v2.500"/></svg>
-        <span>6 ferramentas práticas para usar com a sua equipe já nesta semana</span>
-      </li>
-      <li>
-        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.500" y="5" width="17" height="15" rx="1.500"/><path d="M3.500 10h17M8 3v4M16 3v4M8 14.500l2.500 2.500 5-5"/></svg>
-        <span>45 dias de jornada guiada, uma missão por dia</span>
-      </li>
-    </ul>
-
-    <p class="etiqueta h-anim h-6">R$ 1.032 EM FERRAMENTAS · HOJE <span class="lar" data-price>R$ 147</span></p>
-
-    <a class="btn btn--xl js-buy h-btn" href="/comprar" data-block="hero">QUERO SER UM LÍDER RESPEITADO EM 2027</a>
-    <p class="micro">Frete grátis · Garantia de 7 dias · Acesso imediato às aulas</p>
+    </figure>
   </div>
 </section>
 
-<!-- ============ BLOCO 2 · AUTORIDADE ============ -->
-<section class="sec sec--navy autoridade" id="autoridade">
-  <div class="wrap">
-    <ul class="nums">
-      <li><strong class="num"><span data-count="22">22</span></strong><span class="num-l">ANOS FORMANDO PESSOAS</span></li>
-      <li><strong class="num"><span class="num-x">+</span><span data-count="30">30</span><span class="num-x num-mil"> MIL</span></strong><span class="num-l">PESSOAS TREINADAS</span></li>
-      <li><strong class="num"><span data-count="6">6</span></strong><span class="num-l">OBRAS PUBLICADAS</span></li>
-    </ul>
-    <p class="aut-frase" data-reveal>Empresas e governos de norte a sul do Brasil já aplicaram este método.</p>
-  </div>
-  <!-- {{PASTA_LOGOS}}: nenhum logo autorizado recebido. Todos os clientes entram como texto. -->
-  <div class="marquee" aria-label="Clientes que já aplicaram o método">
-    <div class="marquee-track">
-      <ul>
-        <li>Governo do Acre</li><li>Prefeitura de Maceió</li><li>Prefeitura de Maringá</li><li>Câmara de Maringá</li><li>Câmara de Apucarana</li><li>Escola de Governo de Maringá</li><li>ABRASEL</li><li>Prefeitura de Sarandi</li><li>Grupo DM</li><li>MGA Capital</li><li>Klir Gestão Patrimonial</li>
-      </ul>
-      <ul aria-hidden="true">
-        <li>Governo do Acre</li><li>Prefeitura de Maceió</li><li>Prefeitura de Maringá</li><li>Câmara de Maringá</li><li>Câmara de Apucarana</li><li>Escola de Governo de Maringá</li><li>ABRASEL</li><li>Prefeitura de Sarandi</li><li>Grupo DM</li><li>MGA Capital</li><li>Klir Gestão Patrimonial</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- ============ BLOCO 3 · A DOR ============ -->
-<section class="sec dor" id="dor">
+<!-- ============ BLOCO 2 · QUIZ ============ -->
+<section class="sec sec--navy diag" id="diagnostico" aria-labelledby="qTitulo">
   <div class="wrap wrap--narrow">
-    <h2 class="h2" data-reveal>Você carrega a equipe nas costas. E ainda não é visto como líder.</h2>
-    <div class="prosa" data-reveal>
-      <p>Você resolve tudo. Chega primeiro, sai por último, apaga incêndio o dia inteiro.</p>
-      <p>E mesmo assim sente que não é respeitado do jeito que merece. Nem pela equipe, nem pela direção. Nem no salário.</p>
-      <p>Não é falta de esforço. Você foi promovido pela sua competência técnica, e ninguém te ensinou a liderar.</p>
-    </div>
+    <div class="quizbox" id="quizBox">
 
-    <div class="quiz" id="quiz" data-reveal>
-      <div class="quiz-head">
-        <h3 class="h3">Marque o que já aconteceu com você nos últimos 30 dias</h3>
-        <p class="quiz-count" aria-live="polite"><strong id="quizNum">0</strong> de 10</p>
+      <div id="qIntro">
+        <p class="kicker">15 situações · Resultado na hora</p>
+        <h2 class="h2" id="qTitulo" tabindex="-1">Como você tem reagido?</h2>
+        <p class="lead">Pense nas últimas quatro semanas. Marque o que mais se parece com o que você fez de verdade.</p>
+        <div class="center so-js"><button class="btn-ouro btn-ouro--xl" id="qStart" type="button">Começar o quiz</button></div>
+        <p class="micro center">Sem cadastro. Suas respostas ficam nesta página.</p>
       </div>
-      <ul class="quiz-list">
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Decidi coisas que a equipe deveria decidir sozinha</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Refiz um trabalho que eu tinha delegado</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Evitei uma conversa difícil com alguém da equipe</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Cobrei e a pessoa ficou na defensiva</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Tratei todo mundo do mesmo jeito e cada um reagiu de um jeito</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Senti que a equipe só funciona quando eu estou presente</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Terminei o dia exausto e com a sensação de que não liderei nada</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Vi alguém menos competente que eu ser mais ouvido pela direção</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Expliquei a mesma coisa mais de uma vez para a mesma pessoa</span></label></li>
-        <li><label><input type="checkbox"><span class="box"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.500l4.500 4.500L19 7.500" pathLength="1"/></svg></span><span>Pensei que talvez eu não tenha perfil de líder</span></label></li>
-      </ul>
-      <div class="quiz-result" id="quizResult" hidden>
-        <p class="quiz-msg" id="quizMsg" aria-live="polite"></p>
-        <a class="btn js-buy" href="/comprar" data-block="dor">QUERO AS FERRAMENTAS CERTAS</a>
+
+      <form id="qForm" hidden>
+        <p class="q-cont" id="qCounter" aria-live="polite"></p>
+        <div class="q-prog" id="qProg" role="progressbar" aria-label="Progresso do quiz" aria-valuemin="0" aria-valuemax="15" aria-valuenow="0"><i></i></div>
+        <fieldset id="qCampo">
+          <legend id="qPrompt" tabindex="-1"></legend>
+          <div id="qChoices"></div>
+        </fieldset>
+        <div class="q-nav"><button class="q-link" id="qBack" type="button">Voltar</button><button class="q-link" id="qSkip" type="button">Pular situação</button></div>
+      </form>
+
+      <div id="qResult" hidden>
+        <p class="kicker">Sua autoavaliação</p>
+        <p class="q-score" id="qScoreBox"><strong id="qScore">0</strong><span>/ 100</span></p>
+        <h3 class="q-titulo" id="qTitle" tabindex="-1"></h3>
+        <p class="q-desc" id="qDesc"></p>
+        <p class="micro" id="qCount"></p>
+        <ul class="q-bars" id="qBars" aria-label="Notas por habilidade"></ul>
+        <div class="q-foco" id="qFoco">
+          <h4 id="qAtt"></h4>
+          <p id="qCons"></p>
+          <p id="qEx"></p>
+          <p class="q-cap" id="qCap"></p>
+        </div>
+
+        <!-- CARTÃO DE COMPRA: a parte mais importante da página -->
+        <div class="buy-card" id="buyCard">
+          <h3 class="buy-t">Seu próximo passo: o Programa Liderança Inteligente</h3>
+          <p class="buy-frase" id="buyFrase"></p>
+          <ul class="buy-lista">
+            <li>Livro físico Liderança Inteligente, com frete grátis</li>
+            <li>Treinamento Líder na Prática, com 15 aulas</li>
+            <li>Jornada Metanoia do Líder, com 45 dias, uma missão por dia</li>
+            <li>Manuais Feedback que Transforma, Lidere Cada Perfil e Processos Claros</li>
+          </ul>
+          <p class="buy-ancora">Valor somado dos itens: R$ 1.032</p>
+          <p class="buy-preco"><strong data-price>R$ 147</strong></p>
+          <a id="qCta" class="btn js-buy btn--xl" href="/comprar" data-block="resultado_quiz">Quero acessar o Programa agora</a>
+          <p class="buy-mais"><a href="#ferramentas">Ver tudo o que está incluído</a></p>
+          <p class="micro">Frete grátis · Pix ou cartão · Garantia de 7 dias</p>
+        </div>
+
+        <div class="q-nav q-nav--fim"><button class="q-link" id="qReview" type="button">Rever respostas</button><button class="q-link" id="qRestart" type="button">Refazer o quiz</button></div>
+        <p class="q-disc">Este diagnóstico é uma ferramenta de reflexão, não uma avaliação psicológica.</p>
       </div>
-    </div>
-  </div>
-</section>
 
-<!-- ============ BLOCO 4 · OS DOIS LÍDERES ============ -->
-<section class="sec sec--marinho contraste" id="contraste">
-  <div class="wrap">
-    <h2 class="h2" data-reveal>Dois líderes. O mesmo esforço. Dois destinos em 2027.</h2>
-    <div class="duo" id="duo" style="--pos:50%">
-      <article class="duo-side duo-cold">
-        <div class="duo-in">
-          <h3 class="duo-t">O LÍDER NO IMPROVISO</h3>
-          <ul>
-            <li>Resolve tudo sozinho</li>
-            <li>Evita conversas difíceis</li>
-            <li>Equipe que depende dele para tudo</li>
-            <li>Trabalha mais e é menos ouvido</li>
-            <li>Espera ser reconhecido</li>
-          </ul>
-        </div>
-      </article>
-      <article class="duo-side duo-gold">
-        <div class="duo-in">
-          <h3 class="duo-t">O LÍDER COM MÉTODO</h3>
-          <ul>
-            <li>Delega e acompanha</li>
-            <li>Dá feedback sem gerar resistência</li>
-            <li>Equipe com autonomia</li>
-            <li>É ouvido pela equipe e pela direção</li>
-            <li>É respeitado e muito bem pago pelo que entrega</li>
-          </ul>
-        </div>
-      </article>
-      <div class="duo-handle" aria-hidden="true"><span><svg viewBox="0 0 24 24"><path d="M9 6l-5 6 5 6M15 6l5 6-5 6"/></svg></span></div>
-      <input class="duo-range" id="duoRange" type="range" min="12" max="88" value="50" aria-label="Arraste para comparar o líder no improviso e o líder com método">
-    </div>
-    <p class="frase-final" data-reveal>A diferença entre os dois não é talento. É preparo.</p>
-  </div>
-</section>
-
-<!-- ============ BLOCO 5 · O MECANISMO ============ -->
-<section class="sec sec--navy metodo" id="metodo">
-  <div class="wrap">
-    <h2 class="h2" data-reveal>O problema nunca foi esforço. Foi método.</h2>
-    <p class="lead" data-reveal>Liderança se aprende. E se aprende em três movimentos.</p>
-
-    <div class="trilha" id="trilha">
-      <svg class="trilha-svg trilha-v" preserveAspectRatio="none" viewBox="0 0 2 100" aria-hidden="true"><path class="trilha-bg" d="M1 0V100"/><path class="trilha-fg" d="M1 0V100" pathLength="1"/></svg>
-      <svg class="trilha-svg trilha-h" preserveAspectRatio="none" viewBox="0 0 100 2" aria-hidden="true"><path class="trilha-bg" d="M0 1H100"/><path class="trilha-fg" d="M0 1H100" pathLength="1"/></svg>
-      <ol class="marcos">
-        <li class="marco"><span class="marco-n">1</span><h3>APRENDER O MÉTODO.</h3><p>O livro organiza o que funciona na liderança: conflitos, expectativas, comunicação, pressão e decisões.</p></li>
-        <li class="marco"><span class="marco-n">2</span><h3>PRATICAR COM GUIA.</h3><p>O treinamento mostra como aplicar o método com a sua equipe, aula por aula.</p></li>
-        <li class="marco"><span class="marco-n">3</span><h3>EXECUTAR TODO DIA.</h3><p>A Jornada Metanoia transforma conhecimento em hábito, com uma missão por dia durante 45 dias.</p></li>
+      <!-- As 15 situações. Com JavaScript viram o quiz interativo; sem JavaScript aparecem como lista. -->
+      <ol class="sit-list" id="situacoes">
+        <li data-g="0"><p class="sit-p">Num dia pesado, seu filho te chama ou seu marido ou sua esposa quer conversar. O que sua família recebe de você?</p><ul><li data-p="1">Respondo o necessário, mas fico distante.</li><li data-p="3">Peço alguns minutos e depois volto para ouvir.</li><li data-p="0">Respondo com impaciência. Só noto quando alguém se cala ou pergunta o que fez de errado.</li><li data-p="2">Percebo que descontei em casa e volto para reconhecer isso.</li></ul></li>
+        <li data-g="0"><p class="sit-p">Quando o cansaço começa a virar irritação, em que momento você percebe?</p><ul><li data-p="3">Antes de responder. Noto a tensão no corpo ou a pressa de falar.</li><li data-p="0">Só depois que alguém aponta meu jeito de agir.</li><li data-p="2">Na hora em que escuto meu próprio tom.</li><li data-p="1">Mais tarde, quando lembro da cena e penso: “De onde veio aquilo?”</li></ul></li>
+        <li data-g="0"><p class="sit-p">Alguém diz: “O jeito que você falou comigo me machucou.” O que você faz primeiro?</p><ul><li data-p="0">Explico que a pessoa entendeu errado e defendo o que eu quis dizer.</li><li data-p="3">Pergunto o que machucou e escuto antes de explicar meu lado.</li><li data-p="1">Encerro o assunto e fico remoendo a reclamação.</li><li data-p="2">Na hora me defendo. Depois, volto para ouvir e reconhecer o efeito das minhas palavras.</li></ul></li>
+        <li data-g="0"><p class="sit-p">Uma criança repete algo que você já pediu várias vezes para ela parar de fazer. O que sai de você?</p><ul><li data-p="2">Falo mais alto. Quando me acalmo, volto para reconhecer que passei do ponto.</li><li data-p="0">Acabo dizendo algo sobre ela, como “você nunca me escuta”.</li><li data-p="3">Faço uma pausa e digo com firmeza qual comportamento precisa mudar.</li><li data-p="1">Evito gritar, mas digo algo atravessado, como “claro, você fez de novo”.</li></ul></li>
+        <li data-g="0"><p class="sit-p">Alguém importante manda um “depois a gente conversa”. O que acontece até lá?</p><ul><li data-p="3">Fico preocupado, mas sigo o dia. Se precisar, pergunto quando podemos falar.</li><li data-p="1">Abro a mensagem várias vezes, tentando descobrir se fiz alguma coisa.</li><li data-p="0">Já me preparo para uma briga e começo a tratar a pessoa de outro jeito.</li><li data-p="2">Imagino o pior por um momento. Quando noto, espero ter mais informação antes de agir.</li></ul></li>
+        <li data-g="0"><p class="sit-p">Você está sobrecarregado e alguém pergunta do que você precisa. O que você responde?</p><ul><li data-p="0">“Deixa que eu resolvo.” Depois fico ressentido porque parece que ninguém me ajuda.</li><li data-p="1">“Tô cansado.” Espero que a pessoa entenda sozinha o que precisa fazer.</li><li data-p="3">Digo exatamente o que me aliviaria e peço essa ajuda.</li><li data-p="2">Na hora digo que está tudo bem. Quando me dou conta, volto e faço um pedido claro.</li></ul></li>
+        <li data-g="0"><p class="sit-p">Você recebe uma notícia que te abala, mas precisa continuar o dia. O que faz com o que sentiu?</p><ul><li data-p="2">Reconheço que fiquei mexido e separo um momento para entender o que aconteceu comigo.</li><li data-p="0">Me ocupo até esquecer. Só quando paro percebo que aquilo ainda está pesando.</li><li data-p="3">Dou nome ao que sinto e percebo do que preciso, mesmo que só possa cuidar disso depois.</li><li data-p="1">Sei que fiquei mal, mas sigo no automático e deixo para ver depois se passa.</li></ul></li>
+        <li data-g="0"><p class="sit-p">Uma conversa acaba. Horas depois, ela ainda está rodando na sua cabeça. O que você faz?</p><ul><li data-p="1">Tento me distrair. Quando paro, volto para a mesma cena.</li><li data-p="3">Identifico o que ficou pendente e decido se preciso agir ou seguir.</li><li data-p="0">Repasso a conversa e invento novas respostas. Às vezes, perco até o sono.</li><li data-p="2">Demoro a sair daquilo, mas consigo entender o que me pegou e voltar ao meu dia.</li></ul></li>
+        <li data-g="1"><p class="sit-p">Você erra em algo importante. Qual pensamento mais se parece com o seu?</p><ul><li data-p="0">“Eu estrago tudo. Como é que alguém ainda confia em mim?”</li><li data-p="3">“Isso doeu. Preciso entender o que eu posso corrigir.”</li><li data-p="1">“Eu sei que foi um erro, mas passo o dia me sentindo incapaz.”</li><li data-p="2">“Na hora me diminuo. Depois consigo separar o que fiz de quem eu sou.”</li></ul></li>
+        <li data-g="1"><p class="sit-p">Você se esforça e alguém importante para você nem percebe. O que isso mexe aí dentro?</p><ul><li data-p="3">Fico decepcionado, mas ainda consigo reconhecer meu esforço.</li><li data-p="1">Faço ainda mais, torcendo para a pessoa finalmente me reconhecer.</li><li data-p="2">Por um tempo, duvido do valor do que fiz. Depois consigo olhar com mais equilíbrio.</li><li data-p="0">Começo a sentir que nada do que eu faço é suficiente.</li></ul></li>
+        <li data-g="1"><p class="sit-p">Te pedem algo que você sabe que não consegue assumir. O que costuma pesar na sua resposta?</p><ul><li data-p="0">O medo de decepcionar. Digo sim e fico com raiva de mim depois.</li><li data-p="3">Digo o que posso oferecer e onde está meu limite.</li><li data-p="2">Peço tempo para responder. Depois digo com clareza o que consigo assumir.</li><li data-p="1">Dou uma resposta vaga e fico torcendo para a pessoa desistir do pedido.</li></ul></li>
+        <li data-g="2"><p class="sit-p">Seu marido, sua esposa ou alguém próximo pergunta: “Você ficou magoado comigo?” O que você costuma dizer?</p><ul><li data-p="1">“Agora você percebeu?” A mágoa sai em forma de ironia.</li><li data-p="3">“Fiquei, sim.” Explico o que me doeu e ouço como a pessoa viu a situação.</li><li data-p="0">“Não aconteceu nada.” Depois espero que a pessoa perceba pelo meu jeito.</li><li data-p="2">“Fiquei, mas ainda preciso entender o que me pegou.” Volto ao assunto quando consigo falar.</li></ul></li>
+        <li data-g="2"><p class="sit-p">No trabalho, alguém questiona algo que você fez. Nos primeiros segundos, o que acontece?</p><ul><li data-p="3">Percebo a vontade de me defender e pergunto o que a pessoa viu antes de responder.</li><li data-p="0">Começo a justificar minha decisão sem deixar a pessoa terminar.</li><li data-p="1">Deixo a pessoa falar, mas por dentro já estou montando minha defesa.</li><li data-p="2">Minha primeira reação é me defender. Quando percebo, paro e peço que a pessoa termine.</li></ul></li>
+        <li data-g="3"><p class="sit-p">Alguém de quem você gosta anda mais quieto e menos disponível. Como você lida com essa mudança?</p><ul><li data-p="2">Penso que pode ter a ver comigo, mas pergunto antes de tirar conclusão.</li><li data-p="0">Começo a me afastar. Penso: “Se a pessoa quisesse estar perto, estaria.”</li><li data-p="1">Fico observando o jeito da pessoa e tentando adivinhar o que fiz.</li><li data-p="3">Pergunto como ela está e dou espaço para responder no tempo dela.</li></ul></li>
+        <li data-g="3"><p class="sit-p">Você percebe que suas palavras feriram alguém em casa. No dia seguinte, a rotina voltou ao normal. O que você faz?</p><ul><li data-p="0">Sigo com a rotina e espero que o tempo resolva.</li><li data-p="1">Peço desculpas, mas logo explico o que a pessoa fez para eu reagir daquele jeito.</li><li data-p="3">Volto ao assunto, reconheço o que fiz e pergunto como aquilo afetou a pessoa.</li><li data-p="2">Peço desculpas pelo jeito de falar. Ainda tenho dificuldade de ouvir como a pessoa ficou.</li></ul></li>
       </ol>
+      <div class="sem-js center">
+        <a class="btn js-buy btn--xl" href="/comprar" data-block="resultado_quiz">Quero acessar o Programa agora</a>
+        <p class="micro">Frete grátis · Pix ou cartão · Garantia de 7 dias</p>
+      </div>
     </div>
-    <p class="frase-final" data-reveal>Quem só lê, esquece. Quem pratica e executa, muda.</p>
   </div>
 </section>
 
-<!-- ============ BLOCO 6 · A CAIXA DE FERRAMENTAS ============ -->
-<section class="sec ferramentas" id="ferramentas">
+<!-- ============ BLOCO 3 · REFLEXÃO ============ -->
+<section class="sec ponte" id="ponte">
   <div class="wrap">
-    <h2 class="h2" data-reveal>Tudo o que você recebe hoje</h2>
-    <p class="lead" data-reveal>6 ferramentas. Cada uma resolve um problema real da sua liderança.</p>
-  </div>
-
-  <div class="wrap tools-grid">
-    <aside class="meter" id="meter" aria-label="Valor acumulado das ferramentas">
-      <span class="meter-l">VALOR ACUMULADO</span>
-      <strong class="meter-v">R$ <span id="meterNum">0</span></strong>
-      <span class="meter-bar"><i id="meterFill"></i></span>
-      <span class="meter-max">de R$ 1.032</span>
-    </aside>
-
-    <div class="tools">
-      <!-- Card 1 · {{IMG_LIVRO}} (recebida) -->
-      <article class="tool" data-acc="97">
-        <div class="tool-media"><img src="assets/img/livro-lideranca-inteligente.webp" alt="Livro físico Liderança Inteligente, de Valmer Albuquerque" width="633" height="723" loading="lazy"></div>
-        <div class="tool-body">
-          <p class="tool-k">FERRAMENTA 1 · O MÉTODO</p>
-          <h3 class="tool-n">Livro físico Liderança Inteligente</h3>
-          <dl>
-            <div><dt>Resolve</dt><dd>você lidera no improviso, sem um caminho claro.</dd></div>
-            <div><dt>Você recebe</dt><dd>o livro físico, enviado para a sua casa com frete grátis.</dd></div>
-            <div><dt>Na prática</dt><dd>você para de tentar adivinhar e passa a liderar com um método testado em campo.</dd></div>
-          </dl>
-          <p class="tool-val"><span class="tag">Valor: R$ 97</span><span class="acc">Acumulado: R$ 97</span></p>
-        </div>
-      </article>
-
-      <!-- Card 2 · {{IMG_LIDER_NA_PRATICA}} (recebida) -->
-      <article class="tool" data-acc="394">
-        <div class="tool-media tool-media--duo"><img class="duo-b" src="assets/img/lider-na-pratica-retrato.webp" alt="" width="760" height="1013" loading="lazy"><img class="duo-f" src="assets/img/lider-na-pratica-plataforma.webp" alt="Plataforma do treinamento Líder na Prática: 15 aulas em 4 módulos" width="760" height="1351" loading="lazy"></div>
-        <div class="tool-body">
-          <p class="tool-k">FERRAMENTA 2 · A PRÁTICA</p>
-          <h3 class="tool-n">Treinamento Líder na Prática, 15 aulas</h3>
-          <dl>
-            <div><dt>Resolve</dt><dd>você sabe a teoria, mas trava na hora de aplicar.</dd></div>
-            <div><dt>Você recebe</dt><dd>15 aulas online objetivas, com acesso imediato.</dd></div>
-            <div><dt>Na prática</dt><dd>você aprende a conduzir pessoas, dar feedback e delegar sem perder o controle.</dd></div>
-          </dl>
-          <details class="grade">
-            <summary>Ver todas as aulas</summary>
-            <!-- {{GRADE_15_AULAS}}: aulas 1 a 10 vieram da página atual. Faltam os nomes das aulas 11 a 15. -->
-            <ol>
-              <li>Fundamentos da liderança</li>
-              <li>Eu sou um bom líder?</li>
-              <li>Posicionamento</li>
-              <li>O direito e o peso da liderança</li>
-              <li>Identidade, capacidade e merecimento</li>
-              <li>Perfis comportamentais</li>
-              <li>Comunicação inteligente na liderança</li>
-              <li>As técnicas de comunicação</li>
-              <li>Feedback que constrói</li>
-              <li>Delegação sem perder o controle: os 5 níveis de autonomia</li>
-            </ol>
-          </details>
-          <p class="tool-val"><span class="tag">Valor: R$ 297</span><span class="acc">Acumulado: R$ 394</span></p>
-        </div>
-      </article>
-
-      <!-- Card 3 · {{IMG_JORNADA_METANOIA}} (recebida) -->
-      <article class="tool" data-acc="741">
-        <div class="tool-media tool-media--duo"><img class="duo-b" src="assets/img/jornada-plataforma.webp" alt="" width="760" height="1140" loading="lazy"><img class="duo-f" src="assets/img/jornada-metanoia.webp" alt="Jornada Metanoia do Líder: 45 dias, 45 aulas, uma missão por dia" width="760" height="1013" loading="lazy"></div>
-        <div class="tool-body">
-          <p class="tool-k">FERRAMENTA 3 · A EXECUÇÃO</p>
-          <h3 class="tool-n">Jornada Metanoia do Líder, 45 dias</h3>
-          <dl>
-            <div><dt>Resolve</dt><dd>você começa animado e larga no meio do caminho.</dd></div>
-            <div><dt>Você recebe</dt><dd>45 aulas curtas e uma missão prática por dia, com plano de execução.</dd></div>
-            <div><dt>Na prática</dt><dd>em 45 dias, liderar deixa de ser esforço e vira hábito.</dd></div>
-          </dl>
-          <p class="tool-val"><span class="tag">Valor: R$ 347</span><span class="acc">Acumulado: R$ 741</span></p>
-        </div>
-      </article>
-
-      <!-- Card 4 · {{IMG_FEEDBACK}} (recebida) -->
-      <article class="tool" data-acc="838">
-        <div class="tool-media"><img class="capa" src="assets/img/capa-feedback.webp" alt="Manual Feedback que Transforma" width="720" height="1018" loading="lazy"></div>
-        <div class="tool-body">
-          <p class="tool-k">FERRAMENTA 4 · USO IMEDIATO</p>
-          <h3 class="tool-n">Manual Feedback que Transforma</h3>
-          <dl>
-            <div><dt>Resolve</dt><dd>você evita ou trava nas conversas difíceis.</dd></div>
-            <div><dt>Na prática</dt><dd>você corrige sem criar inimigos e a pessoa sai da conversa querendo melhorar.</dd></div>
-          </dl>
-          <p class="tool-val"><span class="tag">Valor: R$ 97</span><span class="acc">Acumulado: R$ 838</span></p>
-        </div>
-      </article>
-
-      <!-- Card 5 · {{IMG_PERFIS}} (recebida) -->
-      <article class="tool" data-acc="935">
-        <div class="tool-media"><img class="capa" src="assets/img/capa-perfis.webp" alt="Manual Lidere Cada Perfil" width="720" height="1018" loading="lazy"></div>
-        <div class="tool-body">
-          <p class="tool-k">FERRAMENTA 5 · USO IMEDIATO</p>
-          <h3 class="tool-n">Manual Lidere Cada Perfil</h3>
-          <dl>
-            <div><dt>Resolve</dt><dd>você trata todo mundo igual e cada um rende de um jeito.</dd></div>
-            <div><dt>Na prática</dt><dd>você ajusta comunicação, cobrança e reconhecimento a cada pessoa da equipe.</dd></div>
-          </dl>
-          <p class="tool-val"><span class="tag">Valor: R$ 97</span><span class="acc">Acumulado: R$ 935</span></p>
-        </div>
-      </article>
-
-      <!-- Card 6 · {{IMG_PROCESSOS}} (recebida) -->
-      <article class="tool" data-acc="1032">
-        <div class="tool-media"><img class="capa" src="assets/img/capa-processos.webp" alt="Manual Processos Claros" width="720" height="1018" loading="lazy"></div>
-        <div class="tool-body">
-          <p class="tool-k">FERRAMENTA 6 · USO IMEDIATO</p>
-          <h3 class="tool-n">Manual Processos Claros</h3>
-          <dl>
-            <div><dt>Resolve</dt><dd>a equipe depende de você para tudo.</dd></div>
-            <div><dt>Na prática</dt><dd>cada um sabe o que fazer, e você para de ser o gargalo.</dd></div>
-          </dl>
-          <p class="tool-val"><span class="tag">Valor: R$ 97</span><span class="acc">Acumulado: R$ 1.032</span></p>
-        </div>
-      </article>
+    <p class="kicker center" data-reveal>Da reflexão à prática</p>
+    <h2 class="h2" data-reveal>Agora que você percebeu o padrão, o que pode fazer diferente?</h2>
+    <p class="dor-txt" data-reveal>Quando a emoção decide antes de você, quem paga é quem está mais perto: <strong>seu filho, seu marido ou sua esposa, quem trabalha com você.</strong> A palavra dita no impulso não volta. O silêncio que afasta também não.</p>
+    <p class="lead" data-reveal>Eu escrevi <em>Liderança Inteligente</em> para ajudar você a entender o que acontece por dentro, escolher como reagir e cuidar melhor das relações que importam.</p>
+    <div class="cartoes">
+      <article class="cartao" data-reveal><span class="cartao-n">1</span><h3>Gestão emocional</h3><p>Reconheça os sinais de que a pressão está subindo antes de responder no impulso.</p></article>
+      <article class="cartao" data-reveal><span class="cartao-n">2</span><h3>Identidade</h3><p>Aprenda a reconhecer um erro sem deixar que ele defina quem você é.</p></article>
+      <article class="cartao" data-reveal><span class="cartao-n">3</span><h3>Comunicação</h3><p>Expresse o que sentiu e o que precisa sem deixar que o outro tenha de adivinhar.</p></article>
+      <article class="cartao" data-reveal><span class="cartao-n">4</span><h3>Relacionamentos</h3><p>Observe o efeito das suas reações e aprenda a retomar o contato quando suas palavras ferem.</p></article>
     </div>
-  </div>
-
-  <!-- Fechamento da seção · {{IMG_KIT_COMPLETO}}: composição provisória com as imagens atuais -->
-  <div class="wrap tools-end">
-    <div class="kit kit--lg" data-reveal role="img" aria-label="Kit completo Liderança Inteligente">
-      <img class="kit-c kit-c3" src="assets/img/capa-perfis.webp" alt="" width="720" height="1018" loading="lazy">
-        <img class="kit-c kit-c1" src="assets/img/capa-feedback.webp" alt="" width="720" height="1018" loading="lazy">
-        <img class="kit-c kit-c5" src="assets/img/capa-processos.webp" alt="" width="720" height="1018" loading="lazy">
-        <img class="kit-c kit-c2" src="assets/img/lider-na-pratica-retrato.webp" alt="" width="760" height="1013" loading="lazy">
-        <img class="kit-c kit-c4" src="assets/img/jornada-metanoia.webp" alt="" width="760" height="1013" loading="lazy">
-        <img class="kit-book" src="assets/img/livro-lideranca-inteligente.webp" alt="" width="633" height="723" loading="lazy">
-    </div>
-    <p class="big-val" data-reveal>R$ 1.032 EM FERRAMENTAS</p>
-    <p class="lead" data-reveal>E você não vai pagar isso. Continue lendo.</p>
+    <div class="center cta-linha"><a class="btn js-buy btn--xl" href="/comprar" data-block="ponte">Quero mudar esse padrão agora</a></div>
   </div>
 </section>
 
-<!-- ============ BLOCO 7 · DEPOIMENTOS ============ -->
+<!-- ============ BLOCO 4 · DEPOIMENTOS ============ -->
 <section class="sec sec--marinho depoimentos" id="depoimentos">
   <div class="wrap">
     <h2 class="h2" data-reveal>Quem já passou pelo método de Valmer</h2>
     <p class="lead" data-reveal>Líderes que participaram dos treinamentos e mentorias da Impacto Academy.</p>
-    <!-- 8 depoimentos recebidos, alternando homem e mulher. Grade no desktop, carrossel de arrastar no celular. -->
     <ul class="deps" id="deps" tabindex="0" aria-label="Depoimentos em vídeo. Arraste para o lado para ver todos.">
       <li class="dep">
         <div class="dep-video">
@@ -413,55 +243,48 @@
       </li>
     </ul>
     <div class="deps-nav" aria-hidden="true"><span class="deps-dots" id="depsDots"></span><span class="deps-hint">arraste para o lado</span></div>
-    <div class="center"><a class="btn js-buy" href="/comprar" data-block="depoimentos">QUERO COMEÇAR MINHA JORNADA</a></div>
+    <div class="center"><a class="btn js-buy btn--xl" href="/comprar" data-block="depoimentos">Quero ter esse resultado também</a></div>
   </div>
 </section>
 
-<!-- ============ BLOCO 8 · A OFERTA ============ -->
-<section class="sec oferta" id="oferta">
+<!-- ============ BLOCO 5 · O PROGRAMA E A OFERTA (um bloco só) ============ -->
+<section class="sec oferta programa" id="ferramentas">
   <div class="wrap wrap--narrow">
-    <h2 class="h2">A conta é simples</h2>
+    <h2 class="h2" data-reveal>O que você acessa no Programa Liderança Inteligente</h2>
 
-    <div class="recibo" id="recibo">
-      <ul class="recibo-linhas">
-        <li class="r-l"><span>Livro físico Liderança Inteligente</span><i></i><b>R$ 97</b></li>
-        <li class="r-l"><span>Treinamento Líder na Prática, 15 aulas</span><i></i><b>R$ 297</b></li>
-        <li class="r-l"><span>Jornada Metanoia do Líder, 45 dias</span><i></i><b>R$ 347</b></li>
-        <li class="r-l"><span>Manual Feedback que Transforma</span><i></i><b>R$ 97</b></li>
-        <li class="r-l"><span>Manual Lidere Cada Perfil</span><i></i><b>R$ 97</b></li>
-        <li class="r-l"><span>Manual Processos Claros</span><i></i><b>R$ 97</b></li>
-        <li class="r-l"><span>Frete para todo o Brasil</span><i></i><b>GRÁTIS</b></li>
-        <li class="r-l r-total"><span>VALOR TOTAL</span><i></i><b class="r-total-v">R$ <span id="totalNum">1.032</span></b></li>
-      </ul>
+    <ul class="itens" id="itens">
+        <li class="item" data-dim="1"><img src="assets/img/livro-lideranca-inteligente.webp" alt="" width="633" height="723" loading="lazy"><div><h3>Livro físico Liderança Inteligente</h3><p>Para entender o que acontece por dentro antes de reagir.</p></div><b>R$ 97</b></li>
+        <li class="item"><img src="assets/img/lider-na-pratica-retrato.webp" alt="" width="760" height="1013" loading="lazy"><div><h3>Treinamento Líder na Prática, 15 aulas</h3><p>Para levar o que você aprendeu para as conversas reais.</p></div><b>R$ 297</b></li>
+        <li class="item" data-dim="0"><img src="assets/img/jornada-metanoia.webp" alt="" width="760" height="1013" loading="lazy"><div><h3>Jornada Metanoia do Líder, 45 dias</h3><p>Uma missão por dia, para a mudança virar hábito e não ficar só na intenção.</p></div><b>R$ 347</b></li>
+        <li class="item" data-dim="2"><img src="assets/img/capa-feedback.webp" alt="" width="720" height="1018" loading="lazy"><div><h3>Manual Feedback que Transforma</h3><p>Para dizer o que sentiu e o que precisa sem ferir e sem se calar.</p></div><b>R$ 97</b></li>
+        <li class="item" data-dim="3"><img src="assets/img/capa-perfis.webp" alt="" width="720" height="1018" loading="lazy"><div><h3>Manual Lidere Cada Perfil</h3><p>Para entender por que cada pessoa reage de um jeito e se aproximar de cada uma.</p></div><b>R$ 97</b></li>
+        <li class="item"><img src="assets/img/capa-processos.webp" alt="" width="720" height="1018" loading="lazy"><div><h3>Manual Processos Claros</h3><p>Para parar de carregar tudo sozinho.</p></div><b>R$ 97</b></li>
+        <li class="item item--frete"><span class="frete-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7zM7 19a2 2 0 100-4 2 2 0 000 4zM17.5 19a2 2 0 100-4 2 2 0 000 4z"/></svg></span><div><h3>Frete para todo o Brasil</h3></div><b>GRÁTIS</b></li>
+    </ul>
+
+    <div class="soma" id="soma">
+      <span class="soma-t">Valor somado dos 6 itens</span>
+      <strong class="soma-v">R$ <span id="totalNum">1.032</span></strong>
+      <span class="soma-bar" aria-hidden="true"><i id="somaFill"></i></span>
     </div>
 
-    <div class="revela">
-      <p class="rv rv-depois" data-bf-only>A partir de 11/12: <b>R$ 497</b></p>
-      <p class="rv rv-label"><span data-bf-only>Até 10/12, na Black Friday:</span><span data-after-only>O kit completo:</span></p>
+    <div class="revela" id="oferta">
+      <p class="rv rv-label">Hoje você acessa tudo por</p>
       <p class="rv rv-preco"><span class="glow" aria-hidden="true"></span><strong data-price>R$ 147</strong></p>
-      <p class="rv rv-eco"><span data-bf-only>Você economiza R$ 885</span><span data-after-only>Você economiza R$ 535</span></p>
-      <p class="rv rv-dia" data-bf-only>Menos de R$ 3,30 por dia durante os 45 dias da jornada</p>
-      <!-- parcelamento do preço de R$ 147. Para o preço de R$ 497, preencher {{TEXTO_PARCELAMENTO_497}} -->
-      <p class="rv rv-parc" data-bf-only>ou em até <b>12x de R$ 14,70</b> no cartão</p>
+      <p class="rv rv-dia">Menos de R$ 3,30 por dia durante os 45 dias da Jornada</p>
+      <!-- parcelamento informado pelo Valmer. Conferir com o checkout; se não bater, trocar por "Pix ou cartão". -->
+      <p class="rv rv-parc">ou em até <b>12x de R$ 14,70</b> no cartão</p>
     </div>
 
-    <div class="cd-box" data-bf-only>
-      <p class="cd-t">A BLACK FRIDAY TERMINA EM</p>
-      <div class="cd cd--xl" data-countdown role="timer" aria-label="Tempo restante da Black Friday"></div>
-    </div>
-
-    <div class="center">
-      <a class="btn btn--xl js-buy" href="/comprar" data-block="oferta">GARANTIR MINHA CAIXA POR <span data-price>R$ 147</span></a>
-      <p class="micro">Compra 100% segura · Frete grátis · Garantia de 7 dias</p>
-      <!-- formas de pagamento definidas pelo Valmer: só Pix e cartão, sem boleto -->
-      <ul class="pags" aria-label="Formas de pagamento">
-        <li>Pix</li><li>Cartão</li>
-      </ul>
+    <div class="center cta-linha">
+      <a class="btn js-buy btn--xl" href="/comprar" data-block="oferta">Quero acessar o Programa agora</a>
+      <p class="micro">Frete grátis · Acesso por e-mail após a confirmação do pagamento · Garantia de 7 dias</p>
+      <ul class="pags" aria-label="Formas de pagamento"><li>Pix</li><li>Cartão</li></ul>
     </div>
   </div>
 </section>
 
-<!-- ============ BLOCO 9 · GARANTIA ============ -->
+<!-- ============ BLOCO 6 · GARANTIA ============ -->
 <section class="sec sec--navy garantia" id="garantia">
   <div class="wrap garantia-in">
     <div class="selo" data-reveal aria-hidden="true">
@@ -477,11 +300,13 @@
     <div>
       <h2 class="h2 h2--left" data-reveal>O risco é todo meu</h2>
       <p class="prosa-p" data-reveal>Entre, assista às aulas, abra os manuais, comece a jornada. Se em 7 dias você sentir que não é para você, peça o reembolso e devolvemos 100% do valor. Sem perguntas e sem burocracia.</p>
+      <!-- {{REGRA_REEMBOLSO_LIVRO}}: falta definir como fica o reembolso quando o livro já foi enviado -->
     </div>
   </div>
 </section>
 
-<!-- ============ BLOCO 10 · COMO FUNCIONA ============ -->
+
+<!-- ============ BLOCO 7 · COMO FUNCIONA ============ -->
 <section class="sec sec--marinho como" id="como-funciona">
   <div class="wrap wrap--narrow">
     <ol class="passos" id="passos">
@@ -494,90 +319,71 @@
   </div>
 </section>
 
-<!-- ============ BLOCO 11 · PARA QUEM É ============ -->
-<section class="sec para-quem" id="para-quem">
-  <div class="wrap quem-grid">
-    <div class="quem quem--sim" data-reveal>
-      <h2 class="h3 quem-t">É para você se:</h2>
-      <ul>
-        <li>Foi promovido recentemente e ninguém te ensinou a liderar</li>
-        <li>É gestor, coordenador ou supervisor e quer ser levado a sério</li>
-        <li>É empresário e a empresa ainda depende de você para tudo</li>
-        <li>É servidor público em cargo de chefia</li>
-        <li>Lidera há anos e sente que parou de evoluir</li>
-        <li>Quer chegar em 2027 pronto para uma promoção</li>
-      </ul>
-    </div>
-    <div class="quem quem--nao" data-reveal>
-      <h2 class="h3 quem-t">Não é para você se:</h2>
-      <ul>
-        <li>Procura fórmula mágica sem aplicar nada</li>
-        <li>Acha que já sabe tudo sobre liderança</li>
-      </ul>
-    </div>
-  </div>
-</section>
 
-<!-- ============ BLOCO 12 · AUTOR ============ -->
-<section class="sec sec--navy autor" id="autor">
+<!-- ============ BLOCO 8 · AUTOR E AUTORIDADE (um bloco só) ============ -->
+<section class="sec sec--navy autor autoridade" id="autor">
   <div class="wrap">
     <h2 class="h2" data-reveal>Quem vai conduzir você nessa jornada?</h2>
     <div class="autor-grid">
-      <!-- {{FOTO_VALMER}} (em uso: foto da página atual, 640x800) -->
       <div class="autor-foto" data-reveal><img src="assets/img/valmer-albuquerque.webp" alt="Valmer Albuquerque" width="640" height="800" loading="lazy"></div>
       <div>
         <h3 class="autor-nome" data-reveal>Valmer Albuquerque</h3>
         <div class="prosa autor-bio" data-reveal>
-          <p>Começou onde a maioria dos líderes começa: sendo bom tecnicamente e sendo promovido por isso, sem ninguém explicar o que muda quando o resultado passa a depender de outras pessoas.</p>
-          <p>É fundador e diretor editorial da Editora Signature e CEO do Grupo Impacto Educacional. Há mais de duas décadas dedica-se ao desenvolvimento de líderes e à formação de pessoas, unindo gestão, comportamento, mentoria e educação.</p>
-          <p>Como mentor e palestrante, conduz treinamentos para gestores, empresários, servidores públicos e profissionais que desejam desenvolver sua capacidade de liderança. Autor de seis obras, transforma milhares de horas de treinamento e mentoria em métodos claros e aplicáveis.</p>
+          <!-- história trazida da página do quiz, nas palavras do Valmer. Não alterar fatos nem datas sem confirmar com ele. -->
+          <p>“Em 2019, vivi um burnout. Eu liderava centenas de pessoas e tinha uma filha pequena. Foi um período que me fez olhar para a forma como eu lidava com a pressão e para o que isso custava a mim e a quem estava perto de mim.”</p>
+          <p>É fundador e diretor editorial da Editora Signature e CEO do Grupo Impacto Educacional. Autor de seis obras, transforma milhares de horas de treinamento e mentoria em métodos claros e aplicáveis.</p>
         </div>
-        <blockquote class="assinatura" data-reveal>Eu ajudo você a ser reconhecido, liderar com alta performance e ser muito bem pago por isso.</blockquote>
+        <blockquote class="assinatura" data-reveal>O primeiro passo para influenciar melhor quem está perto é aprender a conduzir a si mesmo.</blockquote>
       </div>
+    </div>
+    <ul class="nums">
+      <li><strong class="num"><span data-count="22">22</span></strong><span class="num-l">ANOS FORMANDO PESSOAS</span></li>
+      <li><strong class="num"><span class="num-x">+</span><span data-count="30">30</span><span class="num-x num-mil"> MIL</span></strong><span class="num-l">PESSOAS TREINADAS</span></li>
+      <li><strong class="num"><span data-count="6">6</span></strong><span class="num-l">OBRAS PUBLICADAS</span></li>
+    </ul>
+  </div>
+  <!-- {{PASTA_LOGOS}}: nenhum logo autorizado recebido. Os clientes entram como texto. -->
+  <div class="marquee" aria-label="Clientes que já aplicaram o método">
+    <div class="marquee-track">
+      <ul>
+        <li>Governo do Acre</li><li>Prefeitura de Maceió</li><li>Prefeitura de Maringá</li><li>Câmara de Maringá</li><li>Câmara de Apucarana</li><li>Escola de Governo de Maringá</li><li>ABRASEL</li><li>Prefeitura de Sarandi</li><li>Grupo DM</li><li>MGA Capital</li><li>Klir Gestão Patrimonial</li>
+      </ul>
+      <ul aria-hidden="true">
+        <li>Governo do Acre</li><li>Prefeitura de Maceió</li><li>Prefeitura de Maringá</li><li>Câmara de Maringá</li><li>Câmara de Apucarana</li><li>Escola de Governo de Maringá</li><li>ABRASEL</li><li>Prefeitura de Sarandi</li><li>Grupo DM</li><li>MGA Capital</li><li>Klir Gestão Patrimonial</li>
+      </ul>
     </div>
   </div>
 </section>
 
-<!-- ============ BLOCO 13 · FAQ ============ -->
+<!-- ============ BLOCO 9 · FAQ ============ -->
 <section class="sec sec--marinho faq" id="faq">
   <div class="wrap wrap--narrow">
     <h2 class="h2" data-reveal>Perguntas frequentes</h2>
     <div class="acc-list" id="faqList">
-      <div class="acc-item"><h3><button type="button" aria-expanded="false">Eu já lidero há anos. Isso é para mim?</button></h3><div class="acc-p"><div><p>Sim. Experiência não substitui método. Muitos líderes experientes repetem os mesmos erros há anos sem perceber. As ferramentas ajudam você a sair do automático.</p></div></div></div>
-      <div class="acc-item"><h3><button type="button" aria-expanded="false">Ainda não sou líder. Vale a pena?</button></h3><div class="acc-p"><div><p>Vale. Quem se prepara antes da promoção chega no cargo sendo levado a sério desde o primeiro dia.</p></div></div></div>
-      <div class="acc-item"><h3><button type="button" aria-expanded="false">Não tenho tempo para mais um curso.</button></h3><div class="acc-p"><div><p>As aulas são curtas e objetivas. A Jornada Metanoia pede uma missão por dia, pensada para caber na rotina de quem lidera.</p></div></div></div>
-      <div class="acc-item"><h3><button type="button" aria-expanded="false">É só mais um livro?</button></h3><div class="acc-p"><div><p>Não. O livro é a ferramenta 1 de 6. Junto com ele vêm o treinamento, a jornada de 45 dias e os 3 manuais de uso imediato.</p></div></div></div>
-      <div class="acc-item"><h3><button type="button" aria-expanded="false">O que é o Líder na Prática?</button></h3><div class="acc-p"><div><p>É o treinamento online do kit. São 15 aulas objetivas, baseadas na metodologia do livro Liderança Inteligente, que mostram como aplicar o método com a sua equipe.</p></div></div></div>
-      <div class="acc-item"><h3><button type="button" aria-expanded="false">O que é a Jornada Metanoia?</button></h3><div class="acc-p"><div><p>É um plano de 45 dias com uma aula curta e uma missão prática por dia, para transformar o que você aprende em hábito de liderança.</p></div></div></div>
+      <div class="acc-item"><h3><button type="button" aria-expanded="false">O livro serve para quem não lidera uma equipe?</button></h3><div class="acc-p"><div><p>Sim. O livro traz exemplos de empresas e ensina ferramentas de gestão das emoções e comunicação que você pode aplicar também em casa e nos seus relacionamentos.</p></div></div></div>
+      <div class="acc-item"><h3><button type="button" aria-expanded="false">Não tenho tempo para mais um curso.</button></h3><div class="acc-p"><div><p>As aulas são curtas e objetivas. A Jornada Metanoia pede uma missão por dia, pensada para caber na rotina.</p></div></div></div>
       <div class="acc-item"><h3><button type="button" aria-expanded="false">Quando recebo o acesso?</button></h3><div class="acc-p"><div><p>Logo após a confirmação do pagamento, no seu e-mail. Você começa antes mesmo de o livro chegar.</p></div></div></div>
       <div class="acc-item"><h3><button type="button" aria-expanded="false">Por quanto tempo tenho acesso?</button></h3><div class="acc-p"><div><p>O acesso é vitalício. Você assiste às aulas e consulta os manuais quando e quantas vezes quiser.</p></div></div></div>
       <div class="acc-item"><h3><button type="button" aria-expanded="false">Quando o livro é enviado?</button></h3><div class="acc-p"><div><p>No dia seguinte à compra, com frete grátis para todo o Brasil.</p></div></div></div>
-      <div class="acc-item" data-bf-only><h3><button type="button" aria-expanded="false">O preço de R$ 147 vale até quando?</button></h3><div class="acc-p"><div><p>Até 10 de dezembro às 23h59. A partir de 11 de dezembro, o kit completo passa a custar R$ 497.</p></div></div></div>
-      <!-- resposta válida para o preço de R$ 147. Depois do prazo esta pergunta sai; para R$ 497, preencher {{RESPOSTA_PARCELAMENTO_497}} -->
-      <div class="acc-item" data-bf-only><h3><button type="button" aria-expanded="false">Posso parcelar?</button></h3><div class="acc-p"><div><p>Pode. Você parcela em até 12x de R$ 14,70 no cartão. Se preferir pagar à vista, é R$ 147 no Pix ou no cartão.</p></div></div></div>
+      <div class="acc-item"><h3><button type="button" aria-expanded="false">Posso parcelar?</button></h3><div class="acc-p"><div><p>Pode. Você parcela em até 12x de R$ 14,70 no cartão. Se preferir pagar à vista, é <span data-price>R$ 147</span> no Pix ou no cartão.</p></div></div></div>
       <div class="acc-item"><h3><button type="button" aria-expanded="false">E se eu não gostar?</button></h3><div class="acc-p"><div><p>Você tem 7 dias de garantia. Pede o reembolso e devolvemos 100% do valor.</p></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- ============ BLOCO 14 · FECHAMENTO ============ -->
+<!-- ============ BLOCO 10 · FECHAMENTO ============ -->
 <section class="sec fechamento" id="fechamento">
   <div class="wrap wrap--narrow center">
-    <h2 class="h2 h2--xl" data-reveal>O cargo coloca você na frente de uma equipe. O preparo faz de você um líder.</h2>
-    <p class="prosa-p" data-reveal>Em 2027, alguns líderes vão continuar apagando incêndio. Outros vão ser respeitados, ouvidos e muito bem pagos pelo que entregam. A diferença vai estar no que cada um fez agora.</p>
-    <div class="cd-box" data-bf-only>
-      <div class="cd cd--xl" data-countdown role="timer" aria-label="Tempo restante da Black Friday"></div>
-    </div>
-    <a class="btn btn--xl js-buy" href="/comprar" data-block="fechamento">QUERO MINHA CAIXA DE FERRAMENTAS POR <span data-price>R$ 147</span></a>
-    <p class="ps" data-bf-only><b>P.S.</b> São 6 ferramentas e R$ 1.032 em valor, por R$ 147 até 10 de dezembro. Depois disso, R$ 497. Menos de R$ 3,30 por dia para chegar em 2027 sendo o líder que a sua equipe respeita. E a garantia de 7 dias é minha. Valmer Albuquerque.</p>
-    <!-- Versão do P.S. para depois do prazo: mesma frase, sem as menções de Black Friday. Revisar. -->
-    <p class="ps" data-after-only><b>P.S.</b> São 6 ferramentas e R$ 1.032 em valor, por R$ 497, para chegar em 2027 sendo o líder que a sua equipe respeita. E a garantia de 7 dias é minha. Valmer Albuquerque.</p>
+    <!-- texto novo, escrito para manter o tom do quiz até o fim. Aguardando aprovação do Valmer. -->
+    <h2 class="h2 h2--xl" data-reveal>A próxima reação já está a caminho. Você escolhe como ela vai sair.</h2>
+    <p class="prosa-p" data-reveal>Ainda hoje, alguém vai te chamar num momento ruim. Você pode responder como sempre respondeu ou começar a encurtar o intervalo entre sentir e escolher. O Programa Liderança Inteligente mostra o caminho, uma missão por dia.</p>
+    <div class="cta-linha"><a class="btn js-buy btn--xl" href="/comprar" data-block="fechamento">Quero acessar o Programa agora</a></div>
+    <p class="micro">Frete grátis · Pix ou cartão · Garantia de 7 dias</p>
   </div>
 </section>
 
 </main>
 
-<!-- ============ RODAPÉ ============ -->
 <footer class="rodape" id="rodape">
   <div class="wrap">
     <p>Valmer Albuquerque Editora Signature Ltda · CNPJ 66.911.358/0001-84</p>
@@ -586,13 +392,10 @@
   </div>
 </footer>
 
-<!-- ============ BARRA FIXA NO CELULAR ============ -->
+<!-- ============ BOTÃO FIXO NO CELULAR ============ -->
 <div class="cta-mobile" id="cta-mobile" aria-hidden="true">
-  <div class="cm-l">
-    <strong data-price>R$ 147</strong>
-    <span class="cd cd--mini" data-countdown data-bf-only></span>
-  </div>
-  <a class="btn js-buy" href="/comprar" data-block="cta-mobile" tabindex="-1">GARANTIR</a>
+  <div class="cm-l"><span>Programa completo</span><strong data-price>R$ 147</strong></div>
+  <a class="btn js-buy" href="/comprar" data-block="sticky" tabindex="-1">Quero o Programa</a>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
