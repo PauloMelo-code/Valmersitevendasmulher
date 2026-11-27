@@ -1,4 +1,5 @@
-/* Liderança Inteligente | interações da página */
+/* Emoções Inteligentes | interações da página
+   Cópia do main.js com os textos desta página. Mesmo destino de inscrições e mesmo pixel. */
 (function () {
   'use strict';
 
@@ -9,9 +10,9 @@
   var CONFIG = {
     FORM_ENDPOINT: 'https://lider-de-impacto.lideresdeimpacto.com.br/api/paginas/inscricao/palestra-maringa',
     EVENT_START: '2026-12-14T19:00:00-03:00',
-    EVENT_TITLE: 'Palestra Liderança Inteligente, com Valmer Albuquerque',
+    EVENT_TITLE: 'Palestra Emoções Inteligentes, com Valmer Albuquerque',
     EVENT_PLACE: 'Família Vida Nova, Rua Estados Unidos, Av. Colombo, 2073, Jardim América, Maringá, PR, 87045-010',
-    HEADLINE_B: 'A liderança mais importante começa dentro de você.',
+    HEADLINE_B: 'Descubra como usar suas emoções como aliadas para o seu crescimento pessoal e profissional.',
     PIXEL_ID: '1181979381174003' // mesmo pixel das páginas do livro
   };
   /* ================================================ */
@@ -194,7 +195,7 @@
   function showDone() {
     form.hidden = true; done.hidden = false; done.focus();
     var s = new Date(CONFIG.EVENT_START).toISOString().replace(/[-:]|\.\d{3}/g, '');
-    $('#invite').href = 'https://wa.me/?text=' + encodeURIComponent('Vou à palestra Liderança Inteligente, com Valmer Albuquerque, dia 14 de dezembro, às 19h, em Maringá. A entrada é 1 kg de alimento não perecível e as vagas são limitadas. Vem comigo? A inscrição é por aqui: ' + location.origin + location.pathname);
+    $('#invite').href = 'https://wa.me/?text=' + encodeURIComponent('Vou à palestra Emoções Inteligentes, com Valmer Albuquerque, dia 14 de dezembro, às 19h, em Maringá. É para toda a família, a entrada é 1 kg de alimento não perecível e as vagas são limitadas. Vem comigo? A inscrição é por aqui: ' + location.origin + location.pathname);
     $('#gcal').href = 'https://calendar.google.com/calendar/render?action=TEMPLATE&text=' + encodeURIComponent(CONFIG.EVENT_TITLE) +
       '&dates=' + s + '/' + s + '&location=' + encodeURIComponent(CONFIG.EVENT_PLACE) +
       '&details=' + encodeURIComponent('Entrada solidária: leve 1 kg de alimento não perecível.');
@@ -202,12 +203,12 @@
   $('#ics').addEventListener('click', function () {
     var s = new Date(CONFIG.EVENT_START).toISOString().replace(/[-:]|\.\d{3}/g, '');
     var ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Lideranca Inteligente//PT-BR', 'BEGIN:VEVENT',
-      'UID:lideranca-inteligente-20261214@palestra', 'DTSTAMP:' + s, 'DTSTART:' + s,
+      'UID:emocoes-inteligentes-20261214@palestra', 'DTSTAMP:' + s, 'DTSTART:' + s,
       'SUMMARY:' + CONFIG.EVENT_TITLE, 'LOCATION:' + CONFIG.EVENT_PLACE.replace(/,/g, '\\,'),
       'DESCRIPTION:Entrada solidária: leve 1 kg de alimento não perecível.', 'END:VEVENT', 'END:VCALENDAR'].join('\r\n');
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }));
-    a.download = 'palestra-lideranca-inteligente.ics'; document.body.appendChild(a); a.click(); a.remove();
+    a.download = 'palestra-emocoes-inteligentes.ics'; document.body.appendChild(a); a.click(); a.remove();
   });
 
   var sending = false;
@@ -260,4 +261,93 @@
         $('.btn__t', btn).textContent = 'Confirmar minha inscrição';
       });
   });
+})();
+
+/* Emoções Inteligentes | efeitos só desta página */
+(function () {
+  'use strict';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Frase de destaque: uma palavra por vez */
+  var t = document.querySelector('[data-words]');
+  if (t) {
+    var full = t.textContent.trim(), n = 0;
+    t.setAttribute('aria-label', full);
+    var out = document.createDocumentFragment();
+    Array.prototype.forEach.call(t.childNodes, function (node) {
+      var em = node.nodeType === 1;
+      (node.textContent || '').split(/\s+/).filter(Boolean).forEach(function (w) {
+        var s = document.createElement('span');
+        s.className = 'w' + (em ? ' w--em' : ''); s.textContent = w; s.style.setProperty('--w', n++); s.setAttribute('aria-hidden', 'true');
+        out.appendChild(s); out.appendChild(document.createTextNode(' '));
+      });
+    });
+    t.textContent = ''; t.appendChild(out);
+  }
+
+  /* Celular: carrosséis de arrastar, com bolinhas e um empurrão para mostrar que desliza */
+  Array.prototype.forEach.call(document.querySelectorAll('.car'), function (car) {
+    var box = car.nextElementSibling;
+    if (!box || !box.classList.contains('swipe')) return;
+    var small = window.matchMedia('(max-width: 619px)');
+    function light(k) { for (var z = 0; z < car.children.length; z++) car.children[z].classList.toggle('is-lit', z === k); }
+    var dots = box.querySelector('.swipe__dots'), items = car.children, on = -1, hinted = false;
+    for (var i = 0; i < items.length; i++) dots.appendChild(document.createElement('i'));
+    function sync() {
+      var best = 0, min = 1e9, left = car.getBoundingClientRect().left;
+      for (var k = 0; k < items.length; k++) { var d = Math.abs(items[k].getBoundingClientRect().left - left - 20); if (d < min) { min = d; best = k; } }
+      if (car.scrollLeft + car.clientWidth >= car.scrollWidth - 4) best = items.length - 1;
+      if (best !== on) { on = best; for (var q = 0; q < dots.children.length; q++) dots.children[q].classList.toggle('on', q === best); if (small.matches) light(best); }
+    }
+    var tk = false;
+    car.addEventListener('scroll', function () { if (!tk) { tk = true; requestAnimationFrame(function () { sync(); tk = false; }); } }, { passive: true });
+    ['touchstart', 'pointerdown', 'wheel'].forEach(function (ev) { car.addEventListener(ev, function () { box.classList.add('is-used'); }, { passive: true }); });
+    sync();
+    if ('IntersectionObserver' in window && !reduce) {
+      var io = new IntersectionObserver(function (es) {
+        if (!es[0].isIntersecting || hinted || car.scrollWidth <= car.clientWidth + 4) return;
+        hinted = true; io.disconnect();
+        if (document.documentElement.classList.contains('no-motion')) return;
+        setTimeout(function () {
+          if (box.classList.contains('is-used')) return;
+          car.style.scrollSnapType = 'none';
+          car.scrollTo({ left: 72, behavior: 'smooth' });
+          setTimeout(function () { car.scrollTo({ left: 0, behavior: 'smooth' }); setTimeout(function () { car.style.scrollSnapType = ''; }, 600); }, 650);
+        }, 500);
+      }, { threshold: 0.6 });
+      io.observe(car);
+    }
+  });
+
+  /* Computador e tablet: a luz passa de cartão em cartão enquanto a seção está na tela */
+  if (!reduce && 'IntersectionObserver' in window) {
+    Array.prototype.forEach.call(document.querySelectorAll('.who.car, .pillars.car'), function (list) {
+      var cards = list.children, idx = -1, timer = null, hover = false;
+      function step() {
+        if (hover || window.matchMedia('(max-width: 619px)').matches || document.documentElement.classList.contains('no-motion')) return;
+        idx = (idx + 1) % cards.length;
+        for (var z = 0; z < cards.length; z++) cards[z].classList.toggle('is-lit', z === idx);
+      }
+      list.addEventListener('pointerenter', function () { hover = true; if (!window.matchMedia('(max-width: 619px)').matches) for (var z = 0; z < cards.length; z++) cards[z].classList.remove('is-lit'); });
+      list.addEventListener('pointerleave', function () { hover = false; });
+      new IntersectionObserver(function (es) {
+        if (es[0].isIntersecting) { if (!timer) { step(); timer = setInterval(step, 1700); } }
+        else { clearInterval(timer); timer = null; }
+      }, { threshold: 0.35 }).observe(list);
+    });
+  }
+
+  /* Cartões: inclinam de leve e a luz segue o cursor (só com mouse) */
+  if (!reduce && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    Array.prototype.forEach.call(document.querySelectorAll('.card'), function (c) {
+      c.addEventListener('pointermove', function (e) {
+        if (document.documentElement.classList.contains('no-motion')) return;
+        var r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+        c.style.setProperty('--mx', (x * 100) + '%'); c.style.setProperty('--my', (y * 100) + '%');
+        c.style.setProperty('--ry', ((x - .5) * 7) + 'deg'); c.style.setProperty('--rx', ((.5 - y) * 7) + 'deg');
+      });
+      c.addEventListener('pointerenter', function () { c.style.transitionDelay = '0s'; });
+      c.addEventListener('pointerleave', function () { c.style.setProperty('--rx', '0deg'); c.style.setProperty('--ry', '0deg'); });
+    });
+  }
 })();
