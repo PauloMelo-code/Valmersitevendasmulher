@@ -234,7 +234,7 @@
         }, { threshold: .35 });
         ov.observe(caixa);
       }
-    }
+    } else if (botao) { botao.remove(); botao = null; }
     if (botao) botao.addEventListener("click", function () {
       if (!montaVideo()) { console.warn("[Liderança Inteligente] Vídeo do hero não preenchido em js/config.js."); return; }
       video.muted = false; video.loop = false; video.controls = true; video.currentTime = 0; video.play().catch(function () {});

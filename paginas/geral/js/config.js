@@ -9,8 +9,9 @@ var LI_CONFIG = {
   CHECKOUT_URL_147: "/comprar",
   CHECKOUT_URL_497: "/comprar",
 
-  /* Vídeo de entrada (recebido): vertical 9:16, com os textos já na imagem. */
-  VIDEO_HERO_URL: "assets/video/hero.mp4",
+  /* Vídeo de entrada: retirado a pedido em 27/11/2026 (o hero mostra a imagem do kit).
+     Para voltar, use "assets/video/hero.mp4" (vertical 9:16, com os textos já na imagem). */
+  VIDEO_HERO_URL: "{{VIDEO_HERO_URL}}",
   VIDEO_HERO_POSTER: "assets/img/hero-video-capa.webp",
   VIDEO_HERO_VERTICAL: true,
   /* O vídeo fala em R$ 147. Depois do prazo ele sai sozinho e volta a imagem do kit.
